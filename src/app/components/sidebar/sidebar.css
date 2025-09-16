@@ -30,11 +30,6 @@
   height: 100%;
 }
 
-/* CTA móvil dentro del sidebar: oculto por defecto (solo visible en móvil) */
-.sidebar-mobile-cta {
-  display: none;
-}
-
 /* Header del sidebar INACAP */
 .sidebar-header {
   padding: 1.5rem;
@@ -242,6 +237,40 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.header-logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--inacap-red);
+  margin: 0;
+  line-height: 1;
+}
+
+.header-subtitle {
+  font-size: 0.75rem;
+  color: var(--inacap-gray-600);
+  margin-left: 0.5rem;
+  font-weight: 500;
+}
+
+.header-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 @media (min-width: 1024px) {
   .main-header {
     left: 16rem;
@@ -252,6 +281,14 @@
 @media (max-width: 1024px) {
   .main-header {
     padding-left: 4rem; /* Espacio para el botón hamburguesa */
+  }
+  
+  .header-left {
+    flex: 1;
+  }
+  
+  .header-subtitle {
+    display: none; /* Ocultar subtítulo en móvil para ahorrar espacio */
   }
 }
 
@@ -345,117 +382,11 @@
   letter-spacing: 0.025em;
 }
 
-.main-header h1 {
-  flex-shrink: 0;
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--inacap-black);
-}
-
 .header-center {
   flex: 1;
   display: flex;
   justify-content: center;
   margin: 0 2rem;
-}
-
-.header-right {
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Botón Iniciar Proyecto INACAP */
-.start-project-btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, var(--inacap-red), #e11d48);
-  color: white;
-  border: none;
-  border-radius: 0.75rem;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(196, 30, 58, 0.25);
-  min-width: 9rem;
-}
-
-.start-project-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(196, 30, 58, 0.35);
-  background: linear-gradient(135deg, #b91c3c, var(--inacap-red));
-}
-
-.start-project-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
-}
-
-.start-project-btn.loading {
-  cursor: not-allowed;
-  background: linear-gradient(135deg, #94a3b8, #64748b);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.start-project-btn.loading:hover {
-  transform: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.btn-content {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  position: relative;
-  z-index: 2;
-}
-
-.btn-icon {
-  transition: transform 0.3s ease;
-}
-
-.start-project-btn:hover .btn-icon {
-  transform: rotate(90deg);
-}
-
-.btn-text {
-  transition: opacity 0.2s ease;
-}
-
-.btn-shine {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.6s ease;
-}
-
-.start-project-btn:hover .btn-shine {
-  left: 100%;
-}
-
-/* Spinner de carga */
-.loading-spinner {
-  width: 1.25rem;
-  height: 1.25rem;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 /* Botón de notificaciones INACAP */
@@ -878,19 +809,6 @@
 
 /* Responsive adjustments para dropdowns */
 @media (max-width: 768px) {
-  /* Mostrar CTA dentro del sidebar y ocultar en header */
-  .sidebar-mobile-cta {
-    display: block;
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--inacap-gray-700);
-    background: rgba(255,255,255,0.04);
-  }
-
-  .sidebar-mobile-cta .start-project-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
   /* Ocultar la acción del header en móvil */
   .welcome-action { display: none; }
   .notification-dropdown {
@@ -918,7 +836,7 @@
     display: none;
   }
   
-  .main-header h1 {
+  .header-logo h1 {
     font-size: 1.25rem;
   }
   

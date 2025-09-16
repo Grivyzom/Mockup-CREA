@@ -24,9 +24,6 @@ export class Sidebar implements OnInit {
   isNotificationDropdownPinned = false;
   isProfileDropdownPinned = false;
 
-  // Estado para el botón de iniciar proyecto
-  isStartingProject = false;
-
   // Datos útiles para el estudiante
   studentStats = {
     projectsActive: 3,
@@ -152,30 +149,5 @@ export class Sidebar implements OnInit {
       default:
         this.pageTitle = 'Dashboard';
     }
-  }
-
-  // Método para iniciar un nuevo proyecto
-  startNewProject() {
-    if (this.isStartingProject) return; // Prevenir múltiples clicks
-    
-    this.isStartingProject = true;
-    
-    // Simular proceso de creación (en una app real, esto sería una llamada a API)
-    setTimeout(() => {
-      this.isStartingProject = false;
-      
-      // Aquí puedes agregar la lógica para:
-      // - Navegar a una página de creación de proyecto
-      // - Abrir un modal
-      // - Hacer una llamada a API
-      console.log('¡Nuevo proyecto iniciado!');
-      
-      // Ejemplo: navegar a una página de creación
-      // this.router.navigate(['/new-project']);
-      
-      // Actualizar estadísticas temporalmente (demo)
-      this.studentStats.projectsActive++;
-      
-    }, 2000); // 2 segundos de simulación
   }
 }

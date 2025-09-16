@@ -36,23 +36,6 @@
       </div>
     </div>
 
-    <!-- CTA móvil dentro del sidebar -->
-    <div class="sidebar-mobile-cta select-none">
-      <a class="start-project-btn select-none"
-         [routerLink]="['/proyectos/nuevo']"
-         (click)="closeMobileMenu()"
-         [class.loading]="isStartingProject">
-        <div class="btn-content select-none">
-          <svg *ngIf="!isStartingProject" class="btn-icon w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-          </svg>
-          <div *ngIf="isStartingProject" class="loading-spinner select-none"></div>
-          <span class="btn-text select-none">{{ isStartingProject ? 'Creando...' : 'Iniciar Proyecto' }}</span>
-        </div>
-        <div class="btn-shine select-none"></div>
-      </a>
-    </div>
-
     <!-- Navegación Principal -->
     <nav class="sidebar-nav select-none">
       <div class="nav-section select-none">
@@ -174,23 +157,10 @@
 
 <!-- Header superior INACAP -->
 <header class="main-header select-none no-select">
-  <div class="select-none">
-    <!-- Panel de bienvenida con botón de acción -->
-  <div class="welcome-panel select-none hidden lg:flex">
-      <div class="welcome-content select-none">
-  <a class="start-project-btn select-none"
-           [routerLink]="['/proyectos/nuevo']"
-           [class.loading]="isStartingProject">
-          <div class="btn-content select-none">
-            <svg *ngIf="!isStartingProject" class="btn-icon w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-            </svg>
-            <div *ngIf="isStartingProject" class="loading-spinner select-none"></div>
-            <span class="btn-text select-none">{{ isStartingProject ? 'Creando...' : 'Iniciar Proyecto' }}</span>
-          </div>
-          <div class="btn-shine select-none"></div>
-        </a>
-      </div>
+  <div class="header-container select-none">
+    <!-- Logo/Marca INACAP (izquierda) -->
+    <div class="header-left select-none">
+      <!-- Espacio vacío -->
     </div>
     
     <!-- Área del usuario (derecha) -->

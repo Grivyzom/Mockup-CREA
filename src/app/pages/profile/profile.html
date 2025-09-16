@@ -1,13 +1,5 @@
 <section class="profile-wrap">
-  <div class="container tabs-layout">
-    <div class="tabs">
-      <button class="tab active" type="button">Cuenta</button>
-      <button class="tab" type="button" disabled>Notificaciones</button>
-      <button class="tab" type="button" disabled>Facturación</button>
-      <button class="tab" type="button" disabled>Equipos</button>
-      <button class="tab" type="button" disabled>Integraciones</button>
-    </div>
-
+  <div class="container">
     <!-- Información personal -->
     <div class="card dark">
       <div class="card-header">
@@ -172,6 +164,243 @@
           @if (passError) {<span class="status-error">{{ passError }}</span>}
         </div>
       </form>
+    </div>
+
+    <!-- Autenticación de dos factores -->
+    <div class="card dark">
+      <h2 class="section-title">
+        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        Autenticación de dos factores (2FA)
+      </h2>
+      <p class="section-desc">
+        Añade una capa adicional de seguridad a tu cuenta. Después de activar 2FA, necesitarás tu contraseña y tu dispositivo para acceder.
+      </p>
+
+      @if (!twoFactorEnabled) {
+        <!-- Estado: 2FA Desactivado -->
+        <div class="two-factor-status disabled">
+          <div class="status-indicator">
+            <svg class="status-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </div>
+          <div class="status-content">
+            <h3 class="status-title">Autenticación de dos factores desactivada</h3>
+            <p class="status-desc">Tu cuenta no está protegida con autenticación de dos factores.</p>
+          </div>
+          <button 
+            class="btn-inacap-primary" 
+            type="button" 
+            (click)="startTwoFactorSetup()"
+            [disabled]="twoFactorLoading">
+            Activar 2FA
+          </button>
+        </div>
+      }
+
+      @if (twoFactorEnabled && !showSetup) {
+        <!-- Estado: 2FA Activado -->
+        <div class="two-factor-status enabled">
+          <div class="status-indicator">
+            <svg class="status-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
+          <div class="status-content">
+            <h3 class="status-title">Autenticación de dos factores activada</h3>
+            <p class="status-desc">Tu cuenta está protegida con autenticación de dos factores.</p>
+            <p class="backup-codes-info">
+              <strong>Códigos de respaldo:</strong> {{ backupCodesCount }} códigos disponibles
+            </p>
+          </div>
+          <div class="two-factor-actions">
+            <button 
+              class="btn-inacap-secondary" 
+              type="button" 
+              (click)="showBackupCodes = !showBackupCodes">
+              @if (showBackupCodes) {Ocultar códigos} @else {Ver códigos de respaldo}
+            </button>
+            <button 
+              class="btn-inacap-danger" 
+              type="button" 
+              (click)="disableTwoFactor()"
+              [disabled]="twoFactorLoading">
+              Desactivar 2FA
+            </button>
+          </div>
+        </div>
+
+        @if (showBackupCodes) {
+          <div class="backup-codes-section">
+            <h4 class="backup-codes-title">Códigos de respaldo</h4>
+            <p class="backup-codes-desc">
+              Guarda estos códigos en un lugar seguro. Puedes usar cada código una vez para acceder a tu cuenta si no tienes acceso a tu dispositivo de autenticación.
+            </p>
+            <div class="backup-codes-grid">
+              @for (code of backupCodes; track code.id) {
+                <div class="backup-code" [class.used]="code.used">
+                  <span class="code-value">{{ code.code }}</span>
+                  @if (code.used) {
+                    <span class="code-status">Usado</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="backup-codes-actions">
+              <button class="btn-inacap-secondary" type="button" (click)="regenerateBackupCodes()">
+                Generar nuevos códigos
+              </button>
+              <button class="btn-inacap-ghost" type="button" (click)="downloadBackupCodes()">
+                Descargar códigos
+              </button>
+            </div>
+          </div>
+        }
+      }
+
+      @if (showSetup) {
+        <!-- Configuración inicial de 2FA -->
+        <div class="two-factor-setup">
+          <div class="setup-steps">
+            <div class="step" [class.active]="setupStep === 1" [class.completed]="setupStep > 1">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4 class="step-title">Descargar aplicación</h4>
+                <p class="step-desc">Instala una aplicación de autenticación en tu dispositivo.</p>
+              </div>
+            </div>
+            <div class="step" [class.active]="setupStep === 2" [class.completed]="setupStep > 2">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4 class="step-title">Escanear código QR</h4>
+                <p class="step-desc">Escanea el código QR con tu aplicación de autenticación.</p>
+              </div>
+            </div>
+            <div class="step" [class.active]="setupStep === 3">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4 class="step-title">Verificar código</h4>
+                <p class="step-desc">Ingresa el código de 6 dígitos de tu aplicación.</p>
+              </div>
+            </div>
+          </div>
+
+          @if (setupStep === 1) {
+            <div class="setup-content">
+              <h4>Aplicaciones recomendadas</h4>
+              <div class="recommended-apps">
+                <div class="app-option">
+                  <svg class="app-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <div>
+                    <h5>Google Authenticator</h5>
+                    <p>Aplicación oficial de Google</p>
+                  </div>
+                </div>
+                <div class="app-option">
+                  <svg class="app-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <div>
+                    <h5>Microsoft Authenticator</h5>
+                    <p>Aplicación de Microsoft</p>
+                  </div>
+                </div>
+                <div class="app-option">
+                  <svg class="app-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                  </svg>
+                  <div>
+                    <h5>Authy</h5>
+                    <p>Aplicación de Twilio</p>
+                  </div>
+                </div>
+              </div>
+              <div class="setup-actions">
+                <button class="btn-inacap-primary" type="button" (click)="setupStep = 2">Continuar</button>
+                <button class="btn-inacap-ghost" type="button" (click)="cancelTwoFactorSetup()">Cancelar</button>
+              </div>
+            </div>
+          }
+
+          @if (setupStep === 2) {
+            <div class="setup-content">
+              <div class="qr-section">
+                <div class="qr-code">
+                  @if (qrCodeDataUrl) {
+                    <img [src]="qrCodeDataUrl" alt="Código QR para configurar 2FA" class="qr-image"/>
+                  } @else {
+                    <div class="qr-loading">Generando código QR...</div>
+                  }
+                </div>
+                <div class="manual-entry">
+                  <h5>¿No puedes escanear el código?</h5>
+                  <p>Introduce manualmente esta clave en tu aplicación:</p>
+                  <div class="secret-key">
+                    <code>{{ twoFactorSecret }}</code>
+                    <button type="button" class="copy-btn" (click)="copySecret()">
+                      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="setup-actions">
+                <button class="btn-inacap-primary" type="button" (click)="setupStep = 3">Continuar</button>
+                <button class="btn-inacap-ghost" type="button" (click)="setupStep = 1">Volver</button>
+              </div>
+            </div>
+          }
+
+          @if (setupStep === 3) {
+            <div class="setup-content">
+              <form [formGroup]="twoFactorForm" (ngSubmit)="completeTwoFactorSetup()" novalidate>
+                <div class="verification-section">
+                  <h4>Verificar tu aplicación</h4>
+                  <p>Ingresa el código de 6 dígitos que aparece en tu aplicación de autenticación.</p>
+                  
+                  <div class="field">
+                    <label for="verificationCode">Código de verificación</label>
+                    <input 
+                      id="verificationCode" 
+                      type="text" 
+                      formControlName="verificationCode"
+                      placeholder="000000"
+                      maxlength="6"
+                      autocomplete="one-time-code"
+                      class="verification-input"/>
+                    @if ((twoFactorForm.get('verificationCode')?.touched || submittedTwoFactor) && twoFactorForm.get('verificationCode')?.invalid) {
+                      <div class="msg">Ingresa un código de 6 dígitos</div>
+                    }
+                  </div>
+                </div>
+
+                <div class="setup-actions">
+                  <button 
+                    class="btn-inacap-primary" 
+                    type="submit" 
+                    [disabled]="twoFactorLoading || twoFactorForm.invalid">
+                    @if (twoFactorLoading) {Verificando...} @else {Activar 2FA}
+                  </button>
+                  <button class="btn-inacap-ghost" type="button" (click)="setupStep = 2">Volver</button>
+                </div>
+
+                @if (twoFactorError) {
+                  <div class="status-error">{{ twoFactorError }}</div>
+                }
+              </form>
+            </div>
+          }
+        </div>
+      }
+
+      @if (twoFactorSuccess) {
+        <div class="status-success">{{ twoFactorSuccess }}</div>
+      }
     </div>
 
     <!-- Cerrar otras sesiones -->

@@ -30,6 +30,24 @@ export class Profile implements OnInit {
     newPass: ['', [Validators.required, Validators.minLength(6)]],
     confirm: ['', Validators.required],
   });
+
+  // Autenticación de dos factores (2FA)
+  twoFactorEnabled = false;
+  twoFactorLoading = false;
+  twoFactorSuccess = '';
+  twoFactorError = '';
+  showSetup = false;
+  setupStep = 1;
+  qrCodeDataUrl = '';
+  twoFactorSecret = '';
+  showBackupCodes = false;
+  backupCodesCount = 10;
+  backupCodes: Array<{id: string, code: string, used: boolean}> = [];
+  submittedTwoFactor = false;
+
+  twoFactorForm = this.fb.group({
+    verificationCode: ['', [Validators.required, Validators.pattern(/^\d{6}$/)]],
+  });
   passLoading = false;
   passError: string | null = null;
   passSuccess = false;
@@ -171,6 +189,154 @@ export class Profile implements OnInit {
     };
     reader.onerror = () => { this.avatarLoading = false; this.avatarError = 'No se pudo leer la imagen.'; };
     reader.readAsDataURL(file);
+  }
+
+  // Métodos de autenticación de dos factores (2FA)
+  startTwoFactorSetup() {
+    this.showSetup = true;
+    this.setupStep = 1;
+    this.twoFactorError = '';
+    this.generateTwoFactorSecret();
+  }
+
+  cancelTwoFactorSetup() {
+    this.showSetup = false;
+    this.setupStep = 1;
+    this.qrCodeDataUrl = '';
+    this.twoFactorSecret = '';
+    this.twoFactorForm.reset();
+    this.submittedTwoFactor = false;
+  }
+
+  generateTwoFactorSecret() {
+    // Simular generación de secreto para 2FA
+    this.twoFactorSecret = this.generateRandomBase32(32);
+    this.generateQRCode();
+  }
+
+  generateQRCode() {
+    // Simulación de generación de código QR
+    // En producción, usarías una librería como qrcode
+    const issuer = 'INACAP';
+    const accountName = this.profile.institutionalEmail;
+    const otpauth = `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(accountName)}?secret=${this.twoFactorSecret}&issuer=${encodeURIComponent(issuer)}`;
+    
+    // Simulando URL del QR (en producción sería una imagen real)
+    this.qrCodeDataUrl = `data:image/svg+xml;base64,${btoa(`
+      <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <rect width="200" height="200" fill="white"/>
+        <text x="100" y="100" text-anchor="middle" font-family="Arial" font-size="12" fill="black">
+          Código QR
+        </text>
+        <text x="100" y="120" text-anchor="middle" font-family="Arial" font-size="8" fill="gray">
+          ${this.twoFactorSecret}
+        </text>
+      </svg>
+    `)}`;
+  }
+
+  completeTwoFactorSetup() {
+    this.submittedTwoFactor = true;
+    if (this.twoFactorForm.invalid) return;
+
+    this.twoFactorLoading = true;
+    this.twoFactorError = '';
+
+    // Simulación de verificación del código 2FA
+    setTimeout(() => {
+      const code = this.twoFactorForm.get('verificationCode')?.value;
+      
+      // Simulación: acepta códigos que terminen en números pares
+      if (code && parseInt(code.slice(-1)) % 2 === 0) {
+        this.twoFactorEnabled = true;
+        this.showSetup = false;
+        this.generateBackupCodes();
+        this.twoFactorSuccess = 'Autenticación de dos factores activada correctamente';
+        this.twoFactorForm.reset();
+        this.submittedTwoFactor = false;
+        setTimeout(() => this.twoFactorSuccess = '', 3000);
+      } else {
+        this.twoFactorError = 'Código de verificación incorrecto. Inténtalo de nuevo.';
+      }
+      
+      this.twoFactorLoading = false;
+    }, 2000);
+  }
+
+  disableTwoFactor() {
+    if (confirm('¿Estás seguro de que quieres desactivar la autenticación de dos factores? Esto reducirá la seguridad de tu cuenta.')) {
+      this.twoFactorLoading = true;
+      
+      setTimeout(() => {
+        this.twoFactorEnabled = false;
+        this.backupCodes = [];
+        this.showBackupCodes = false;
+        this.twoFactorSuccess = 'Autenticación de dos factores desactivada';
+        this.twoFactorLoading = false;
+        setTimeout(() => this.twoFactorSuccess = '', 3000);
+      }, 1500);
+    }
+  }
+
+  generateBackupCodes() {
+    this.backupCodes = Array.from({ length: 10 }, (_, i) => ({
+      id: `backup-${Date.now()}-${i}`,
+      code: this.generateBackupCode(),
+      used: false
+    }));
+    this.backupCodesCount = this.backupCodes.filter(code => !code.used).length;
+  }
+
+  regenerateBackupCodes() {
+    if (confirm('¿Generar nuevos códigos de respaldo? Los códigos actuales dejarán de funcionar.')) {
+      this.generateBackupCodes();
+      this.twoFactorSuccess = 'Códigos de respaldo regenerados';
+      setTimeout(() => this.twoFactorSuccess = '', 3000);
+    }
+  }
+
+  downloadBackupCodes() {
+    const codesText = this.backupCodes
+      .map(code => `${code.code} ${code.used ? '(usado)' : ''}`)
+      .join('\n');
+    
+    const content = `Códigos de respaldo de INACAP\nGenerados: ${new Date().toLocaleString()}\n\n${codesText}\n\nGuarda estos códigos en un lugar seguro.`;
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inacap-backup-codes-${Date.now()}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  copySecret() {
+    navigator.clipboard.writeText(this.twoFactorSecret).then(() => {
+      this.twoFactorSuccess = 'Clave copiada al portapapeles';
+      setTimeout(() => this.twoFactorSuccess = '', 2000);
+    }).catch(() => {
+      this.twoFactorError = 'No se pudo copiar la clave';
+      setTimeout(() => this.twoFactorError = '', 2000);
+    });
+  }
+
+  private generateRandomBase32(length: number): string {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+
+  private generateBackupCode(): string {
+    const chars = '0123456789abcdef';
+    let result = '';
+    for (let i = 0; i < 8; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
   }
 
   onAvatarRemove() {
