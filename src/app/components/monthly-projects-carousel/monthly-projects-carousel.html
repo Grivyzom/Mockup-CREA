@@ -1,0 +1,239 @@
+<div class="deck-wrapper select-none">
+	<!-- Selector de vista (oculto en móvil) -->
+	<div class="view-toggle" aria-label="Cambiar estilo de tarjeta">
+		<button type="button" class="seg-btn" [class.active]="currentVariant==='standard'" (click)="setVariant('standard')">Amplia</button>
+		<button type="button" class="seg-btn" [class.active]="currentVariant==='compact'" (click)="setVariant('compact')">Compacta</button>
+		<button type="button" class="seg-btn" [class.active]="currentVariant==='showcase'" (click)="setVariant('showcase')">Vitrina</button>
+	</div>
+
+	<!-- Stack de cartas -->
+    <div class="deck"
+	    role="region"
+	    aria-roledescription="Carrusel de proyectos"
+	    [attr.aria-label]="'Proyecto ' + (currentIndex + 1) + ' de ' + projects.length"
+	    tabindex="0"
+			 [ngClass]="{
+				'variant-compact': currentVariant==='compact',
+				'variant-showcase': currentVariant==='showcase'
+			 }"
+        (click)="onDeckClick($event)"
+	    (touchstart)="onTouchStart($event)"
+	    (touchend)="onTouchEnd($event)"
+	    (mouseenter)="onMouseEnter()"
+	    (mouseleave)="onMouseLeave()"
+	    (focusin)="onFocusIn()"
+	    (focusout)="onFocusOut()"
+	    (keydown)="onKeydown($event)">
+
+		@for (p of visibleStack; track p.id; let i = $index) {
+			<div class="card" [style.zIndex]="100 - i" [class.top]="i === 0"
+					 role="group" aria-roledescription="slide"
+					 [attr.aria-label]="p.title + ' (' + (currentIndex + 1) + ' de ' + projects.length + ')'"
+					 (click)="onCardClick($event, p, i)"
+					 [style.transform]="'translateY(' + (i*10) + 'px) scale(' + (1 - i*0.04) + ')'">
+
+					<!-- Indicador de progreso del carrusel (se mueve fuera de la tarjeta) -->
+
+				<!-- Región en vivo para anunciar cambios de slide a lectores de pantalla -->
+				@if (i === 0) {
+				  <div class="sr-only" aria-live="polite">{{ liveAnnouncement }}</div>
+				}
+
+				<!-- Banner -->
+				<div class="banner bg-gradient-to-r" [ngClass]="getAreaColor(p.area)">
+					<div class="overlay"></div>
+					<div class="badge-left">
+						<div class="icon-glass">
+							<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getAreaIcon(p.area)"/>
+							</svg>
+						</div>
+						<div class="meta">
+							<div class="text-xs opacity-90 text-white">{{ p.duration }}</div>
+							<div class="text-sm font-semibold text-white">{{ p.students }} estudiantes</div>
+						</div>
+					</div>
+					<div class="badge-right areas-dropdown-container"
+							 (mouseenter)="openAreasDropdown(p.id)"
+							 (mouseleave)="closeAreasDropdown(p.id)">
+						<button class="info-icon-btn" type="button" aria-label="Ver áreas involucradas"
+									(click)="toggleAreasDropdown(p.id); $event.stopPropagation()">
+							<svg class="info-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+								<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+							</svg>
+						</button>
+						<span class="chip area-chip" [ngClass]="'chip-' + p.area">
+							{{ getAreaLabel(p.area) }}
+						</span>
+						<div class="areas-dropdown" [class.show]="areasDropdownOpenId === p.id">
+							<div class="areas-dropdown-inner">
+								<div class="areas-title">Áreas involucradas</div>
+								<div class="areas-chips">
+									@for (a of (p.areas || [p.area]); track a) {
+										<span class="chip area-chip" [ngClass]="'chip-' + a">
+											{{ getAreaLabel(a) }}
+										</span>
+									}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Contenido -->
+				<div class="content">
+					<div class="content-main">
+						<h3 class="title marquee-bounce" [appOverflowMarquee]="true"><span class="marquee-content">{{ p.title }}</span></h3>
+
+						<!-- Descripción -->
+						<div class="description-section">
+							<div class="description-desktop">
+								<p class="description-text">{{ p.fullDescription || p.description }}</p>
+							</div>
+
+							<div class="description-mobile">
+								<button
+									class="description-toggle"
+									type="button"
+									[attr.aria-expanded]="isDescriptionOpen(p.id)"
+									(click)="toggleDescription(p.id); $event.stopPropagation()">
+									<span class="description-preview">{{ p.description }}</span>
+									<svg
+										class="description-icon"
+										[class.rotated]="isDescriptionOpen(p.id)"
+										viewBox="0 0 20 20"
+										fill="currentColor">
+										<path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+									</svg>
+								</button>
+
+								<div class="description-expanded" [class.show]="isDescriptionOpen(p.id)">
+									<p class="description-full">{{ p.fullDescription || p.description }}</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Progreso -->
+						<div class="progress-section">
+							<div class="progress-header">
+								<span class="progress-label">Progreso del proyecto</span>
+								<span class="progress-percentage">{{ p.progress }}%</span>
+							</div>
+							<div class="progress-bar">
+								<div class="progress-fill" [style.width.%]="p.progress"></div>
+							</div>
+						</div>
+
+						<!-- Miembros -->
+						@let members = p.members ?? [];
+						@if (members.length > 0) {
+							<div class="members-section">
+								<div class="members-header">
+									<span class="members-label">Miembros del equipo</span>
+									<span class="members-count">{{ members.length }} miembros</span>
+								</div>
+								<div class="members-list">
+									@for (member of members | slice:0:3; track member.id) {
+										<div class="member-card">
+											<div class="member-avatar">
+												<img [src]="member.avatar" [alt]="member.name" />
+											</div>
+											<div class="member-info">
+												<div class="member-name marquee-bounce" [appOverflowMarquee]="true"><span class="marquee-content">{{ member.name }}</span></div>
+												<div class="member-role">{{ member.role }}</div>
+											</div>
+										</div>
+									}
+									@if (members.length > 3) {
+										<div class="more-members">
+											<div class="more-avatar">
+												<span>+{{ members.length - 3 }}</span>
+											</div>
+										</div>
+									}
+								</div>
+							</div>
+						}
+					</div>
+
+					<div class="bottom">
+					<span class="difficulty" [ngClass]="{
+							'dif-basic': p.difficulty === 'Básico',
+							'dif-inter': p.difficulty === 'Intermedio',
+							'dif-adv': p.difficulty === 'Avanzado'
+						}">
+					{{ p.difficulty }}
+					</span>
+												<button
+													class="ver-mas"
+													type="button"
+													[attr.aria-label]="'Ver más sobre ' + p.title"
+													[title]="'Ver más sobre ' + p.title"
+													(click)="open(p); $event.stopPropagation()">
+													<svg class="ver-mas-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+														<path d="M5 12h14M13 5l7 7-7 7" />
+													</svg>
+												<span class="ver-mas-label">Ver más</span>
+												</button>
+					</div>
+				</div>
+			</div>
+		}
+
+		<!-- Controles -->
+				<button class="nav left" (click)="prev()" aria-label="Anterior" type="button" [disabled]="isAnimating">
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M15 18l-6-6 6-6"/>
+			</svg>
+		</button>
+				<button class="nav right" (click)="next()" aria-label="Siguiente" type="button" [disabled]="isAnimating">
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M9 18l6-6-6-6"/>
+			</svg>
+		</button>
+
+				<!-- Botón Play/Pause de autoplay -->
+				<button class="nav autoplay-toggle" type="button"
+								[attr.aria-pressed]="isAutoplaying"
+								[attr.aria-label]="isAutoplaying ? 'Pausar carrusel' : 'Reanudar carrusel'"
+								(click)="toggleAutoplay()">
+					<svg *ngIf="isAutoplaying" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<path d="M10 5h-2v14h2V5zm6 0h-2v14h2V5z" />
+					</svg>
+					<svg *ngIf="!isAutoplaying" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<path d="M8 5v14l11-7z" />
+					</svg>
+				</button>
+
+
+
+		<!-- Indicadores de swipe para móvil -->
+		<div class="swipe-indicator mobile-only" [class.show]="!hasUserInteracted">
+			<div class="swipe-hint">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+					<path d="M7 4v16l13-8z"/>
+				</svg>
+				<span>Desliza para navegar</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- Paginación debajo del deck (fuera del card) -->
+	@if (projects.length > 1) {
+		<div class="carousel-progress carousel-progress-bottom">
+			<div class="progress-dots">
+				@for (project of projects; track project.id; let idx = $index) {
+					<button class="progress-dot" type="button"
+								[class.active]="idx === currentIndex"
+								[attr.aria-label]="'Ir al proyecto ' + (idx + 1) + ' de ' + projects.length"
+								[attr.aria-current]="idx === currentIndex ? 'true' : null"
+								(click)="goToSlide(idx)">
+					</button>
+				}
+			</div>
+			<div class="progress-counter">
+				{{ currentIndex + 1 }} / {{ projects.length }}
+			</div>
+		</div>
+	}
+</div>

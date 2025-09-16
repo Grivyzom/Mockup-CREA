@@ -1,0 +1,130 @@
+<div class="demo-container">
+  <header class="demo-header">
+    <h1>🎨 Webkit Scrollbar INACAP - Demostración</h1>
+    <p>Explora todos los tipos de scrollbar personalizados disponibles en la aplicación.</p>
+  </header>
+
+  <div class="demo-grid">
+    <!-- 1. Scrollbar por defecto -->
+    <div class="demo-card">
+      <h3>📄 Scrollbar por defecto</h3>
+      <p class="demo-description">Aplicado globalmente a toda la aplicación</p>
+      <div class="demo-content default-scroll">
+        @for (proyecto of proyectos.slice(0, 8); track proyecto.id) {
+          <div class="content-item">
+            <strong>{{proyecto.titulo}}</strong>
+            <p>{{proyecto.descripcion}}</p>
+            <small>Carrera: {{proyecto.carrera}} | Estudiantes: {{proyecto.estudiantes}}</small>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- 2. Scrollbar INACAP -->
+    <div class="demo-card">
+      <h3>🏛️ Scrollbar INACAP Premium</h3>
+      <p class="demo-description">Para elementos destacados con identidad visual fuerte</p>
+      <div class="demo-content scrollbar-inacap">
+        @for (proyecto of proyectos.slice(0, 10); track proyecto.id) {
+          <div class="content-item premium">
+            <div class="item-header">
+              <strong>{{proyecto.titulo}}</strong>
+              <span class="badge">{{proyecto.carrera}}</span>
+            </div>
+            <p>{{proyecto.descripcion}}</p>
+            <div class="item-footer">
+              <span>👥 {{proyecto.estudiantes}} estudiantes</span>
+              <span>📅 {{proyecto.fecha}}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- 3. Scrollbar delgado -->
+    <div class="demo-card">
+      <h3>🪶 Scrollbar delgado</h3>
+      <p class="demo-description">Para espacios compactos y elementos secundarios</p>
+      <div class="demo-content scrollbar-thin">
+        @for (carrera of carreras; track carrera) {
+          <div class="thin-item">
+            <span class="dot"></span>
+            {{carrera}}
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- 4. Scrollbar invisible -->
+    <div class="demo-card">
+      <h3>👻 Scrollbar invisible</h3>
+      <p class="demo-description">Para carruseles y elementos con navegación externa</p>
+      <div class="demo-content scrollbar-invisible horizontal">
+        @for (proyecto of proyectos.slice(0, 15); track proyecto.id) {
+          <div class="carousel-item">
+            <div class="card-mini">
+              <h4>Proyecto {{proyecto.id}}</h4>
+              <p>{{proyecto.carrera}}</p>
+              <small>{{proyecto.estudiantes}} estudiantes</small>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="carousel-controls">
+        <button (click)="showAlert('scroll left')" class="btn-carousel">← Anterior</button>
+        <button (click)="showAlert('scroll right')" class="btn-carousel">Siguiente →</button>
+      </div>
+    </div>
+
+    <!-- 5. Scrollbar para formularios -->
+    <div class="demo-card">
+      <h3>📝 Scrollbar para formularios</h3>
+      <p class="demo-description">Optimizado para textareas y campos de entrada</p>
+      <textarea 
+        class="demo-textarea scrollbar-form" 
+        placeholder="Escribe la descripción de tu proyecto aquí..."
+        readonly>{{textoLargo}}</textarea>
+    </div>
+
+    <!-- 6. Scrollbar para modales -->
+    <div class="demo-card">
+      <h3>🗂️ Scrollbar para modales</h3>
+      <p class="demo-description">Diseñado para overlays y ventanas emergentes</p>
+      <div class="demo-modal">
+        <div class="modal-content">
+          <h4>📋 Detalles del proyecto</h4>
+          @for (proyecto of proyectos; track proyecto.id) {
+            <div class="modal-item">
+              <div class="modal-row">
+                <strong>{{proyecto.titulo}}</strong>
+                <span class="status">Activo</span>
+              </div>
+              <p>{{proyecto.descripcion}}</p>
+              <div class="modal-meta">
+                <span>🎓 {{proyecto.carrera}}</span>
+                <span>👥 {{proyecto.estudiantes}}</span>
+                <span>📅 {{proyecto.fecha}}</span>
+              </div>
+              <hr>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="demo-footer">
+    <div class="footer-content">
+      <h3>🚀 Implementación</h3>
+      <p>Para usar estos scrollbars en tu aplicación, simplemente agrega las clases CSS correspondientes:</p>
+      <div class="code-examples">
+        <code>.scrollbar-inacap</code>
+        <code>.scrollbar-thin</code>
+        <code>.scrollbar-invisible</code>
+        <code>.scrollbar-form</code>
+        <code>.modal-content</code>
+      </div>
+      <p>Consulta la documentación completa en <code>webkit-scrollbar-guide.md</code></p>
+    </div>
+  </footer>
+</div>

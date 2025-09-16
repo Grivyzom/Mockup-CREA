@@ -1,0 +1,157 @@
+<!-- Modal Backdrop -->
+<div *ngIf="isOpen" 
+     class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[2000] p-4"
+     (click)="onBackdropClick($event)">
+  
+  <!-- Modal Container -->
+  <div class="modal-container bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+       (click)="$event.stopPropagation()">
+    
+    <!-- Modal Header con Banner -->
+    <div *ngIf="project" class="relative">
+      <!-- Banner del Proyecto -->
+      <div class="project-banner h-48 bg-gradient-to-r relative overflow-hidden"
+           [ngClass]="getAreaColor(project.area)">
+        <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+        
+        <!-- Icono del área -->
+        <div class="absolute top-6 left-6">
+          <div class="w-16 h-16 bg-white bg-opacity-20 rounded-xl flex items-center justify-center glass-effect">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="getAreaIcon(project.area)"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Botón de cerrar -->
+        <button class="absolute top-6 right-6 w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center hover:bg-opacity-30 transition-all"
+                (click)="onCloseModal()">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+
+        <!-- Información del banner -->
+        <div class="absolute bottom-6 left-6 text-white">
+          <div class="text-sm opacity-90">{{ project.duration }}</div>
+          <div class="text-lg font-semibold">{{ project.students }} estudiantes</div>
+        </div>
+
+        <!-- Badge de dificultad -->
+        <div class="absolute bottom-6 right-6">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white bg-opacity-20 text-white backdrop-blur-sm">
+            {{ project.difficulty }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Body -->
+    <div *ngIf="project" class="modal-body p-8 overflow-y-auto max-h-[calc(90vh-12rem)]">
+      
+      <!-- Título del Proyecto -->
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">{{ project.title }}</h2>
+        <p class="text-lg text-gray-600">{{ project.description }}</p>
+      </div>
+
+      <!-- Grid de Información -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        
+        <!-- Miembros del Equipo -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+            </svg>
+            Miembros del Equipo
+          </h3>
+          <div class="space-y-2">
+            <div *ngFor="let member of project.members" 
+                 class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center overflow-hidden">
+                <img *ngIf="member.avatar" [src]="member.avatar" [alt]="member.name" class="w-full h-full object-cover rounded-full" />
+                <span *ngIf="!member.avatar" class="text-blue-600 font-semibold text-sm">{{ member.name.charAt(0) }}</span>
+              </div>
+              <div class="flex-1">
+                <div class="text-gray-900 font-medium">{{ member.name }}</div>
+                <div class="text-gray-500 text-sm">{{ member.role }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Carreras Involucradas -->
+        <div class="space-y-4">
+          <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+            </svg>
+            Carreras Involucradas
+          </h3>
+          <div class="flex flex-wrap gap-2">
+            <span *ngFor="let area of project.areas" 
+                  class="area-chip inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                  [ngClass]="'chip-'+area">
+              <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+              </svg>
+              {{ getAreaLabel(area) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estado y Progreso -->
+      <div class="bg-gray-50 rounded-xl p-6 mb-8">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-xl font-semibold text-gray-900 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+            </svg>
+            Estado del Proyecto
+          </h3>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                [ngClass]="getStatusColor(project.status)">
+            {{ project.status }}
+          </span>
+        </div>
+        
+        <!-- Barra de Progreso -->
+        <div class="space-y-2">
+          <div class="flex justify-between text-sm text-gray-600">
+            <span>Progreso</span>
+            <span>{{ project.progress }}%</span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-3">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500"
+                 [style.width.%]="project.progress"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripción Completa -->
+      <div class="mb-8" *ngIf="project.fullDescription">
+        <h3 class="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+          <svg class="w-5 h-5 mr-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-6a1 1 0 00-1-1H9a1 1 0 00-1 1v6a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 8V8a1 1 0 112 0v4a1 1 0 11-2 0z" clip-rule="evenodd"/>
+          </svg>
+          Descripción Detallada
+        </h3>
+        <p class="text-gray-700 leading-relaxed">{{ project.fullDescription }}</p>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer bg-gray-50 px-8 py-6 flex items-center justify-between">
+      <button class="text-gray-500 hover:text-gray-700 px-4 py-2 text-sm font-medium transition-colors"
+              (click)="onCloseModal()">
+        Cerrar
+      </button>
+      <button class="btn-inacap px-6 py-3 rounded-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+              (click)="viewFullProject()">
+        Ver Proyecto Completo →
+      </button>
+    </div>
+  </div>
+</div>

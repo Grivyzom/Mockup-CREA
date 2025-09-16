@@ -1,0 +1,224 @@
+<section class="profile-wrap">
+  <div class="container tabs-layout">
+    <div class="tabs">
+      <button class="tab active" type="button">Cuenta</button>
+      <button class="tab" type="button" disabled>Notificaciones</button>
+      <button class="tab" type="button" disabled>Facturación</button>
+      <button class="tab" type="button" disabled>Equipos</button>
+      <button class="tab" type="button" disabled>Integraciones</button>
+    </div>
+
+    <!-- Información personal -->
+    <div class="card dark">
+      <div class="card-header">
+        <div>
+          <h2 class="section-title">Información personal</h2>
+          <p class="section-desc">Utilice una dirección permanente donde pueda recibir correo.</p>
+        </div>
+        <div class="avatar-col">
+          <img class="avatar" [src]="profile.avatarUrl || 'public/favicon.ico'" alt="Avatar"/>
+          <div class="avatar-actions">
+            <label class="btn-inacap-secondary small" for="avatarInput">
+              Cambiar avatar
+            </label>
+            <input id="avatarInput" type="file" accept="image/png,image/jpeg,image/gif" (change)="onAvatarSelected($event)" hidden />
+          </div>
+          <small class="avatar-hint">JPG, GIF o PNG. 1 MB máximo.</small>
+          @if (avatarLoading) {<div class="status-loading">Cargando imagen…</div>}
+          @if (avatarSuccess) {<div class="status-success">Avatar actualizado</div>}
+          @if (avatarError) {<div class="status-error">{{ avatarError }}</div>}
+        </div>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="saveProfile()" novalidate>
+        <div class="grid-2">
+          <div class="field">
+            <label for="firstName">Nombre de pila</label>
+            <input id="firstName" type="text" formControlName="firstName" autocomplete="given-name"/>
+            @if ((form.get('firstName')?.touched || submittedProfile) && form.get('firstName')?.invalid) {<div class="msg">Requerido</div>}
+          </div>
+          <div class="field">
+            <label for="lastName">Apellido</label>
+            <input id="lastName" type="text" formControlName="lastName" autocomplete="family-name"/>
+            @if ((form.get('lastName')?.touched || submittedProfile) && form.get('lastName')?.invalid) {<div class="msg">Requerido</div>}
+          </div>
+        </div>
+
+        <div class="grid-1">
+          <div class="field">
+            <label for="institutionalEmail">Dirección de correo electrónico</label>
+            <input id="institutionalEmail" type="email" formControlName="institutionalEmail" autocomplete="email"/>
+            @if ((form.get('institutionalEmail')?.touched || submittedProfile) && form.get('institutionalEmail')?.invalid) {<div class="msg">Correo válido requerido</div>}
+          </div>
+        </div>
+
+        <div class="grid-1">
+          <div class="field">
+            <label for="username">Nombre de usuario</label>
+            <input id="username" type="text" formControlName="username" autocomplete="username" placeholder="ejemplo.com/ Jane Smith"/>
+            @if ((form.get('username')?.touched || submittedProfile) && form.get('username')?.invalid) {<div class="field-error">Mínimo 3 caracteres</div>}
+          </div>
+        </div>
+
+        <div class="grid-1">
+          <div class="field">
+            <label for="timezone">Zona horaria</label>
+            <select id="timezone" formControlName="timezone">
+              <option value="America/Los_Angeles">Hora estándar del Pacífico</option>
+              <option value="America/Santiago">Hora de Chile (America/Santiago)</option>
+              <option value="America/Argentina/Buenos_Aires">Buenos Aires</option>
+              <option value="America/Lima">Lima</option>
+              <option value="America/Bogota">Bogotá</option>
+              <option value="UTC">UTC</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn-inacap-primary" type="submit" [disabled]="!canSaveProfile">
+            @if (!saving) {<span>Ahorrar</span>}
+            @if (saving) {<span class="btn-loading" aria-label="Guardando"></span>}
+          </button>
+          @if (saveSuccess) {<span class="status-success">Guardado</span>}
+        </div>
+      </form>
+    </div>
+
+    <!-- Cambiar contraseña -->
+    <div class="card dark">
+      <h2 class="section-title">
+        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+        </svg>
+        Cambiar la contraseña
+      </h2>
+      <p class="section-desc">Actualice su contraseña asociada a su cuenta.</p>
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" novalidate>
+        <div class="password-form-grid">
+          <div class="field">
+            <label for="current">Contraseña actual</label>
+            <div class="input-with-btn">
+              <input id="current" [type]="showCurrent ? 'text' : 'password'" formControlName="current" autocomplete="current-password"/>
+              <button type="button" class="icon-btn" (click)="showCurrent=!showCurrent" [attr.aria-pressed]="showCurrent" [attr.aria-label]="showCurrent ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                @if (!showCurrent) {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                }
+                @if (showCurrent) {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                  </svg>
+                }
+              </button>
+            </div>
+            <small class="hint">Usa 10+ caracteres, mezcla mayúsculas, minúsculas y símbolos.</small>
+            @if ((passwordForm.get('current')?.touched || submittedPass) && passwordForm.get('current')?.invalid) {<div class="msg">Requerido</div>}
+          </div>
+          <div class="field">
+            <label for="newPass">Nueva contraseña</label>
+            <div class="input-with-btn">
+              <input id="newPass" [type]="showNew ? 'text' : 'password'" formControlName="newPass" autocomplete="new-password"/>
+              <button type="button" class="icon-btn" (click)="showNew=!showNew" [attr.aria-pressed]="showNew" [attr.aria-label]="showNew ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                @if (!showNew) {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                }
+                @if (showNew) {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 711.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                  </svg>
+                }
+              </button>
+            </div>
+            <div class="strength" role="progressbar" [attr.aria-valuenow]="passwordStrength" aria-valuemin="0" aria-valuemax="4" [attr.aria-label]="'Fuerza: ' + strengthLabel">
+              <span [class.on]="passwordStrength>0"></span>
+              <span [class.on]="passwordStrength>1"></span>
+              <span [class.on]="passwordStrength>2"></span>
+              <span [class.on]="passwordStrength>3"></span>
+            </div>
+            <div class="strength-label">{{ strengthLabel }}</div>
+            @if ((passwordForm.get('newPass')?.touched || submittedPass) && passwordForm.get('newPass')?.invalid) {<div class="msg">Mínimo 6 caracteres</div>}
+          </div>
+          <div class="field">
+            <label for="confirm">Confirmar contraseña</label>
+            <div class="input-with-btn">
+              <input id="confirm" [type]="showConfirm ? 'text' : 'password'" formControlName="confirm" autocomplete="new-password"/>
+              <button type="button" class="icon-btn" (click)="showConfirm=!showConfirm" [attr.aria-pressed]="showConfirm" [attr.aria-label]="showConfirm ? 'Ocultar contraseña' : 'Mostrar contraseña'">
+                @if (!showConfirm) {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                }
+                @if (showConfirm) {
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 711.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"/>
+                  </svg>
+                }
+              </button>
+            </div>
+            @if (passMismatch) {<div class="msg">Las contraseñas no coinciden</div>}
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-inacap-primary" type="submit" [disabled]="passLoading || passwordForm.invalid || passMismatch">
+            Ahorrar
+          </button>
+          @if (passSuccess) {<span class="status-success">Contraseña actualizada</span>}
+          @if (passError) {<span class="status-error">{{ passError }}</span>}
+        </div>
+      </form>
+    </div>
+
+    <!-- Cerrar otras sesiones -->
+    <div class="card dark">
+      <h2 class="section-title">
+        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+        Cerrar otras sesiones
+      </h2>
+      <p class="section-desc">Ingrese su contraseña para confirmar que desea cerrar sesión en sus otras sesiones en todos sus dispositivos.</p>
+      <form [formGroup]="sessionsForm" (ngSubmit)="closeOtherSessions()" novalidate>
+        <div class="grid-1">
+          <div class="field"><label for="sessionPass">Tu contraseña</label><input id="sessionPass" type="password" formControlName="password" autocomplete="current-password"/></div>
+        </div>
+        <div class="actions">
+          <button class="btn-inacap-secondary" type="submit" [disabled]="sessionsLoading || sessionsForm.invalid">
+            Cerrar otras sesiones
+          </button>
+          @if (sessionsSuccess) {<span class="status-success">Listo</span>}
+        </div>
+      </form>
+    </div>
+
+    <!-- Eliminar cuenta -->
+    <div class="card danger dark">
+      <h2 class="section-title">
+        <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+        </svg>
+        Eliminar cuenta
+      </h2>
+      <p class="section-desc">¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción es irreversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.</p>
+      <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()" novalidate>
+        <div class="grid-1">
+          <div class="field">
+            <label for="confirmDel">Escribe ELIMINAR para confirmar</label>
+            <input id="confirmDel" type="text" formControlName="confirm"/>
+            @if (deleteError) {<div class="err">{{ deleteError }}</div>}
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn-danger-inacap" type="submit" [disabled]="deleteLoading || deleteForm.invalid || confirmText.toUpperCase()!=='ELIMINAR'">
+            Sí, eliminar mi cuenta
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

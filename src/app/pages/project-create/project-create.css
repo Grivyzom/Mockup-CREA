@@ -1,0 +1,54 @@
+/* Proyecto - Crear (UI INACAP) */
+
+.form-hint { color: #6b7280; font-size: 0.875rem; }
+
+/* Ajustes de inputs y focus con paleta INACAP */
+input[type="text"], input[type="number"], input[type="email"], textarea, select {
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.25);
+}
+
+/* Previews */
+.preview-grid img { border: 1px solid var(--inacap-border); }
+
+/* Responsive cards spacing */
+@media (max-width: 640px) {
+  .card-inacap { padding: 1rem !important; }
+}
+
+/* Animación para revelar secciones progresivamente */
+.reveal {
+  opacity: 0;
+  transform: translateY(8px);
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity .25s ease, transform .25s ease, max-height .35s ease;
+}
+.reveal.show {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 2000px; /* suficiente para el contenido */
+  overflow: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: none; transform: none; }
+}
+
+/* Botonera de acciones en mobile */
+@media (max-width: 640px) {
+  .btn-inacap-primary,
+  .btn-inacap-secondary {
+    border-radius: 0.75rem; /* touch-friendly */
+  }
+  .actions-safe-area {
+    padding-bottom: env(safe-area-inset-bottom, 16px);
+  }
+}
+
+/* Contadores de caracteres en advertencia */
+.text-red-600 { color: #dc2626; }
+.text-gray-500 { color: #6b7280; }

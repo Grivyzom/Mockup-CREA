@@ -1,0 +1,68 @@
+<nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex-shrink-0">
+        <a routerLink="/home" class="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
+          MiWeb
+        </a>
+      </div>
+      
+      <!-- Navigation Links -->
+      <div class="hidden md:block">
+        <div class="ml-10 flex items-baseline space-x-4">
+          <a routerLink="/home" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            Inicio
+          </a>
+          <a routerLink="/about" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            Nosotros
+          </a>
+          <a routerLink="/contact" 
+             routerLinkActive="text-blue-600 border-b-2 border-blue-600"
+             class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            Contacto
+          </a>
+        </div>
+      </div>
+      
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button (click)="toggleMobileMenu()" 
+                class="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div [class.hidden]="!isMobileMenuOpen" class="md:hidden">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <a routerLink="/home" 
+           routerLinkActive="text-blue-600 bg-blue-50"
+           (click)="closeMobileMenu()"
+           class="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">
+          Inicio
+        </a>
+        <a routerLink="/about" 
+           routerLinkActive="text-blue-600 bg-blue-50"
+           (click)="closeMobileMenu()"
+           class="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">
+          Nosotros
+        </a>
+        <a routerLink="/contact" 
+           routerLinkActive="text-blue-600 bg-blue-50"
+           (click)="closeMobileMenu()"
+           class="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium">
+          Contacto
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

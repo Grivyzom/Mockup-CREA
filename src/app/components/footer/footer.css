@@ -1,0 +1,122 @@
+/* Footer responsive adaptado al navbar */
+footer {
+  width: 100%;
+  margin-left: 0;
+  margin-top: auto;
+  position: relative;
+  z-index: 5; /* Por debajo del sidebar */
+  background-color: #1f2937 !important;
+}
+
+/* Contenedor principal del footer */
+.footer-container {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  margin-left: 0;
+  transition: margin-left 0.3s ease-in-out, padding-left 0.3s ease-in-out;
+  max-width: none;
+  width: 100%;
+}
+
+/* Adaptación para desktop con sidebar */
+@media (min-width: 1024px) {
+  footer {
+    width: 100%; /* Ocupar solo el ancho del contenedor padre */
+    margin-left: 0; /* Sin margen adicional aquí */
+    position: relative;
+  }
+  
+  .footer-container {
+    padding-left: 2rem;
+    padding-right: 1rem;
+    max-width: none;
+    width: 100%;
+  }
+}
+
+/* Grid responsive */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* Ajustes para móvil */
+@media (max-width: 767px) {
+  .footer-brand {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .footer-links,
+  .footer-contact {
+    text-align: center;
+  }
+  
+  .footer-social {
+    justify-content: center;
+  }
+}
+
+/* Enlaces del footer */
+.footer-link {
+  color: #d1d5db;
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+}
+
+/* Iconos sociales */
+.footer-social {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.footer-social a {
+  color: #d1d5db;
+  transition: color 0.2s ease;
+}
+
+.footer-social a:hover {
+  color: #ffffff;
+}
+
+/* Copyright */
+.footer-copyright {
+  text-align: center;
+  border-top: 1px solid #374151;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  color: #9ca3af;
+}
+
+/* Texto no seleccionable */
+footer * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

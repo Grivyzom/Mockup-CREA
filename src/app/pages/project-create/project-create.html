@@ -1,0 +1,191 @@
+<div class="min-h-screen bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <header class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900">Crear Proyecto</h1>
+      <p class="text-gray-600 mt-2">Completa la información para publicar tu proyecto. Los campos con * son obligatorios.</p>
+    </header>
+
+    <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-4" aria-label="Progreso del formulario">
+      <div class="h-full bg-[var(--inacap-red)] transition-all" [style.width.%]="progressPercent"></div>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-8" novalidate>
+      <!-- Sección básica -->
+      <section class="card-inacap p-6 reveal show">
+        <h2 class="text-lg font-bold mb-4">Información básica</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Título del Proyecto *</label>
+            <input type="text" formControlName="titulo" autocomplete="off" inputmode="text" maxlength="100" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" placeholder="Ej: Plataforma de aprendizaje colaborativo" />
+            <div class="flex justify-between mt-1">
+              <p *ngIf="form.get('titulo')?.invalid && form.get('titulo')?.touched" class="text-sm text-red-600">Ingresa un título entre 6 y 100 caracteres.</p>
+              <span class="text-xs text-gray-500" [class.text-red-600]="tituloWarn">{{tituloLen}} / {{tituloMax}}</span>
+            </div>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Descripción del proyecto *</label>
+            <textarea rows="5" formControlName="descripcion" autocomplete="off" maxlength="1000" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" placeholder="Cuenta brevemente el objetivo, el alcance y el impacto esperado"></textarea>
+            <div class="flex justify-between mt-1">
+              <p *ngIf="form.get('descripcion')?.invalid && form.get('descripcion')?.touched" class="text-sm text-red-600">La descripción debe tener entre 20 y 1000 caracteres.</p>
+              <span class="text-xs text-gray-500" [class.text-red-600]="descripcionWarn">{{descripcionLen}} / {{descripcionMax}}</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Número de estudiantes *</label>
+            <input type="number" formControlName="numeroEstudiantes" min="1" max="50" step="1" inputmode="numeric" autocomplete="off" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+            <p *ngIf="form.get('numeroEstudiantes')?.invalid && form.get('numeroEstudiantes')?.touched" class="text-sm text-red-600 mt-1">Debe ser un número entre 1 y 50.</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Fecha de inicio *</label>
+            <input type="date" formControlName="fechaInicio" [min]="todayISO" autocomplete="off" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+            <p *ngIf="form.get('fechaInicio')?.invalid && form.get('fechaInicio')?.touched" class="text-sm text-red-600 mt-1">Selecciona una fecha de inicio.</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Fecha de término *</label>
+            <input type="date" formControlName="fechaFin" [min]="fechaInicioISO || todayISO" autocomplete="off" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+            <p *ngIf="form.get('fechaFin')?.hasError('rangoInvalido') && form.get('fechaFin')?.touched" class="text-sm text-red-600 mt-1">La fecha de término debe ser posterior a la de inicio.</p>
+            <p *ngIf="form.get('fechaFin')?.invalid && !form.get('fechaFin')?.hasError('rangoInvalido') && form.get('fechaFin')?.touched" class="text-sm text-red-600 mt-1">Selecciona una fecha de término.</p>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Carreras involucradas *</label>
+            <div class="mt-2 flex flex-wrap gap-2">
+              <button type="button"
+                      *ngFor="let c of carrerasDisponibles"
+                      (click)="toggleCarrera(c)"
+                      [class.bg-inacap-red]="(carreras.value || []).includes(c)"
+                      [class.text-white]="(carreras.value || []).includes(c)"
+                      class="px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-inacap-red-light">
+                {{ c }}
+              </button>
+            </div>
+            <p *ngIf="form.get('carreras')?.invalid && form.get('carreras')?.touched" class="text-sm text-red-600 mt-1">Selecciona al menos una carrera.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección: Líder/Representante del proyecto -->
+      <section class="card-inacap p-6 reveal" [class.show]="basicComplete">
+        <h2 class="text-lg font-bold mb-4">Líder del Proyecto</h2>
+        <p class="text-sm text-gray-500 mb-4">Usa una dirección donde puedas recibir correspondencia.</p>
+        <div formGroupName="lider" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">First name *</label>
+            <input type="text" formControlName="firstName" autocomplete="given-name" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+            <p *ngIf="form.get('lider.firstName')?.invalid && form.get('lider.firstName')?.touched" class="text-sm text-red-600 mt-1">Obligatorio.</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Last name *</label>
+            <input type="text" formControlName="lastName" autocomplete="family-name" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+            <p *ngIf="form.get('lider.lastName')?.invalid && form.get('lider.lastName')?.touched" class="text-sm text-red-600 mt-1">Obligatorio.</p>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Email address *</label>
+            <input type="email" formControlName="email" autocomplete="email" inputmode="email" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+            <p *ngIf="form.get('lider.email')?.invalid && form.get('lider.email')?.touched" class="text-sm text-red-600 mt-1">Ingresa un email válido.</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Country *</label>
+            <select formControlName="country" autocomplete="country" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]">
+              <option>Chile</option>
+              <option>United States</option>
+              <option>Argentina</option>
+              <option>Peru</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Street address *</label>
+            <input type="text" formControlName="street" autocomplete="street-address" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">City *</label>
+            <input type="text" formControlName="city" autocomplete="address-level2" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">State / Province *</label>
+            <input type="text" formControlName="state" autocomplete="address-level1" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección multimedia -->
+      <section class="card-inacap p-6 reveal" [class.show]="basicComplete">
+        <h2 class="text-lg font-bold mb-4">Multimedia</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Banner del proyecto (opcional)</label>
+            <input type="file" accept="image/*" (change)="onBannerSelected($event)" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-inacap-red file:text-white hover:file:bg-[var(--inacap-red-hover)]" />
+            <div *ngIf="bannerPreview" class="mt-3">
+              <img [src]="bannerPreview" alt="Banner" class="w-full h-40 object-cover rounded-lg border" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Fotos del proyecto</label>
+            <input type="file" multiple accept="image/*" (change)="onFotosSelected($event)" class="mt-1 block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-inacap-red file:text-white hover:file:bg-[var(--inacap-red-hover)]" />
+            <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <div *ngFor="let f of fotosPreview; let i = index" class="relative group">
+                <img [src]="f" class="h-28 w-full object-cover rounded-lg border" alt="Foto {{i+1}}" />
+                <button type="button" (click)="removeFoto(i)" class="absolute top-1 right-1 bg-white/90 hover:bg-white text-red-600 rounded-full w-7 h-7 flex items-center justify-center shadow">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de personas -->
+      <section class="card-inacap p-6 reveal" [class.show]="basicComplete">
+        <h2 class="text-lg font-bold mb-4">Participación</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Profesor monitor *</label>
+            <input type="text" formControlName="profesorMonitor" autocomplete="name" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" placeholder="Nombre del profesor" />
+            <p *ngIf="form.get('profesorMonitor')?.invalid && form.get('profesorMonitor')?.touched" class="text-sm text-red-600 mt-1">Campo obligatorio.</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">¿Permitir postulación de ex alumnos?</label>
+            <div class="mt-2 flex items-center gap-3">
+              <input type="checkbox" id="exalumnos" formControlName="permitirExAlumnos" class="h-5 w-5 text-[var(--inacap-red)] focus:ring-[var(--inacap-red)] rounded" />
+              <label for="exalumnos" class="text-sm text-gray-700">Sí, permitir postulaciones de ex alumnos</label>
+            </div>
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Invitar miembros</label>
+            <div class="space-y-3">
+              <div *ngFor="let m of miembros.controls; let i = index" class="flex items-center gap-3">
+                <input type="email" [formControl]="$any(m.get('email'))" autocomplete="email" inputmode="email" class="flex-1 rounded-lg border border-gray-300 px-3 py-3 md:py-2 text-base md:text-sm focus:ring-2 focus:ring-[var(--inacap-red)] focus:border-[var(--inacap-red)]" placeholder="correo@inacap.cl" />
+                <button type="button" (click)="removeMiembro(i)" class="btn-inacap-secondary px-3 py-2">Quitar</button>
+              </div>
+              <button type="button" (click)="addMiembro()" class="btn-inacap-primary">+ Agregar miembro</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Acciones (desktop y tablet) -->
+      <div class="mt-8 hidden sm:block">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-sm text-gray-500 text-left">Revisa que la información esté correcta antes de publicar.</p>
+          <div class="w-full grid grid-cols-1 gap-3 sm:w-auto sm:flex sm:items-center sm:gap-3">
+            <button type="submit" class="btn-inacap-primary w-full sm:w-auto text-base py-3.5">Publicar proyecto</button>
+            <button type="button" (click)="saveDraft()" class="btn-inacap-secondary w-full sm:w-auto text-base py-3.5">Guardar borrador</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acciones sticky en móvil -->
+      <div class="sm:hidden fixed left-0 right-0 bottom-0 z-40 bg-white/95 border-t border-gray-200 backdrop-blur supports-[backdrop-filter]:bg-white/80 actions-safe-area">
+        <div class="max-w-5xl mx-auto px-4 py-3 grid grid-cols-2 gap-3">
+          <button type="button" (click)="saveDraft()" class="btn-inacap-secondary w-full text-base py-3">Guardar</button>
+          <button type="submit" class="btn-inacap-primary w-full text-base py-3">Publicar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

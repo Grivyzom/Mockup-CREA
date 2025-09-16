@@ -1,0 +1,57 @@
+/* Layout principal con sidebar (usar .main-content según app.html) */
+.main-content {
+  min-height: 100vh;
+  padding-top: 70px; /* Altura del header en móvil */
+  margin-left: 0;
+  transition: margin-left 0.3s ease-in-out;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* En desktop, ajustar margen para el sidebar */
+@media (min-width: 1024px) {
+  .main-content {
+    margin-left: 16rem; /* Ancho del sidebar */
+    padding-top: 90px; /* Altura del header en desktop */
+    padding-left: 2rem;
+    padding-right: 2rem;
+    width: calc(100% - 16rem); /* Ocupar solo el espacio disponible */
+    max-width: none; /* Sin restricción de ancho máximo */
+  }
+}
+
+/* Footer ajustado para sidebar */
+app-footer {
+  margin-left: 0;
+  transition: margin-left 0.3s ease-in-out;
+  width: 100%;
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  app-footer {
+    margin-left: 16rem; /* Ancho del sidebar */
+    width: calc(100% - 16rem); /* Solo el espacio disponible menos el sidebar */
+    position: relative;
+    z-index: 5; /* Por debajo del sidebar pero visible */
+  }
+}
+
+/* Ajustar scroll-to-top para el sidebar */
+app-scroll-to-top {
+  right: 2rem;
+}
+
+@media (min-width: 1024px) {
+  app-scroll-to-top {
+    right: 2rem; /* Mantener desde el borde derecho */
+  }
+}
+
+/* Asegurar que el contenido no se superponga */
+:host {
+  display: block;
+  position: relative;
+}

@@ -1,59 +1,75 @@
 # MockupCrea
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.1.
+Aplicación Angular (v20) con componentes standalone, sidebar responsive y un flujo de exploración de proyectos que incluye tarjetas, modal de detalle y página de proyecto completo.
 
-## Development server
+Para una visión técnica profunda de la arquitectura, lógica y decisiones, ver `ARCHITECTURE.md`.
 
-To start a local development server, run:
+## Ejecutar en desarrollo
 
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1) Instalar dependencias (una vez):
 
 ```bash
-ng generate component component-name
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+2) Levantar el servidor de desarrollo:
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
+La app se sirve en `http://localhost:4200/` y recarga automáticamente al guardar cambios.
 
-To build the project run:
+## Build de producción
 
 ```bash
-ng build
+npm run build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Los artefactos quedan en `dist/`. La configuración utiliza Angular CLI 20.
 
-## Running unit tests
+## Estructura clave
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- `src/app/app.ts` y `app.html`: Shell principal con `<app-sidebar>`, `<router-outlet>` y `<app-footer>`
+- `src/app/app.routes.ts`: Definición de rutas
+- `src/app/pages/home/*`: Dashboard de proyectos mensuales (grilla/cards + "Ver más")
+- `src/app/components/project-modal/*`: Modal para ver detalle resumido de un proyecto
+- `src/app/pages/project-detail/*`: Página con toda la información del proyecto
+- `src/app/components/*`: Sidebar, Footer, ScrollToTop, Navbar/Header
+- `src/app/app.css`: Layout global y adaptación al sidebar
 
-```bash
-ng test
-```
+## Rutas
 
-## Running end-to-end tests
+- `/home`: Lista de proyectos del mes
+- `/proyecto/:id`: Detalle completo del proyecto
+- `/about`, `/contact`: Páginas auxiliares
+- Redirecciones: `'' → /home`, `** → NotFound`
 
-For end-to-end (e2e) testing, run:
+## Flujo de proyectos
 
-```bash
-ng e2e
-```
+1) En Home, cada card muestra área, duración, estudiantes, dificultad y un botón "Ver más".
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+2) Al hacer clic en "Ver más" se abre un modal con:
 
-## Additional Resources
+	- Banner del proyecto (color e ícono por área)
+	- Título y descripción
+	- Miembros y carreras involucradas (chips)
+	- Estado + barra de progreso
+	- Botón "Ver proyecto completo" → navega a `/proyecto/:id`
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+3) La página de detalle muestra toda la información estructurada en un layout 2/3 + 1/3.
+
+## Estilos
+
+Se combinan utilidades estilo Tailwind con CSS propio para chips, glass-effect, grillas y animaciones. El footer y el contenido se adaptan al ancho del sidebar en desktop con `margin-left: 16rem` y `width: calc(100% - 16rem)`.
+
+## Scripts disponibles
+
+- `npm start`: Servidor de desarrollo
+- `npm run build`: Build de producción
+- `npm test`: Tests unitarios (Karma)
+
+## Notas
+
+- Los datos de proyectos están mockeados en los componentes para desarrollo. En producción se recomienda migrarlos a un servicio HTTP y compartir el modelo `ProjectData`.
+- El modal bloquea el scroll del body mientras está abierto y se cierra con click en el backdrop o en el botón de cerrar.

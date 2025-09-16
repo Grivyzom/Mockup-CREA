@@ -1,0 +1,322 @@
+<div class="dashboard-container">
+  <!-- Layout de 3 columnas para escritorio -->
+  <div class="dashboard-grid desktop-layout">
+    
+    <!-- Columna Izquierda -->
+    <div class="dashboard-column left-column">
+      <div class="column-header">
+        <h2>Proyectos</h2>
+        <button class="column-action-btn" aria-label="Más opciones">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="cards-container">
+        <div *ngFor="let card of leftColumnCards" 
+             class="dashboard-card" 
+             [class]="'card-' + card.size + ' card-' + card.color"
+             (click)="onCardClick(card)">
+          <div class="card-header">
+            <h3>{{ card.title }}</h3>
+            <div class="card-icon">
+              <svg *ngIf="card.type === 'chart'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+              </svg>
+              <svg *ngIf="card.type === 'stats'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-content">
+            <p>{{ card.content }}</p>
+            <div class="card-placeholder">
+              <!-- Contenido placeholder que simula gráficos/datos -->
+              <div class="placeholder-bars" *ngIf="card.type === 'chart'">
+                <div class="bar" style="height: 60%"></div>
+                <div class="bar" style="height: 80%"></div>
+                <div class="bar" style="height: 45%"></div>
+                <div class="bar" style="height: 90%"></div>
+                <div class="bar" style="height: 70%"></div>
+              </div>
+              <div class="placeholder-stats" *ngIf="card.type === 'stats'">
+                <div class="stat-item">
+                  <span class="stat-number">24</span>
+                  <span class="stat-label">Activos</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">8</span>
+                  <span class="stat-label">Completados</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Central -->
+    <div class="dashboard-column center-column">
+      <div class="column-header">
+        <h2>Actividades</h2>
+        <button class="column-action-btn" aria-label="Más opciones">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="cards-container">
+        <div *ngFor="let card of centerColumnCards" 
+             class="dashboard-card" 
+             [class]="'card-' + card.size + ' card-' + card.color"
+             (click)="onCardClick(card)">
+          <div class="card-header">
+            <h3>{{ card.title }}</h3>
+            <div class="card-icon">
+              <svg *ngIf="card.type === 'activity'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <svg *ngIf="card.type === 'list'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-content">
+            <p>{{ card.content }}</p>
+            <div class="card-placeholder">
+              <div class="placeholder-timeline" *ngIf="card.type === 'activity'">
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <span class="timeline-title">Proyecto actualizado</span>
+                    <span class="timeline-time">Hace 2 horas</span>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <span class="timeline-title">Nueva tarea asignada</span>
+                    <span class="timeline-time">Hace 4 horas</span>
+                  </div>
+                </div>
+                <div class="timeline-item">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <span class="timeline-title">Entrega completada</span>
+                    <span class="timeline-time">Ayer</span>
+                  </div>
+                </div>
+              </div>
+              <div class="placeholder-list" *ngIf="card.type === 'list'">
+                <div class="list-item">
+                  <div class="list-checkbox"></div>
+                  <span>Revisar documentación del proyecto</span>
+                </div>
+                <div class="list-item">
+                  <div class="list-checkbox checked"></div>
+                  <span>Actualizar repositorio</span>
+                </div>
+                <div class="list-item">
+                  <div class="list-checkbox"></div>
+                  <span>Preparar presentación</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna Derecha -->
+    <div class="dashboard-column right-column">
+      <div class="column-header">
+        <h2>Panel de Control</h2>
+        <button class="column-action-btn" aria-label="Más opciones">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="cards-container">
+        <!-- Calendario interactivo -->
+        <div class="dashboard-card card-large card-indigo calendar-card">
+          <div class="card-header">
+            <h3>Calendario</h3>
+            <div class="card-icon">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-content calendar-content">
+            <app-calendar (dateSelected)="onDateSelected($event)"></app-calendar>
+          </div>
+        </div>
+        
+        <div *ngFor="let card of rightColumnCards" 
+             class="dashboard-card" 
+             [class]="'card-' + card.size + ' card-' + card.color"
+             (click)="onCardClick(card)">
+          <div class="card-header">
+            <h3>{{ card.title }}</h3>
+            <div class="card-icon">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+              </svg>
+            </div>
+          </div>
+          <div class="card-content">
+            <p>{{ card.content }}</p>
+            <div class="card-placeholder">
+              <div class="placeholder-notifications" *ngIf="card.type === 'list'">
+                <div class="notification-item">
+                  <div class="notification-dot"></div>
+                  <span>Nueva actualización disponible</span>
+                </div>
+                <div class="notification-item">
+                  <div class="notification-dot"></div>
+                  <span>Reunión en 30 minutos</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Layout móvil responsive -->
+  <div class="mobile-layout">
+    <!-- Header móvil con navegación por pestañas -->
+    <div class="mobile-header">
+      <h1 class="mobile-title">Dashboard</h1>
+      <div class="mobile-tabs">
+        <button 
+          class="mobile-tab" 
+          [class.active]="activeTab === 'proyectos'"
+          (click)="setActiveTab('proyectos')"
+          aria-label="Ver proyectos">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+          <span>Proyectos</span>
+        </button>
+        <button 
+          class="mobile-tab" 
+          [class.active]="activeTab === 'actividades'"
+          (click)="setActiveTab('actividades')"
+          aria-label="Ver actividades">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Actividades</span>
+        </button>
+        <button 
+          class="mobile-tab" 
+          [class.active]="activeTab === 'panel'"
+          (click)="setActiveTab('panel')"
+          aria-label="Ver panel de control">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          <span>Panel</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenido móvil por pestañas -->
+    <div class="mobile-content">
+      <!-- Pestaña Proyectos -->
+      <div class="mobile-tab-content" *ngIf="activeTab === 'proyectos'">
+        <div class="mobile-cards-grid">
+          <div *ngFor="let card of leftColumnCards" 
+               class="mobile-card" 
+               [class]="'mobile-card-' + card.color"
+               (click)="onCardClick(card)">
+            <div class="mobile-card-header">
+              <h3>{{ card.title }}</h3>
+              <div class="mobile-card-icon">
+                <svg *ngIf="card.type === 'chart'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+                <svg *ngIf="card.type === 'stats'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+              </div>
+            </div>
+            <div class="mobile-card-content">
+              <p>{{ card.content }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pestaña Actividades -->
+      <div class="mobile-tab-content" *ngIf="activeTab === 'actividades'">
+        <div class="mobile-cards-grid">
+          <div *ngFor="let card of centerColumnCards" 
+               class="mobile-card" 
+               [class]="'mobile-card-' + card.color"
+               (click)="onCardClick(card)">
+            <div class="mobile-card-header">
+              <h3>{{ card.title }}</h3>
+              <div class="mobile-card-icon">
+                <svg *ngIf="card.type === 'activity'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <svg *ngIf="card.type === 'list'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+              </div>
+            </div>
+            <div class="mobile-card-content">
+              <p>{{ card.content }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pestaña Panel (incluyendo calendario) -->
+      <div class="mobile-tab-content" *ngIf="activeTab === 'panel'">
+        <div class="mobile-cards-grid">
+          <!-- Calendario en móvil -->
+          <div class="mobile-card mobile-card-indigo mobile-calendar-card">
+            <div class="mobile-card-header">
+              <h3>Calendario</h3>
+              <div class="mobile-card-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="mobile-card-content mobile-calendar-content">
+              <app-calendar (dateSelected)="onDateSelected($event)"></app-calendar>
+            </div>
+          </div>
+          
+          <!-- Otras cards del panel -->
+          <div *ngFor="let card of rightColumnCards" 
+               class="mobile-card" 
+               [class]="'mobile-card-' + card.color"
+               (click)="onCardClick(card)">
+            <div class="mobile-card-header">
+              <h3>{{ card.title }}</h3>
+              <div class="mobile-card-icon">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                </svg>
+              </div>
+            </div>
+            <div class="mobile-card-content">
+              <p>{{ card.content }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

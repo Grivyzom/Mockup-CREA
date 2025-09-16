@@ -1,0 +1,979 @@
+/* Layout principal del dashboard */
+.dashboard-container {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 1.5rem;
+}
+
+/* Por defecto mostrar desktop */
+.desktop-layout {
+  display: block;
+}
+
+.mobile-layout {
+  display: none;
+}
+
+/* Grid de 3 columnas para desktop */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 1.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: calc(100vh - 3rem);
+}
+
+/* Estilos de columnas */
+.dashboard-column {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  position: relative;
+  z-index: 0;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.column-header h2 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.column-action-btn {
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  color: #64748b;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.column-action-btn:hover {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+/* Container de cards con scroll */
+.cards-container {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+}
+
+/* Estilos base de cards */
+.dashboard-card {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+/* Tamaños de cards */
+.card-small {
+  min-height: 120px;
+}
+
+.card-medium {
+  min-height: 200px;
+}
+
+.card-large {
+  min-height: 300px;
+}
+
+/* Header de cards */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.card-icon {
+  opacity: 0.7;
+  color: #64748b;
+}
+
+/* Contenido de cards */
+.card-content {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content p {
+  margin: 0 0 1rem 0;
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.card-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Colores de cards */
+.card-blue .card-header {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border-bottom: none;
+}
+
+.card-blue .card-header h3,
+.card-blue .card-icon {
+  color: white;
+  opacity: 1;
+}
+
+.card-green .card-header {
+  background: linear-gradient(135deg, #10b981, #047857);
+  color: white;
+  border-bottom: none;
+}
+
+.card-green .card-header h3,
+.card-green .card-icon {
+  color: white;
+  opacity: 1;
+}
+
+.card-purple .card-header {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  color: white;
+  border-bottom: none;
+}
+
+.card-purple .card-header h3,
+.card-purple .card-icon {
+  color: white;
+  opacity: 1;
+}
+
+.card-orange .card-header {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border-bottom: none;
+}
+
+.card-orange .card-header h3,
+.card-orange .card-icon {
+  color: white;
+  opacity: 1;
+}
+
+.card-red .card-header {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border-bottom: none;
+}
+
+.card-red .card-header h3,
+.card-red .card-icon {
+  color: white;
+  opacity: 1;
+}
+
+.card-indigo .card-header {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  border-bottom: none;
+}
+
+.card-indigo .card-header h3,
+.card-indigo .card-icon {
+  color: white;
+  opacity: 1;
+}
+
+.card-teal .card-header {
+  background: linear-gradient(135deg, #14b8a6, #0f766e);
+  color: white;
+  border-bottom: none;
+}
+
+.card-teal .card-header h3,
+.card-teal .card-icon {
+  color: white;
+  opacity: 1;
+}
+
+/* Placeholder content styles */
+
+/* Barras de gráfico */
+.placeholder-bars {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+  height: 100px;
+  padding: 0 1rem;
+}
+
+.bar {
+  flex: 1;
+  background: linear-gradient(to top, #3b82f6, #60a5fa);
+  border-radius: 4px 4px 0 0;
+  min-height: 20px;
+  opacity: 0.8;
+}
+
+/* Estadísticas */
+.placeholder-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 80px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-top: 0.25rem;
+}
+
+/* Timeline */
+.placeholder-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.timeline-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #3b82f6;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.timeline-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.timeline-time {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Lista de tareas */
+.placeholder-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.list-checkbox {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #cbd5e1;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.list-checkbox.checked {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  position: relative;
+}
+
+.list-checkbox.checked::after {
+  content: '✓';
+  position: absolute;
+  top: -2px;
+  left: 2px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.list-item span {
+  font-size: 0.875rem;
+  color: #334155;
+}
+
+/* Notificaciones */
+.placeholder-notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 6px;
+  border-left: 3px solid #3b82f6;
+}
+
+.notification-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b82f6;
+  flex-shrink: 0;
+}
+
+.notification-item span {
+  font-size: 0.875rem;
+  color: #334155;
+}
+
+/* Scrollbar personalizado */
+.cards-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cards-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.cards-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.cards-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .desktop-layout .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .desktop-layout .right-column {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-layout {
+    display: none;
+  }
+  
+  .mobile-layout {
+    display: block;
+  }
+}
+
+/* Layout móvil por defecto oculto */
+.mobile-layout {
+  display: none;
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 1200px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+  
+  .desktop-layout .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  
+  .desktop-layout .right-column {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 992px) {
+  .dashboard-container {
+    padding: 0.75rem;
+  }
+  
+  .desktop-layout .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 0;
+  }
+  
+  .desktop-layout {
+    display: none;
+  }
+  
+  .mobile-layout {
+    display: block;
+  }
+}
+
+/* Header móvil */
+.mobile-header {
+  background: white;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.mobile-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+/* Pestañas móviles */
+.mobile-tabs {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.5rem;
+}
+
+.mobile-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.75rem 0.5rem;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.mobile-tab:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.mobile-tab.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.mobile-tab svg {
+  flex-shrink: 0;
+}
+
+.mobile-tab span {
+  text-align: center;
+  line-height: 1;
+}
+
+/* Contenido móvil */
+.mobile-content {
+  padding: 1rem;
+  padding-bottom: 2rem;
+}
+
+.mobile-tab-content {
+  animation: fadeInMobile 0.3s ease-out;
+}
+
+/* Grid de cards móviles */
+.mobile-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 480px) {
+  .mobile-cards-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Cards móviles */
+.mobile-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.mobile-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-card:active {
+  transform: translateY(0);
+}
+
+/* Header de card móvil */
+.mobile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.mobile-card-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.mobile-card-icon {
+  flex-shrink: 0;
+  color: #64748b;
+}
+
+/* Contenido de card móvil */
+.mobile-card-content {
+  color: #64748b;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.mobile-card-content p {
+  margin: 0;
+}
+
+/* Colores de cards móviles */
+.mobile-card-blue {
+  border-left: 4px solid #3b82f6;
+}
+
+.mobile-card-blue:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(59, 130, 246, 0.02));
+}
+
+.mobile-card-green {
+  border-left: 4px solid #10b981;
+}
+
+.mobile-card-green:hover {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(16, 185, 129, 0.02));
+}
+
+.mobile-card-purple {
+  border-left: 4px solid #8b5cf6;
+}
+
+.mobile-card-purple:hover {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(139, 92, 246, 0.02));
+}
+
+.mobile-card-orange {
+  border-left: 4px solid #f59e0b;
+}
+
+.mobile-card-orange:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(245, 158, 11, 0.02));
+}
+
+.mobile-card-red {
+  border-left: 4px solid #ef4444;
+}
+
+.mobile-card-red:hover {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(239, 68, 68, 0.02));
+}
+
+.mobile-card-indigo {
+  border-left: 4px solid #6366f1;
+}
+
+.mobile-card-indigo:hover {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(99, 102, 241, 0.02));
+}
+
+.mobile-card-teal {
+  border-left: 4px solid #14b8a6;
+}
+
+.mobile-card-teal:hover {
+  background: linear-gradient(135deg, rgba(20, 184, 166, 0.05), rgba(20, 184, 166, 0.02));
+}
+
+/* Calendario en móvil */
+.mobile-calendar-card {
+  grid-column: 1 / -1; /* Ocupa todo el ancho disponible */
+}
+
+.mobile-calendar-content {
+  padding: 0 !important;
+}
+
+.mobile-calendar-content app-calendar {
+  width: 100%;
+}
+
+/* Ajustes específicos del calendario en móvil */
+.mobile-calendar-card .calendar-container {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 0;
+  backdrop-filter: none;
+}
+
+.mobile-calendar-card .calendar-day {
+  width: 100% !important;
+  height: 36px !important;
+  font-size: 14px !important;
+  min-width: 36px;
+}
+
+.mobile-calendar-card .nav-button {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.mobile-calendar-card .month-name {
+  font-size: 18px !important;
+}
+
+.mobile-calendar-card .year {
+  font-size: 14px !important;
+}
+
+.mobile-calendar-card .weekday {
+  font-size: 12px !important;
+  padding: 6px 2px !important;
+}
+
+.mobile-calendar-card .today-button {
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+}
+
+/* Animación para cambio de pestañas */
+@keyframes fadeInMobile {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mejoras para dispositivos muy pequeños */
+@media (max-width: 375px) {
+  .mobile-header {
+    padding: 0.75rem;
+  }
+  
+  .mobile-title {
+    font-size: 1.25rem;
+  }
+  
+  .mobile-tab {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.7rem;
+  }
+  
+  .mobile-tab svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .mobile-content {
+    padding: 0.75rem;
+  }
+  
+  .mobile-card {
+    padding: 1rem;
+  }
+  
+  .mobile-card-header h3 {
+    font-size: 0.9rem;
+  }
+  
+  .mobile-card-content {
+    font-size: 0.8rem;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dashboard-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Hover effects para mejor UX */
+.dashboard-card:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos específicos para el calendario */
+.calendar-card {
+  overflow: hidden !important;
+  position: relative;
+  z-index: 1;
+  height: auto;
+  min-height: 420px;
+  max-height: none;
+}
+
+.calendar-content {
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+  height: auto;
+}
+
+.calendar-content app-calendar {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Ajustes del calendario para el dashboard */
+.calendar-card .calendar-container {
+  max-width: 100%;
+  width: 100%;
+  background: transparent;
+  box-shadow: none;
+  border: none;
+  padding: 12px;
+  backdrop-filter: none;
+  position: relative;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-card .calendar-header {
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.calendar-card .today-section {
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.calendar-card .weekdays-header {
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+
+.calendar-card .calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  align-content: start;
+  margin-bottom: 8px;
+}
+
+.calendar-card .calendar-footer {
+  margin-top: auto;
+  padding-top: 8px;
+  flex-shrink: 0;
+}
+
+/* Ajustes responsive específicos para el calendario en dashboard */
+.calendar-card .calendar-day {
+  width: 100% !important;
+  height: 32px !important;
+  font-size: 12px !important;
+  min-width: 32px;
+}
+
+.calendar-card .nav-button {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.calendar-card .month-name {
+  font-size: 15px !important;
+  margin-bottom: 2px !important;
+}
+
+.calendar-card .year {
+  font-size: 12px !important;
+}
+
+.calendar-card .weekday {
+  font-size: 10px !important;
+  padding: 3px 1px !important;
+}
+
+.calendar-card .today-button {
+  font-size: 11px !important;
+  padding: 4px 8px !important;
+}
+
+/* Responsive específico para el calendario */
+@media (max-width: 1024px) {
+  .calendar-card {
+    min-height: 380px;
+  }
+  
+  .calendar-card .calendar-container {
+    padding: 10px;
+  }
+  
+  .calendar-card .calendar-day {
+    height: 28px !important;
+    font-size: 11px !important;
+  }
+  
+  .calendar-card .nav-button {
+    width: 28px !important;
+    height: 28px !important;
+  }
+  
+  .calendar-card .month-name {
+    font-size: 14px !important;
+  }
+  
+  .calendar-card .weekday {
+    font-size: 9px !important;
+    padding: 2px 1px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .calendar-card {
+    min-height: 340px;
+  }
+  
+  .calendar-card .calendar-container {
+    padding: 8px;
+  }
+  
+  .calendar-card .calendar-day {
+    height: 26px !important;
+    font-size: 10px !important;
+  }
+  
+  .calendar-card .nav-button {
+    width: 26px !important;
+    height: 26px !important;
+  }
+  
+  .calendar-card .month-name {
+    font-size: 13px !important;
+  }
+  
+  .calendar-card .year {
+    font-size: 11px !important;
+  }
+  
+  .calendar-card .weekday {
+    font-size: 8px !important;
+    padding: 2px 1px !important;
+  }
+  
+  .calendar-card .today-button {
+    font-size: 10px !important;
+    padding: 3px 6px !important;
+  }
+}

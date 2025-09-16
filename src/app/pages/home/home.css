@@ -1,0 +1,484 @@
+/* Estilos para el panel de proyectos mensuales */
+
+/* Utilidades para truncar texto */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Animaciones adicionales para las tarjetas */
+.project-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0 !important; /* eliminar cualquier padding interno */
+  margin: 0 !important; /* eliminar cualquier margin que pueda causar espacio */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* para asegurar que no hay espacios */
+  user-select: none; /* hacer que nada sea seleccionable */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.project-card * {
+  margin-top: 0 !important; /* forzar reset de margin superior */
+  user-select: none; /* hacer que todos los elementos hijos tampoco sean seleccionables */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Ajustar el contenido del proyecto */
+.project-card .p-5 {
+  margin: 0 !important;
+  padding: 1.25rem;
+  min-height: calc(100% - 8rem); /* altura mínima menos la del banner */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 2.5rem; /* aún más espacio en la parte inferior */
+}
+
+.project-card .mb-3 {
+  margin-bottom: 1.5rem; /* aún más separación */
+  margin-top: 0 !important; /* asegurar que no hay margin superior */
+  flex-grow: 1;
+}
+
+.project-card .flex.items-center.justify-between {
+  margin-top: auto; /* empujar hacia abajo */
+  margin-bottom: 0.75rem; /* aún más separación del borde inferior */
+}
+
+/* Asegurar que título y descripción no sean seleccionables */
+.project-card h3,
+.project-card p {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+/* Reset específico para Tailwind */
+.project-card.rounded-xl {
+  overflow: hidden !important;
+}
+
+.project-card .project-banner:first-child {
+  margin-top: 0 !important;
+  border-top-left-radius: 0.75rem !important;
+  border-top-right-radius: 0.75rem !important;
+}
+
+/* Efectos para el banner canvas */
+.project-banner {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  overflow: visible; /* permitir que elementos posicionados salgan del banner */
+  z-index: 1; /* por debajo de las etiquetas */
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  border-top-left-radius: 0.75rem; /* coincide con rounded-xl del card */
+  border-top-right-radius: 0.75rem;
+  /* Asegurar que llegue hasta el borde superior */
+  flex-shrink: 0; /* no permitir que se reduzca */
+  order: -1; /* asegurar que sea el primer elemento */
+}
+
+.project-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
+  pointer-events: none;
+}
+
+/* Centramos la grilla en desktop con un ancho máximo controlado */
+.project-grid.centered {
+  max-width: min(1200px, calc(100vw - 18rem)); /* Responsive y evita solapamiento con sidebar */
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+/* Grid fluido que se adapta a cualquier ancho disponible */
+.project-grid.auto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 1.25rem; /* 20px */
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .project-grid.auto-grid { 
+    gap: 1.5rem; 
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .project-grid.centered { 
+    max-width: min(1280px, calc(100vw - 18rem)); 
+  }
+  .project-grid.auto-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (min-width: 1366px) {
+  .project-grid.centered { 
+    max-width: 1280px; 
+  }
+  .project-grid.auto-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* En móvil, convertir a carrusel horizontal con scroll snap */
+  .project-grid,
+  .project-grid.auto-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 1.5rem; /* alinear el snap con el padding */
+    -webkit-overflow-scrolling: touch;
+    gap: 0; /* evitar recortes por gap en un carrusel 1x1 */
+    padding-bottom: 0.5rem;
+    margin: 0; 
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .project-grid > div,
+  .project-grid.auto-grid > div {
+    /* Mostrar exactamente 1 card por vista */
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    margin-right: 1rem; /* espacio entre tarjetas sin usar gap */
+  }
+  .project-grid.centered { max-width: none; }
+}
+
+/* Layout responsivo para el contenedor principal */
+@media (max-width: 1023px) {
+  /* En tablet y móvil, ocultar el espacio reservado y hacer que el carrusel ocupe todo el ancho */
+  .carousel-container {
+    flex-direction: column;
+  }
+  
+  .carousel-section {
+    width: 100%;
+  }
+  
+  .reserved-space {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  /* En desktop, mostrar layout de dos columnas */
+  .carousel-container {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .carousel-section {
+    flex: 1;
+  }
+  
+  .reserved-space {
+    width: 20rem;
+    display: block;
+  }
+  /* Separación entre hero y panel para evitar solapes del card flotante */
+  #panel-proyectos { margin-top: 1.5rem; }
+
+  /* Card de saludo más compacto y alineado a la derecha */
+  .greeting-card-wrap { justify-self: end; max-width: 28rem; width: 100%; }
+}
+
+/* Evitar saltos de scroll-bar y layout shift en desktop cuando aparece la barra horizontal del carrusel en móvil */
+@media (min-width: 769px) {
+  .project-grid { 
+    overflow: visible; 
+  }
+}
+
+/* Ajustes de la tarjeta en móvil para mejor legibilidad en carrusel 1x1 */
+@media (max-width: 768px) {
+  .project-card {
+    margin: 0; /* evitar recortes laterales */
+  }
+  .project-card .p-5 {
+    padding: 1rem; /* compactar un poco */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .project-grid.auto-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .project-grid.auto-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .project-grid.auto-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+/* Colores INACAP para los botones */
+.btn-inacap {
+  background-color: #C41E3A;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-inacap:hover {
+  background-color: #A01829;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(196, 30, 58, 0.3);
+}
+
+/* Botón secundario con borde rojo */
+.btn-inacap-secondary {
+  background-color: white;
+  color: #C41E3A;
+  border: 1px solid #C41E3A;
+  transition: all 0.2s ease;
+}
+.btn-inacap-secondary:hover {
+  background-color: #fff5f6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(196, 30, 58, 0.1);
+}
+
+/* Focus visible accesible para elementos interactivos del hero */
+.btn-inacap:focus-visible,
+.btn-inacap-secondary:focus-visible,
+.hero-kpis button:focus-visible,
+.hero-kpis:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(196, 30, 58, 0.9);
+}
+
+/* Estilos para las etiquetas de dificultad */
+.difficulty-badge {
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+/* Animación para el indicador de mes */
+.month-indicator {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Efecto glassmorphism para elementos del banner */
+.glass-effect {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* === Dropdown de áreas en card === */
+.areas-dropdown-container { position: relative; z-index: 10; }
+.area-badge {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(8px);
+}
+.areas-button {
+  width: 1.75rem;
+  height: 1.75rem;
+  line-height: 1.5rem;
+  text-align: center;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.25);
+  color: #fff;
+  font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.35);
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 10;
+}
+.areas-button:hover { background: rgba(255,255,255,0.35); transform: translateY(-1px); }
+
+.areas-chips { display: flex; align-items: center; gap: 0.375rem; flex-wrap: nowrap; position: relative; z-index: 10; justify-content: flex-end; }
+
+.area-chip-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.info-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: var(--inacap-red);
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
+}
+
+.info-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.area-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.4);
+  backdrop-filter: blur(6px);
+  position: relative;
+  z-index: 10;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+}
+.more-chip { background: rgba(0,0,0,0.3); border-color: rgba(0,0,0,0.2); }
+
+/* Variantes de color para chips según área */
+.chip-informatica { background: rgba(37,99,235,0.85); }
+.chip-diseño { background: rgba(124,58,237,0.85); }
+.chip-agricultura { background: rgba(22,163,74,0.85); }
+.chip-mecanica { background: rgba(234,88,12,0.85); }
+.chip-electronica { background: rgba(202,138,4,0.85); }
+.chip-salud { background: rgba(239,68,68,0.85); }
+
+.dropdown-menu.areas-dropdown {
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  min-width: 220px;
+  background: #fff;
+  color: #111827;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  border: 1px solid rgba(0,0,0,0.06);
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+  z-index: 1000; /* por encima del banner y contenido */
+}
+.dropdown-menu.areas-dropdown.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.dropdown-menu.areas-dropdown .dropdown-header {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+.dropdown-menu.areas-dropdown .dropdown-header h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #374151;
+}
+.dropdown-menu.areas-dropdown .dropdown-content { padding: 0.5rem; max-height: 240px; overflow: auto; }
+.dropdown-menu.areas-dropdown .dropdown-chips { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+.dropdown-menu.areas-dropdown .dropdown-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.5rem; border-radius: 0.375rem; }
+.dropdown-menu.areas-dropdown .dropdown-item:hover { background: #f9fafb; }
+.area-dot { width: 10px; height: 10px; border-radius: 9999px; display: inline-block; }
+/* Colores para las áreas */
+.area-informatica { background: #2563eb; }
+.area-diseño { background: #7c3aed; }
+.area-agricultura { background: #16a34a; }
+.area-mecanica { background: #ea580c; }
+.area-electronica { background: #ca8a04; }
+.area-salud { background: #ef4444; }
+
+/* === Hero KPIs (no seleccionables + iconos) === */
+.hero-kpis,
+.hero-kpis * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.hero-kpis .kpi-icon {
+  width: 1rem; /* 16px */
+  height: 1rem;
+  color: var(--inacap-red);
+  flex-shrink: 0;
+}
+
+/* === Colaboradores (logos) === */
+.partner-card {
+  background-color: #ffffff; /* bg-white */
+  border-radius: 0.75rem;   /* rounded-xl */
+  border: 1px solid #e5e7eb;/* border-gray-200 */
+  padding: 1rem;            /* p-4 */
+  display: flex;            /* flex */
+  align-items: center;      /* items-center */
+  justify-content: center;  /* justify-center */
+  transition: all .2s ease; /* transition-all */
+  color: #6b7280; /* gris neutro por defecto */
+}
+.partner-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); /* shadow-md */
+  color: var(--inacap-red); /* tint de marca al hover */
+  transform: translateY(-2px);
+}
+.partner-logo { width: 100%; height: 40px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* Utilidad general para deshabilitar selección en bloque */
+.no-select,
+.no-select * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

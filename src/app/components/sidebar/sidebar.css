@@ -1,0 +1,1064 @@
+/* Sidebar principal INACAP */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1100; /* Encima de overlay y header */
+  height: 100vh;
+  width: 16rem;
+  background-color: var(--inacap-black);
+  color: white;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    /* En desktop mantenemos el sidebar fijo y visible */
+    transform: translateX(0);
+  }
+}
+
+.sidebar.mobile-open {
+  transform: translateX(0);
+}
+
+.sidebar-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* CTA móvil dentro del sidebar: oculto por defecto (solo visible en móvil) */
+.sidebar-mobile-cta {
+  display: none;
+}
+
+/* Header del sidebar INACAP */
+.sidebar-header {
+  padding: 1.5rem;
+  background-color: var(--inacap-red);
+  border-bottom: 1px solid var(--inacap-gray-700);
+}
+
+/* Buscador dentro del sidebar */
+.sidebar-search { padding: 0.75rem 0.75rem 0; }
+.search-input-wrapper { position: relative; }
+.search-icon { position:absolute; left:12px; top:50%; transform: translateY(-50%); width:16px; height:16px; color:#D1D5DB; opacity:.9; }
+.search-input { width:100%; padding:10px 36px; padding-left:36px; border-radius: 10px; background: rgba(255,255,255,.12); color:#F9FAFB; border:1px solid rgba(255,255,255,.18); outline: none; }
+.search-input::placeholder{ color:#E5E7EB; opacity:.85; }
+.search-input:focus{ background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.3); }
+.search-clear { position:absolute; right:8px; top:50%; transform: translateY(-50%); width:22px; height:22px; border-radius:999px; background: rgba(255,255,255,.18); color:#F9FAFB; border:1px solid rgba(255,255,255,.24); line-height:20px; text-align:center; font-weight:700; }
+
+/* Navegación */
+.sidebar-nav {
+  flex: 1;
+  padding: 1.5rem 1rem 1.5rem 1rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Sección inferior del sidebar */
+.sidebar-bottom {
+  padding: 1rem;
+  border-top: 1px solid var(--inacap-gray-700);
+  background-color: var(--inacap-black);
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Ajuste para la primera sección de navegación */
+.nav-section:first-child {
+  margin-top: -0.5rem;
+}
+
+.nav-section-title {
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--inacap-gray-300);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Enlaces de navegación INACAP */
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #D1D5DB;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border-left: 3px solid transparent;
+}
+
+.nav-link:hover {
+  background-color: var(--inacap-gray-700);
+  color: white;
+  border-left-color: var(--inacap-red);
+  transform: translateX(0.25rem);
+}
+
+.nav-link-active {
+  background-color: rgba(196, 30, 58, 0.1); /* Fondo muy sutil */
+  color: white;
+  border-left-color: var(--inacap-red);
+  border-left-width: 3px;
+  font-weight: 600;
+}
+
+.nav-icon {
+  flex-shrink: 0;
+  margin-right: 0.75rem;
+  color: var(--inacap-gray-300);
+}
+
+.nav-link:hover .nav-icon {
+  color: white;
+}
+
+.nav-link-active .nav-icon {
+  color: white;
+}
+
+/* Enlaces de modalidades INACAP */
+.team-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #D1D5DB;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.team-link:hover {
+  background-color: var(--inacap-gray-700);
+  color: white;
+}
+
+.team-icon {
+  flex-shrink: 0;
+  margin-right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Colores específicos para modalidades INACAP */
+.inacap-ip {
+  background-color: var(--inacap-red);
+}
+
+.inacap-cft {
+  background-color: var(--inacap-gray-700);
+}
+
+.inacap-uni {
+  background-color: var(--inacap-red);
+}
+
+.team-link:hover .team-icon {
+  opacity: 0.9;
+}
+
+/* Footer del sidebar */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--inacap-gray-700);
+  background-color: var(--inacap-black);
+}
+
+/* Botón de menú móvil INACAP */
+.mobile-menu-btn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1200; /* Por encima de header (999), overlay (1050) y sidebar (1100) si es necesario */
+  padding: 0.5rem;
+  background-color: var(--inacap-red);
+  color: white;
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  background-color: var(--inacap-red-hover);
+  transform: scale(1.05);
+}
+
+/* Estilo cuando el menú está abierto */
+.mobile-menu-btn.menu-open {
+  background-color: var(--inacap-gray-700);
+  transform: scale(1.0);
+  box-shadow: 0 4px 12px rgba(68, 68, 68, 0.3);
+}
+
+.mobile-menu-btn.menu-open:hover {
+  background-color: var(--inacap-red);
+  transform: scale(1.05);
+}
+
+/* Header principal INACAP */
+.main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background-color: white;
+  border-bottom: 1px solid var(--inacap-border);
+  padding: 1rem 1.5rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .main-header {
+    left: 16rem;
+  }
+}
+
+/* En móvil, agregar espacio para el botón del sidebar */
+@media (max-width: 1024px) {
+  .main-header {
+    padding-left: 4rem; /* Espacio para el botón hamburguesa */
+  }
+}
+
+/* Overlay del menú móvil: por encima del header, por debajo del sidebar */
+.sidebar-overlay {
+  z-index: 1050;
+}
+
+.main-header > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Panel de bienvenida - simplificado */
+.welcome-panel {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--inacap-black);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.welcome-subtitle {
+  font-size: 0.75rem;
+  color: var(--inacap-gray-600);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Estadísticas del estudiante - simplificadas */
+.stats-container {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(248, 249, 250, 0.8);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(196, 30, 58, 0.1);
+  transition: all 0.3s ease;
+}
+
+.stats-container:hover {
+  background: rgba(248, 249, 250, 1);
+  border-color: rgba(196, 30, 58, 0.2);
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.stat-icon {
+  color: var(--inacap-red);
+  flex-shrink: 0;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stat-number {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--inacap-black);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.6875rem;
+  color: var(--inacap-gray-600);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.main-header h1 {
+  flex-shrink: 0;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--inacap-black);
+}
+
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  margin: 0 2rem;
+}
+
+.header-right {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Botón Iniciar Proyecto INACAP */
+.start-project-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--inacap-red), #e11d48);
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(196, 30, 58, 0.25);
+  min-width: 9rem;
+}
+
+.start-project-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(196, 30, 58, 0.35);
+  background: linear-gradient(135deg, #b91c3c, var(--inacap-red));
+}
+
+.start-project-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(196, 30, 58, 0.3);
+}
+
+.start-project-btn.loading {
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #94a3b8, #64748b);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.start-project-btn.loading:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.btn-icon {
+  transition: transform 0.3s ease;
+}
+
+.start-project-btn:hover .btn-icon {
+  transform: rotate(90deg);
+}
+
+.btn-text {
+  transition: opacity 0.2s ease;
+}
+
+.btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.start-project-btn:hover .btn-shine {
+  left: 100%;
+}
+
+/* Spinner de carga */
+.loading-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Botón de notificaciones INACAP */
+.notification-btn {
+  position: relative;
+  padding: 0.5rem;
+  color: var(--inacap-gray-700);
+  border: none;
+  background: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.notification-btn:hover {
+  color: var(--inacap-red);
+  background-color: var(--inacap-red-light);
+}
+
+.notification-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--inacap-red);
+}
+
+/* Indicadores visuales cuando los dropdowns están fijados */
+.dropdown-container.notification-pinned .notification-btn {
+  background-color: rgba(196, 30, 58, 0.15);
+  color: var(--inacap-red);
+}
+
+.dropdown-container.profile-pinned .user-avatar {
+  background-color: rgba(196, 30, 58, 0.1);
+  border-radius: 0.5rem;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -0.125rem;
+  right: -0.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+  background-color: var(--inacap-red);
+  border-radius: 9999px;
+}
+
+/* Avatar del usuario */
+.user-avatar {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  gap: 0.5rem;
+}
+
+.user-avatar:hover {
+  background-color: var(--inacap-red-light);
+}
+
+.user-avatar img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--inacap-border);
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--inacap-gray-700);
+  line-height: 1;
+}
+
+.user-dropdown-icon {
+  color: var(--inacap-gray-400);
+  margin-left: 0.25rem;
+  transition: transform 0.2s;
+}
+
+.user-dropdown-icon.rotate {
+  transform: rotate(180deg);
+}
+
+/* Contenedor de dropdown */
+.dropdown-container {
+  position: relative;
+}
+
+/* Menú dropdown base */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem); /* Agregar espacio entre el botón y el dropdown */
+  right: 0;
+  z-index: 50;
+  min-width: 20rem;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--inacap-border);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Mejorar hover experience */
+.dropdown-container:hover .dropdown-menu {
+  transition-delay: 0.1s;
+}
+
+/* Header del dropdown */
+.dropdown-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--inacap-border);
+  background-color: #f8f9fa;
+}
+
+.dropdown-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--inacap-black);
+  margin: 0;
+}
+
+.notification-count {
+  font-size: 0.75rem;
+  color: var(--inacap-gray-700);
+}
+
+/* Contenido del dropdown */
+.dropdown-content {
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+/* Items del dropdown */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--inacap-gray-700);
+  text-decoration: none;
+  transition: background-color 0.2s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: var(--inacap-red-light);
+  color: var(--inacap-red);
+}
+
+.dropdown-item svg {
+  flex-shrink: 0;
+  color: var(--inacap-gray-400);
+}
+
+.dropdown-item:hover svg {
+  color: var(--inacap-red);
+}
+
+/* Footer del dropdown */
+.dropdown-footer {
+  padding: 0.5rem;
+  border-top: 1px solid var(--inacap-border);
+  background-color: #f8f9fa;
+}
+
+.view-all-link {
+  display: block;
+  text-align: center;
+  padding: 0.5rem;
+  color: var(--inacap-red);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.view-all-link:hover {
+  background-color: var(--inacap-red-light);
+}
+
+/* Estilos específicos para notificaciones */
+.notification-dropdown {
+  right: 0;
+  width: 24rem;
+  top: calc(100% + 0.75rem); /* Espacio específico para notificaciones */
+}
+
+/* Flecha para conectar dropdown con botón */
+.notification-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  right: 1rem;
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid white;
+  filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.1));
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: var(--inacap-red-light);
+}
+
+.notification-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--inacap-black);
+  margin: 0 0 0.25rem 0;
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: var(--inacap-gray-700);
+  margin: 0;
+}
+
+/* Estilos específicos para perfil */
+.profile-dropdown {
+  right: 0;
+  width: 18rem;
+  top: calc(100% + 0.75rem); /* Consistente con notificaciones */
+}
+
+/* Flecha para el dropdown de perfil */
+.profile-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -0.5rem;
+  right: 2rem;
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-bottom: 0.5rem solid white;
+  filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.1));
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--inacap-black);
+  margin: 0;
+}
+
+.profile-email {
+  font-size: 0.75rem;
+  color: var(--inacap-gray-700);
+  margin: 0;
+}
+
+/* Estilo especial para logout */
+.dropdown-item.logout {
+  color: #dc2626;
+}
+
+.dropdown-item.logout:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.dropdown-item.logout svg {
+  color: #dc2626;
+}
+
+/* Estadísticas en el dropdown del perfil */
+.dropdown-stats {
+  border-top: 1px solid var(--inacap-border);
+  border-bottom: 1px solid var(--inacap-border);
+  padding: 0.75rem 0;
+  margin: 0.5rem 0;
+}
+
+.stats-header h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--inacap-gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin: 0 0 0.5rem 0;
+  padding: 0 1rem;
+}
+
+.profile-stats-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+
+.profile-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  padding: 0.5rem;
+  background: rgba(248, 249, 250, 0.8);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(196, 30, 58, 0.1);
+  transition: all 0.2s ease;
+}
+
+.profile-stat-item:hover {
+  background: rgba(248, 249, 250, 1);
+  border-color: rgba(196, 30, 58, 0.2);
+}
+
+.profile-stat-item .stat-icon {
+  color: var(--inacap-red);
+  flex-shrink: 0;
+}
+
+.profile-stat-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.profile-stat-number {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--inacap-black);
+  line-height: 1;
+}
+
+.profile-stat-label {
+  font-size: 0.625rem;
+  color: var(--inacap-gray-600);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* Ajustes para el contenedor de acción en el panel de bienvenida */
+.welcome-action {
+  display: flex;
+  align-items: center;
+}
+
+/* Colores para iconos de notificación */
+.bg-blue-500 {
+  background-color: #3b82f6;
+}
+
+.bg-green-500 {
+  background-color: #10b981;
+}
+
+.bg-yellow-500 {
+  background-color: #f59e0b;
+}
+
+/* Responsive adjustments para dropdowns */
+@media (max-width: 768px) {
+  /* Mostrar CTA dentro del sidebar y ocultar en header */
+  .sidebar-mobile-cta {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--inacap-gray-700);
+    background: rgba(255,255,255,0.04);
+  }
+
+  .sidebar-mobile-cta .start-project-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Ocultar la acción del header en móvil */
+  .welcome-action { display: none; }
+  .notification-dropdown {
+    width: 20rem;
+    right: -8rem;
+  }
+  
+  .profile-dropdown {
+    width: 16rem;
+    right: -6rem;
+  }
+  
+  .dropdown-menu {
+    max-height: 70vh;
+  }
+  
+  .dropdown-content {
+    max-height: 15rem;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .user-info {
+    display: none;
+  }
+  
+  .main-header h1 {
+    font-size: 1.25rem;
+  }
+  
+  /* Ajustes para el panel de bienvenida en móvil */
+  .welcome-panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .welcome-title {
+    font-size: 1.25rem;
+  }
+  
+  .welcome-action .start-project-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .welcome-action .start-project-btn .btn-text {
+    display: inline;
+  }
+  
+  .welcome-action .start-project-btn .btn-content {
+    gap: 0.5rem;
+  }
+  
+  .profile-stats-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .profile-stats-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .stat-item {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .stat-item.deadline {
+    border-left: none;
+    border-top: 1px solid var(--inacap-border);
+    padding-left: 0;
+    padding-top: 0.5rem;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+  
+  .stat-text {
+    max-width: none;
+    white-space: normal;
+  }
+}
+
+/* Ocultar en móvil */
+@media (max-width: 1024px) {
+  .mobile-menu-btn {
+    display: block;
+  }
+  
+  /* Ajustar posición cuando el menú está abierto */
+  .mobile-menu-btn.menu-open {
+    left: calc(16rem + 1rem); /* Ancho del sidebar + margen */
+    transition: left 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+}
+
+/* Scrollbar personalizado INACAP */
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background-color: var(--inacap-gray-700);
+  border-radius: 9999px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background-color: var(--inacap-red);
+}
+
+/* Estados focus para accesibilidad WCAG */
+.nav-link:focus,
+.team-link:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--inacap-red);
+}
+
+/* Efectos hover mejorados */
+.nav-link:focus-visible,
+.team-link:focus-visible {
+  outline: 2px solid var(--inacap-red);
+  outline-offset: 2px;
+}
+
+/* Contenido principal ajustado */
+.main-content {
+  margin-left: 0;
+  margin-top: 70px; /* separación base en móvil/tablet */
+  padding: 1.5rem;
+  min-height: calc(100vh - 70px);
+  transition: margin-left 0.3s ease-in-out;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    margin-left: 16rem;
+    /* En escritorio añadimos un poco más de espacio para despegar el título del navbar */
+    margin-top: 90px;
+    min-height: calc(100vh - 90px);
+    padding: 2rem;
+    /* Asegurar que nunca se superponga con el sidebar */
+    max-width: calc(100vw - 16rem);
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .main-content {
+    padding: 1.5rem;
+    max-width: calc(100vw - 16rem);
+  }
+}
+
+/* Ajustes adicionales para el layout */
+.app-layout {
+  position: relative;
+  min-height: 100vh;
+}

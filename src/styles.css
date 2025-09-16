@@ -1,1 +1,332 @@
+/* Importaciones de fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+/* Tailwind CSS (requerido para @layer) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Tokens de color INACAP */
+:root {
+  --inacap-red: #c41e3a; /* TODO: Reemplazar con HEX oficial cuando lo entreguen */
+  --inacap-black: #1f1f1f;
+  --inacap-gray-700: #444;
+  --inacap-gray-300: #d9d9d9;
+  --inacap-white: #fff;
+  
+  /* Colores semánticos basados en la paleta INACAP */
+  --inacap-red-hover: #a01729;
+  --inacap-red-light: #f5e6e8;
+  --inacap-border: #eaeaea;
+  --inacap-text-primary: var(--inacap-black);
+  --inacap-text-secondary: var(--inacap-gray-700);
+  --inacap-background: var(--inacap-white);
+}
+
+/* Clases utilitarias INACAP */
+@layer utilities {
+  .bg-inacap-red {
+    background-color: var(--inacap-red);
+  }
+  
+  .text-inacap-red {
+    color: var(--inacap-red);
+  }
+  
+  .border-inacap-red {
+    border-color: var(--inacap-red);
+  }
+  
+  .hover\:bg-inacap-red-hover:hover {
+    background-color: var(--inacap-red-hover);
+  }
+  
+  .bg-inacap-black {
+    background-color: var(--inacap-black);
+  }
+  
+  .text-inacap-black {
+    color: var(--inacap-black);
+  }
+  
+  .bg-inacap-gray-700 {
+    background-color: var(--inacap-gray-700);
+  }
+  
+  .text-inacap-gray-700 {
+    color: var(--inacap-gray-700);
+  }
+
+  /* Utilidades adicionales para variables definidas */
+  .bg-inacap-red-light { background-color: var(--inacap-red-light); }
+  .bg-inacap-white { background-color: var(--inacap-white); }
+  .text-inacap-white { color: var(--inacap-white); }
+  .border-inacap { border-color: var(--inacap-border); }
+}
+
+/* Tipografía INACAP (provisional) */
+
+@layer base {
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--inacap-text-primary);
+    background-color: var(--inacap-background);
+  }
+  html { scroll-behavior: smooth; }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--inacap-text-primary);
+  }
+  
+  /* Asegurar contraste WCAG AA */
+  .contrast-check {
+    color: var(--inacap-text-primary);
+    background-color: var(--inacap-background);
+  }
+}
+
+/* Componentes base INACAP */
+.btn-inacap-primary {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  color: white;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  outline: none;
+  background-color: var(--inacap-red);
+  border: 1px solid var(--inacap-red);
+}
+
+.btn-inacap-primary:hover {
+  background-color: var(--inacap-red-hover);
+  border-color: var(--inacap-red-hover);
+}
+
+.btn-inacap-primary:focus {
+  box-shadow: 0 0 0 2px var(--inacap-red);
+}
+  
+/* Botón secundario INACAP */
+.btn-inacap-secondary {
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  outline: none;
+  color: var(--inacap-red);
+  border: 2px solid var(--inacap-red);
+  background-color: transparent;
+}
+  
+  .btn-inacap-secondary:hover {
+    background-color: var(--inacap-red-light);
+  }
+  
+/* Cards INACAP */
+.card-inacap {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--inacap-border);
+}
+
+/* Headers INACAP */
+.header-inacap {
+  background-color: var(--inacap-red);
+  color: var(--inacap-white);
+}
+
+/* ========================================
+   WEBKIT SCROLLBAR INACAP COMPLEMENT
+   ======================================== */
+
+/* Scrollbar principal (global) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--inacap-background);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--inacap-gray-300);
+  border-radius: 4px;
+  border: 1px solid var(--inacap-border);
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--inacap-gray-700);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--inacap-red);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--inacap-background);
+}
+
+/* Scrollbar para elementos específicos con clase .scrollbar-inacap */
+.scrollbar-inacap::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.scrollbar-inacap::-webkit-scrollbar-track {
+  background: var(--inacap-red-light);
+  border-radius: 6px;
+  margin: 2px;
+}
+
+.scrollbar-inacap::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--inacap-red) 0%, var(--inacap-red-hover) 100%);
+  border-radius: 6px;
+  border: 2px solid var(--inacap-red-light);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.scrollbar-inacap::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--inacap-red-hover) 0%, var(--inacap-red) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(196, 30, 58, 0.2);
+}
+
+.scrollbar-inacap::-webkit-scrollbar-thumb:active {
+  background: var(--inacap-red-hover);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Scrollbar delgado para elementos compactos */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--inacap-gray-300);
+  border-radius: 3px;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.scrollbar-thin:hover::-webkit-scrollbar-thumb {
+  opacity: 1;
+  background: var(--inacap-red);
+}
+
+/* Scrollbar invisible (overlay) */
+.scrollbar-invisible::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background: transparent;
+}
+
+.scrollbar-invisible {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* Scrollbar para áreas de texto y formularios */
+textarea.scrollbar-form::-webkit-scrollbar,
+.form-scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea.scrollbar-form::-webkit-scrollbar-track,
+.form-scrollable::-webkit-scrollbar-track {
+  background: var(--inacap-border);
+  border-radius: 4px;
+  margin: 4px 0;
+}
+
+textarea.scrollbar-form::-webkit-scrollbar-thumb,
+.form-scrollable::-webkit-scrollbar-thumb {
+  background: var(--inacap-gray-700);
+  border-radius: 4px;
+  border: 1px solid var(--inacap-border);
+}
+
+textarea.scrollbar-form::-webkit-scrollbar-thumb:hover,
+.form-scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--inacap-red);
+}
+
+/* Scrollbar para modales y overlays */
+.modal-content::-webkit-scrollbar,
+.overlay-content::-webkit-scrollbar {
+  width: 12px;
+}
+
+.modal-content::-webkit-scrollbar-track,
+.overlay-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.modal-content::-webkit-scrollbar-thumb,
+.overlay-content::-webkit-scrollbar-thumb {
+  background: rgba(196, 30, 58, 0.8);
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover,
+.overlay-content::-webkit-scrollbar-thumb:hover {
+  background: var(--inacap-red);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive: scrollbars más gruesos en móvil para mejor usabilidad */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .scrollbar-inacap::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Dark mode support (si se implementa en el futuro) */
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+    border-color: #444;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+  
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--inacap-red);
+  }
+}
+
 /* You can add global styles to this file, and also import other style files */

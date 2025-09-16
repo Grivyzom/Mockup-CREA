@@ -1,0 +1,73 @@
+<div class="calendar-container">
+  <!-- Header del calendario -->
+  <div class="calendar-header">
+    <button class="nav-button" (click)="previousMonth()" aria-label="Mes anterior">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    
+    <div class="month-year">
+      <h3 class="month-name">{{ currentMonthName }}</h3>
+      <span class="year">{{ currentYearDisplay }}</span>
+    </div>
+    
+    <button class="nav-button" (click)="nextMonth()" aria-label="Mes siguiente">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Botón "Hoy" -->
+  <div class="today-section">
+    <button class="today-button" (click)="goToToday()">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+      Hoy
+    </button>
+  </div>
+
+  <!-- Nombres de los días -->
+  <div class="weekdays-header">
+    <div class="weekday" *ngFor="let day of dayNames">
+      {{ day }}
+    </div>
+  </div>
+
+  <!-- Grilla del calendario -->
+  <div class="calendar-grid">
+    <button 
+      *ngFor="let calendarDate of calendarDates" 
+      class="calendar-day"
+      [class.other-month]="!calendarDate.isCurrentMonth"
+      [class.today]="calendarDate.isToday"
+      [class.selected]="calendarDate.isSelected"
+      [class.weekend]="calendarDate.isWeekend"
+      (click)="onDateClick(calendarDate)"
+      [attr.aria-label]="calendarDate.date + ' de ' + monthNames[calendarDate.month] + ' ' + calendarDate.year">
+      {{ calendarDate.date }}
+    </button>
+  </div>
+
+  <!-- Footer con fecha seleccionada -->
+  <div class="calendar-footer" *ngIf="selectedDate">
+    <div class="selected-date">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+      </svg>
+      {{ selectedDate.getDate() }} de {{ monthNames[selectedDate.getMonth()] }}, {{ selectedDate.getFullYear() }}
+    </div>
+  </div>
+  
+  <!-- Mensaje cuando no hay fecha seleccionada -->
+  <div class="calendar-footer" *ngIf="!selectedDate">
+    <div class="no-selection">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+      </svg>
+      Haz clic en una fecha para seleccionar
+    </div>
+  </div>
+</div>

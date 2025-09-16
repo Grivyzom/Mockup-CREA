@@ -1,0 +1,354 @@
+<!-- Overlay para móviles -->
+<div *ngIf="isMobileMenuOpen" 
+  class="fixed inset-0 bg-black bg-opacity-50 lg:hidden select-none sidebar-overlay"
+     (click)="closeMobileMenu()">
+</div>
+
+<!-- Sidebar INACAP -->
+<aside class="sidebar select-none no-select" [class.mobile-open]="isMobileMenuOpen">
+  <div class="sidebar-content">
+    <!-- Logo/Header INACAP -->
+    <div class="sidebar-header select-none">
+      <div class="flex items-center">
+        <!-- Logo INACAP (usar SVG oficial cuando esté disponible) -->
+        <div class="w-10 h-10 bg-inacap-red rounded flex items-center justify-center select-none">
+          <span class="text-white font-bold text-lg select-none">I</span>
+        </div>
+        <div class="ml-3 select-none">
+          <span class="text-lg font-semibold text-white select-none">INACAP</span>
+          <p class="text-xs text-gray-300 mt-0.5 select-none">Aprender Haciendo</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search en Sidebar debajo del logo -->
+    <div class="sidebar-search select-none">
+      <div class="search-input-wrapper select-none">
+        <svg class="search-icon select-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text"
+               class="search-input select-none"
+               placeholder="Buscar…"
+               [(ngModel)]="searchTerm" />
+        <button class="search-clear select-none" *ngIf="searchTerm" (click)="searchTerm = ''" type="button" aria-label="Limpiar búsqueda">×</button>
+      </div>
+    </div>
+
+    <!-- CTA móvil dentro del sidebar -->
+    <div class="sidebar-mobile-cta select-none">
+      <a class="start-project-btn select-none"
+         [routerLink]="['/proyectos/nuevo']"
+         (click)="closeMobileMenu()"
+         [class.loading]="isStartingProject">
+        <div class="btn-content select-none">
+          <svg *ngIf="!isStartingProject" class="btn-icon w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          <div *ngIf="isStartingProject" class="loading-spinner select-none"></div>
+          <span class="btn-text select-none">{{ isStartingProject ? 'Creando...' : 'Iniciar Proyecto' }}</span>
+        </div>
+        <div class="btn-shine select-none"></div>
+      </a>
+    </div>
+
+    <!-- Navegación Principal -->
+    <nav class="sidebar-nav select-none">
+      <div class="nav-section select-none">
+        <h3 class="nav-section-title select-none">Navegación</h3>
+        <ul class="nav-list select-none">
+          <li>
+            <a routerLink="/home" 
+               routerLinkActive="nav-link-active"
+               class="nav-link select-none"
+               (click)="closeMobileMenu()">
+              <div class="nav-icon select-none">
+                <svg class="w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+              </div>
+              <span class="select-none">Inicio</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/dashboard" 
+               routerLinkActive="nav-link-active"
+               class="nav-link select-none"
+               (click)="closeMobileMenu()">
+              <div class="nav-icon select-none">
+                <svg class="w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+              </div>
+              <span class="select-none">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/about" 
+               routerLinkActive="nav-link-active"
+               class="nav-link select-none"
+               (click)="closeMobileMenu()">
+              <div class="nav-icon select-none">
+                <svg class="w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+              </div>
+              <span class="select-none">Proyectos</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/contact" 
+               routerLinkActive="nav-link-active"
+               class="nav-link select-none"
+               (click)="closeMobileMenu()">
+              <div class="nav-icon select-none">
+                <svg class="w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <span class="select-none">Mi Historial</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Sección de Proyectos en la parte inferior -->
+    <div class="sidebar-bottom select-none">
+      <div class="nav-section select-none">
+        <h3 class="nav-section-title select-none">Proyectos</h3>
+        <ul class="nav-list select-none">
+          <li>
+            <a href="#" class="nav-link team-link select-none">
+              <div class="team-icon inacap-ip select-none">IP</div>
+              <span class="select-none">Instituto Profesional</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link team-link select-none">
+              <div class="team-icon inacap-cft select-none">CFT</div>
+              <span class="select-none">Centro de Formación Técnica</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link team-link select-none">
+              <div class="team-icon inacap-uni select-none">U</div>
+              <span class="select-none">Universidad</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Settings en la parte inferior -->
+    <div class="sidebar-footer select-none">
+      <a href="#" class="nav-link select-none">
+        <div class="nav-icon select-none">
+          <svg class="w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <span class="select-none">Configuración</span>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<!-- Botón de menú móvil -->
+<button class="mobile-menu-btn lg:hidden select-none" 
+        [class.menu-open]="isMobileMenuOpen"
+        (click)="toggleMobileMenu()"
+        type="button"
+        [attr.aria-label]="isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'">
+  <!-- Ícono de hamburguesa cuando está cerrado -->
+  <svg *ngIf="!isMobileMenuOpen" class="w-6 h-6 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+  </svg>
+  <!-- Ícono de X cuando está abierto -->
+  <svg *ngIf="isMobileMenuOpen" class="w-6 h-6 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+  </svg>
+</button>
+
+<!-- Header superior INACAP -->
+<header class="main-header select-none no-select">
+  <div class="select-none">
+    <!-- Panel de bienvenida con botón de acción -->
+  <div class="welcome-panel select-none hidden lg:flex">
+      <div class="welcome-content select-none">
+  <a class="start-project-btn select-none"
+           [routerLink]="['/proyectos/nuevo']"
+           [class.loading]="isStartingProject">
+          <div class="btn-content select-none">
+            <svg *ngIf="!isStartingProject" class="btn-icon w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+            <div *ngIf="isStartingProject" class="loading-spinner select-none"></div>
+            <span class="btn-text select-none">{{ isStartingProject ? 'Creando...' : 'Iniciar Proyecto' }}</span>
+          </div>
+          <div class="btn-shine select-none"></div>
+        </a>
+      </div>
+    </div>
+    
+    <!-- Área del usuario (derecha) -->
+    <div class="header-right select-none">
+      <!-- Notificaciones -->
+      <div class="dropdown-container select-none" 
+           [class.notification-pinned]="isNotificationDropdownPinned"
+           (mouseenter)="openNotificationDropdown()" 
+           (mouseleave)="closeNotificationDropdown()">
+        <button class="notification-btn select-none" 
+                (click)="toggleNotificationDropdown()"
+                aria-label="Notificaciones">
+          <svg class="w-6 h-6 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          <span class="notification-badge select-none">3</span>
+        </button>
+        
+        <!-- Dropdown de notificaciones -->
+        <div class="dropdown-menu notification-dropdown select-none" 
+             [class.show]="isNotificationDropdownOpen">
+          <div class="dropdown-header select-none">
+            <h3 class="select-none">Notificaciones</h3>
+            <span class="notification-count select-none">3 nuevas</span>
+          </div>
+          <div class="dropdown-content select-none">
+            <div class="notification-item select-none">
+              <div class="notification-icon bg-blue-500 select-none">
+                <svg class="w-4 h-4 select-none" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div class="notification-content select-none">
+                <p class="notification-title select-none">Nuevo proyecto asignado</p>
+                <p class="notification-time select-none">Hace 2 minutos</p>
+              </div>
+            </div>
+            <div class="notification-item select-none">
+              <div class="notification-icon bg-green-500 select-none">
+                <svg class="w-4 h-4 select-none" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div class="notification-content select-none">
+                <p class="notification-title select-none">Proyecto completado</p>
+                <p class="notification-time select-none">Hace 1 hora</p>
+              </div>
+            </div>
+            <div class="notification-item select-none">
+              <div class="notification-icon bg-yellow-500 select-none">
+                <svg class="w-4 h-4 select-none" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+              </div>
+              <div class="notification-content select-none">
+                <p class="notification-title select-none">Recordatorio de entrega</p>
+                <p class="notification-time select-none">Hace 3 horas</p>
+              </div>
+            </div>
+          </div>
+          <div class="dropdown-footer select-none">
+            <a href="#" class="view-all-link select-none">Ver todas las notificaciones</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Avatar del usuario -->
+      <div class="dropdown-container select-none" 
+           [class.profile-pinned]="isProfileDropdownPinned"
+           (mouseenter)="openProfileDropdown()" 
+           (mouseleave)="closeProfileDropdown()">
+        <div class="user-avatar select-none" 
+             (click)="toggleProfileDropdown()">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+               alt="Estudiante INACAP" class="select-none">
+          <div class="user-info select-none">
+            <span class="user-name select-none">Estudiante INACAP</span>
+          </div>
+          <svg class="user-dropdown-icon w-4 h-4 select-none" 
+               [class.rotate]="isProfileDropdownOpen"
+               fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </div>
+        
+        <!-- Dropdown de perfil -->
+        <div class="dropdown-menu profile-dropdown select-none" 
+             [class.show]="isProfileDropdownOpen">
+          <div class="dropdown-header select-none">
+            <div class="profile-info select-none">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+                   alt="Estudiante INACAP" class="profile-avatar select-none">
+              <div class="select-none">
+                <p class="profile-name select-none">Juan Pérez</p>
+                <p class="profile-email select-none">juan.perez@inacapmail.cl</p>
+              </div>
+            </div>
+          </div>
+          <div class="dropdown-content select-none">
+            <a routerLink="/perfil" class="dropdown-item select-none" (click)="closeMobileMenu(); closeDropdowns()">
+              <svg class="w-4 h-4 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              <span class="select-none">Mi Perfil</span>
+            </a>
+            <a href="#" class="dropdown-item select-none">
+              <svg class="w-4 h-4 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span class="select-none">Configuración</span>
+            </a>
+            <a href="#" class="dropdown-item select-none">
+              <svg class="w-4 h-4 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <span class="select-none">Ayuda</span>
+            </a>
+          </div>
+          
+          <!-- Estadísticas de proyectos en el perfil -->
+          <div class="dropdown-stats select-none">
+            <div class="stats-header select-none">
+              <h4 class="select-none">Mis Proyectos</h4>
+            </div>
+            <div class="profile-stats-container select-none">
+              <div class="profile-stat-item select-none">
+                <svg class="stat-icon w-4 h-4 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+                <div class="profile-stat-info select-none">
+                  <span class="profile-stat-number select-none">{{ studentStats.projectsActive }}</span>
+                  <span class="profile-stat-label select-none">Activos</span>
+                </div>
+              </div>
+              <div class="profile-stat-item select-none">
+                <svg class="stat-icon w-4 h-4 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <div class="profile-stat-info select-none">
+                  <span class="profile-stat-number select-none">{{ studentStats.projectsCompleted }}</span>
+                  <span class="profile-stat-label select-none">Completados</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="dropdown-footer select-none">
+            <a href="#" class="dropdown-item logout select-none">
+              <svg class="w-4 h-4 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+              </svg>
+              <span class="select-none">Cerrar Sesión</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,155 @@
+.scroll-to-top-btn {
+  /* Posicionamiento fijo */
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  
+  /* Estilo del botón */
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  cursor: pointer;
+  
+  /* Sombra */
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  
+  /* Centrar contenido */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Transiciones suaves */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(100px);
+  opacity: 0;
+  visibility: hidden;
+  
+  /* Efectos hover */
+  &:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(0) scale(1.1);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.6);
+  }
+  
+  /* Efectos active */
+  &:active {
+    transform: translateY(0) scale(0.95);
+  }
+  
+  /* Estado visible */
+  &.show {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Focus para accesibilidad */
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+  }
+}
+
+/* Responsivo para tablets */
+@media (max-width: 768px) {
+  .scroll-to-top-btn {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    
+    &:hover {
+      transform: translateY(0) scale(1.05);
+    }
+  }
+}
+
+/* Responsivo para móviles */
+@media (max-width: 480px) {
+  .scroll-to-top-btn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    
+    &:hover {
+      transform: translateY(0);
+      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+    }
+  }
+}
+
+/* Animación de entrada */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Animación de salida */
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+}
+
+/* Variante con pulso sutil */
+.scroll-to-top-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: inherit;
+  z-index: -1;
+  animation: pulse 2s infinite;
+  opacity: 0.7;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .scroll-to-top-btn {
+    background: linear-gradient(135deg, #4f46e5, #3730a3);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    
+    &:hover {
+      background: linear-gradient(135deg, #3730a3, #312e81);
+      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5);
+    }
+  }
+}
