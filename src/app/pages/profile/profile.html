@@ -56,12 +56,13 @@
           <div class="field">
             <label for="timezone">Zona horaria</label>
             <select id="timezone" formControlName="timezone" [disabled]="!isEditingProfile">
-              <option value="America/Los_Angeles">Hora estándar del Pacífico</option>
-              <option value="America/Santiago">Hora de Chile (America/Santiago)</option>
-              <option value="America/Argentina/Buenos_Aires">Buenos Aires</option>
-              <option value="America/Lima">Lima</option>
-              <option value="America/Bogota">Bogotá</option>
-              <option value="UTC">UTC</option>
+              @for (group of timezoneGroups; track group.region) {
+                <optgroup [label]="group.region">
+                  @for (z of group.zones; track z) {
+                    <option [value]="z">{{ z }}</option>
+                  }
+                </optgroup>
+              }
             </select>
           </div>
         </div>

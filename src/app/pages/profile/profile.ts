@@ -1,8 +1,9 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, NgZone, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service';
 import { ToastService } from '../../components/ui/toast/toast.service';
+import { FALLBACK_TIMEZONES, buildTimezoneGroups } from '../../shared/timezones';
 
 @Component({
   selector: 'app-profile',
@@ -15,6 +16,8 @@ export class Profile implements OnInit {
   private fb = inject(FormBuilder);
   private profileService = inject(ProfileService);
   private toast = inject(ToastService);
+  private zone = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
 
   // Perfil
   profile = this.profileService.getProfile();
@@ -25,6 +28,9 @@ export class Profile implements OnInit {
     username: [this.profile.username, [Validators.required, Validators.minLength(3)]],
     timezone: [this.profile.timezone ?? 'America/Los_Angeles']
   });
+  // Timezones
+  allTimezones: string[] = [];
+  timezoneGroups: Array<{region: string; zones: string[]}> = [];
   // Edición del perfil
   isEditingProfile = false;
   private originalProfileValue: any;
@@ -89,6 +95,20 @@ export class Profile implements OnInit {
     this.passwordForm.get('newPass')?.valueChanges.subscribe((val) => {
       this.passwordStrength = this.calcStrength(val ?? '');
     });
+
+    // Cargar zonas horarias (feature detection)
+    try {
+      // @ts-ignore - propuesta Intl.supportedValuesOf
+      if (typeof Intl.supportedValuesOf === 'function') {
+        // @ts-ignore
+        this.allTimezones = Intl.supportedValuesOf('timeZone');
+      } else {
+        this.allTimezones = FALLBACK_TIMEZONES;
+      }
+    } catch {
+      this.allTimezones = FALLBACK_TIMEZONES;
+    }
+    this.timezoneGroups = buildTimezoneGroups(this.allTimezones);
 
     // Deshabilitar formulario de perfil por defecto y guardar snapshot inicial
     this.form.disable({ emitEvent: false });
@@ -210,15 +230,19 @@ export class Profile implements OnInit {
     const reader = new FileReader();
     this.avatarLoading = true;
     reader.onload = () => {
-      const url = reader.result as string;
-      const updated = { ...this.profile, avatarUrl: url };
-      this.profileService.updateProfile(updated as any);
-      this.profile = updated as any;
-      this.avatarLoading = false;
-      this.avatarSuccess = true;
-      setTimeout(() => this.avatarSuccess = false, 2000);
+      this.zone.run(() => {
+        const url = reader.result as string;
+        const updated = { ...this.profile, avatarUrl: url };
+        this.profileService.updateProfile(updated as any);
+        this.profile = updated as any;
+        this.avatarLoading = false;
+        this.avatarSuccess = true;
+        this.cdr.markForCheck();
+        setTimeout(() => { this.avatarSuccess = false; this.cdr.markForCheck(); }, 2000);
+        this.toast.show({ message: 'Avatar actualizado', type: 'success', duration: 3000 });
+      });
     };
-    reader.onerror = () => { this.avatarLoading = false; this.avatarError = 'No se pudo leer la imagen.'; };
+    reader.onerror = () => { this.zone.run(() => { this.avatarLoading = false; this.avatarError = 'No se pudo leer la imagen.'; this.cdr.markForCheck(); }); };
     reader.readAsDataURL(file);
   }
 

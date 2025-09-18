@@ -1,13 +1,13 @@
+/* Wrapper del deck */
 .deck-wrapper { 
   width: 100%; 
   display: flex; 
-  flex-direction: column; /* Para que la paginación quede debajo del deck */
-  align-items: center; /* Centrar horizontalmente el deck y la paginación */
-  justify-content: flex-start; /* Evitar centrar verticalmente */
+  justify-content: center; /* Mantener centrado dentro del contenedor principal */
   position: relative;
   padding: 0 8px; /* Aún más compacto para aprovechar ancho */
 }
 
+/* Control segmentado para cambiar vista */
 .view-toggle {
   position: absolute;
   top: -48px;
@@ -59,11 +59,6 @@
   transform: scale(1.02);
 }
 
-.seg-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(196,30,58,.9);
-}
-
 .seg-btn.active {
   background: var(--inacap-red);
   color: var(--inacap-white);
@@ -72,18 +67,21 @@
   cursor: pointer;
 }
 
+.seg-btn:hover { background: #f3f4f6; }
+
 .deck {
   position: relative;
-  width: 100%;
-  max-width: 1280px;
-  height: 720px;
-  overflow: visible;
-  perspective: 1000px;
+  width: 100%; /* Ocupar todo el ancho disponible del contenedor */
+  max-width: 1280px; /* limitar a un ancho agradable en desktop grandes */
+  height: 720px; /* Un poco más alta para más contenido */
+  overflow: visible; /* asegurar que los botones a los costados no se recorten */
+  perspective: 1000px; /* Para efectos 3D mejorados */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* Variantes visuales */
 .deck.variant-compact {
   height: 560px;
 }
@@ -103,6 +101,7 @@
 .deck.variant-showcase .description-text { font-size: 1.05rem; }
 .deck.variant-showcase .members-section { min-height: 120px; }
 
+/* Carta base */
 .card {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -119,8 +118,8 @@
 }
 
 .card:hover {
-  transform: translateY(-2px) scale(1.001);
-  box-shadow: 0 18px 28px rgba(0,0,0,.14);
+  transform: translateY(-2px) scale(1.002);
+  box-shadow: 0 20px 35px rgba(0,0,0,.15);
 }
 
 .card.top {
@@ -129,10 +128,11 @@
 }
 
 .card.top:hover {
-  transform: translateY(-3px) scale(1.003);
-  box-shadow: 0 26px 44px rgba(0,0,0,.18);
+  transform: translateY(-4px) scale(1.005);
+  box-shadow: 0 28px 50px rgba(0,0,0,.2);
 }
 
+/* Banner de la carta */
 .banner { 
   position: relative; 
   height: 220px; 
@@ -157,16 +157,20 @@
 .banner .overlay { position: absolute; inset: 0; background: rgba(0,0,0,.2); }
 .badge-left { position: absolute; left: 16px; top: 16px; display: flex; align-items: center; gap: 12px; }
 .icon-glass { width: 44px; height: 44px; border-radius: 12px; display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,.2); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.25); }
+.badge-right { position: absolute; right: 16px; top: 16px; }
 .badge-right { display:flex; align-items:center; gap:10px; position:absolute; right:16px; top:16px; z-index: 5; }
 .info-icon-btn { width:28px; height:28px; border-radius:999px; background: rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.35); display:flex; align-items:center; justify-content:center; backdrop-filter: blur(6px); }
 .info-icon { width:16px; height:16px; color:#fff; opacity:.95; }
 
+/* Dropdown de áreas */
 .areas-dropdown { position:absolute; top:40px; right:0; min-width: 220px; background:#fff; border-radius:12px; border:1px solid #e5e7eb; box-shadow:0 16px 35px rgba(0,0,0,.18); opacity:0; transform: translateY(-6px); pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 20; }
 .areas-dropdown.show { opacity:1; transform: translateY(0); pointer-events: auto; }
 .areas-dropdown-inner { padding:12px; }
 .areas-title { font-size:.8rem; font-weight:800; color:#374151; margin-bottom:8px; }
 .areas-chips { display:flex; flex-wrap:wrap; gap:6px; }
 
+/* Chips por área (colores) */
+/* Chip de área mejorado */
 .area-chip { 
   color: #fff; 
   font-weight: 700; 
@@ -191,6 +195,7 @@
 .chip-electronica{ background: rgba(202,138,4,.85); }
 .chip-salud{ background: rgba(239,68,68,.85); }
 
+/* Contenido */
 .content { 
   padding: 18px 20px 20px; 
   display: flex; 
@@ -215,40 +220,7 @@
   flex: 0 0 auto; /* Espacio fijo para el título */
 }
 
-.marquee-bounce {
-  position: relative;
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 16px), transparent 100%);
-}
-.marquee-bounce.marquee-enabled .marquee-content {
-  display: inline-block;
-  padding-inline: 0; /* sin padding para no falsear el overflow */
-  animation: marquee-shift 8s linear infinite;
-}
-.marquee-bounce.marquee-enabled:hover .marquee-content,
-.marquee-bounce.marquee-enabled:focus-within .marquee-content {
-  animation-play-state: paused; /* pausa al hover/focus para accesibilidad */
-}
-
-@keyframes marquee-shift {
-  0% { transform: translateX(0); }
-  40% { transform: translateX(0); } /* esperar un poco en inicio */
-  60% { transform: translateX(calc(-100% + 100%)); } /* desplazar lo justo: contenido - contenedor */
-  100% { transform: translateX(calc(-100% + 100%)); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquee-bounce .marquee-content { animation: none !important; }
-  .card:hover, .card.top:hover { transform: translateY(-2px) scale(1); }
-}
-
-/* Ajustes para nombres de miembros (espacio reducido) */
-.member-name.marquee-bounce { max-width: 140px; }
-.member-name.marquee-bounce.marquee-enabled .marquee-content { animation-duration: 10s; }
-
+/* Sección de descripción */
 .description-section {
   margin-bottom: 12px;
   flex: 1 1 auto; /* Permite crecer pero también comprimirse */
@@ -257,6 +229,7 @@
   min-height: 60px; /* Aumentar altura mínima */
 }
 
+/* Desktop - descripción siempre visible */
 .description-desktop {
   display: block;
   max-height: 150px; /* Aumentar altura máxima */
@@ -272,6 +245,7 @@
   overflow-y: auto;
 }
 
+/* Móvil - descripción desplegable */
 .description-mobile {
   display: none;
 }
@@ -339,23 +313,17 @@
 .dif-basic{ background:#dbeafe; color:#1e40af; }
 .dif-inter{ background:#d1fae5; color:#065f46; }
 .dif-adv{ background:#fee2e2; color:#991b1b; }
-/* Botón Ver más con mejor UX y accesibilidad */
 .ver-mas { 
   color: var(--inacap-red); 
   font-weight: 700; 
-  font-size: .9rem; /* un poco más pequeño */
-  line-height: 1; 
-  transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
-  padding: 8px 12px; /* más compacto */
-  min-height: 36px; /* ligeramente menor */
+  font-size: .95rem; 
+  transition: all 0.3s ease;
+  padding: 8px 16px;
   border-radius: 8px;
   background: transparent;
   border: 1px solid transparent;
   position: relative;
   overflow: hidden;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px; /* menor separación */
 }
 
 .ver-mas::before {
@@ -373,31 +341,21 @@
   color: var(--inacap-red-hover);
   background: var(--inacap-red-light);
   border-color: var(--inacap-red);
-  transform: translateX(1px);
+  transform: translateX(4px);
 }
 
 .ver-mas:hover::before {
   left: 100%;
 }
 
-.ver-mas-icon { transition: transform .2s ease; }
-.ver-mas:hover .ver-mas-icon { transform: translateX(2px); }
-
-.ver-mas .ver-mas-label { order: 2; }
-.ver-mas .ver-mas-icon { order: 1; }
-
-.ver-mas:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(196,30,58,.9);
+/* Controles */
+/* Ocultar controles izquierda/derecha en todas las vistas */
+/* Botones de navegación mejorados */
+.nav {
+  display: none !important; /* Mantener ocultos como se solicita */
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ver-mas,
-  .ver-mas-icon { transition: none; }
-}
-
-.nav { display:none !important; }
-
+/* Indicador de progreso del carrusel */
 .carousel-progress {
   position: absolute;
   top: 16px;
@@ -413,48 +371,18 @@
   color: white;
 }
 
-.carousel-progress-bottom {
-  position: static;
-  margin: 12px auto 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: 100%;
-  background: transparent; /* sin recuadro */
-}
-
-.carousel-progress-bottom .progress-dot {
-  background: #d1d5db; /* gris claro */
-}
-.carousel-progress-bottom .progress-dot.active {
-  background: var(--inacap-red);
-}
-.carousel-progress-bottom .progress-dot:hover {
-  background: #9ca3af;
-}
-.carousel-progress-bottom .progress-counter {
-  color: #374151; /* texto oscuro en fondo claro */
-}
-
 .progress-dots {
   display: flex;
   gap: 6px;
 }
 
 .progress-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-.progress-dot {
-  appearance: none;
-  border: none;
-  padding: 0;
 }
 
 .progress-dot.active {
@@ -467,11 +395,6 @@
   transform: scale(1.1);
 }
 
-.progress-dot:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(196,30,58,.9);
-}
-
 .progress-counter {
   font-size: 0.75rem;
   font-weight: 600;
@@ -480,6 +403,7 @@
   text-align: center;
 }
 
+/* Indicador de swipe para móvil */
 .swipe-indicator {
   position: absolute;
   bottom: 20px;
@@ -517,6 +441,7 @@
   50% { opacity: 1; }
 }
 
+/* Estados de loading y animación */
 .deck.loading .card {
   pointer-events: none;
 }
@@ -551,11 +476,14 @@
   animation: cardSlideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .ver-mas,
-  .ver-mas-icon { transition: none; }
+/* Ocultar hint en desktop */
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
 }
 
+/* Efectos de hover mejorados para touch devices */
 @media (hover: hover) {
   .card:hover .progress-fill {
     background: linear-gradient(90deg, var(--inacap-red-hover) 0%, var(--inacap-red) 100%);
@@ -566,6 +494,7 @@
   }
 }
 
+/* Mejoras para dispositivos táctiles */
 @media (hover: none) {
   .card {
     transition: transform 0.2s ease;
@@ -576,11 +505,35 @@
   }
 }
 
-/* Botón de autoplay (centrado inferior) */
-.nav.autoplay-toggle{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.nav.left { 
+  left: 12px; /* Posicionar dentro del borde del card para ancho completo */
+}
+
+.nav.right { 
+  right: 12px; /* Posicionar dentro del borde del card para ancho completo */
+}
+
+.nav:hover { 
+  background: rgba(255, 255, 255, 1);
+  transform: translateY(-50%) scale(1.08); 
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.nav:active { 
+  transform: translateY(-50%) scale(0.95); 
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.nav:focus-visible { 
+  outline: 3px solid rgba(59, 130, 246, 0.5); 
+  outline-offset: 2px; 
+}
+
+.nav[disabled] { 
+  opacity: 0.4; 
+  pointer-events: none; 
+  cursor: not-allowed;
 }
 
 /* Responsive */
@@ -592,7 +545,7 @@
   }
   
   .deck { 
-    height: 520px; 
+    height: 440px; 
     width: 100%; 
     max-width: none; /* Remover limitación de ancho máximo en móvil */
   }
@@ -653,7 +606,7 @@
   }
   
   .content { 
-    height: calc(520px - 140px); /* Ajustar altura del contenido acorde al deck más alto */
+    height: calc(440px - 140px); /* Ajustar altura del contenido */
     padding: 16px; /* Reducir padding interno */
   }
   
@@ -705,23 +658,6 @@
     width: 26px;
     height: 26px;
   }
-  /* Dots más grandes para toque */
-  .progress-dot { width: 10px; height: 10px; }
-  .progress-dots { gap: 8px; }
-  .progress-counter { font-size: 0.7rem; }
-
-  /* CTA Ver más más accesible */
-  .bottom { gap: 8px; }
-  .ver-mas { width: 100%; text-align: center; position: static; bottom: auto; box-shadow: none; margin-top: 6px; justify-content: center; }
-
-  /* Autoplay: ocultar toggle en móvil, se pausa por interacción */
-  .nav.autoplay-toggle { display: none !important; }
-
-  /* Descripción: aumentar área táctil del toggle */
-  .description-toggle { padding: 8px 6px; }
-
-  /* Más espacio bajo los miembros para evitar choque con acciones */
-  .members-list { padding-bottom: 16px; }
 }
 
 /* Breakpoint para móviles muy pequeños */
@@ -804,6 +740,20 @@
     padding: 0 24px; /* Menos padding en tablets */
     justify-content: center; /* Restaurar centrado en tablets */
   }
+  
+  .nav.left { 
+    left: -35px; 
+  }
+  
+  .nav.right { 
+    right: -35px; 
+  }
+  
+  .nav {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
 }
 
 /* Breakpoint para pantallas pequeñas de desktop */
@@ -812,6 +762,14 @@
     padding: 0 50px; /* Padding equilibrado */
     justify-content: center; /* Centrar en el grid */
   }
+  
+  .nav.left { 
+    left: -35px; 
+  }
+  
+  .nav.right { 
+    right: -35px; 
+  }
 }
 
 /* Ajustes para pantallas muy anchas */
@@ -819,6 +777,20 @@
   .deck-wrapper {
     padding: 0 60px; /* Padding equilibrado */
     justify-content: center; /* Centrar en el grid */
+  }
+  
+  .nav.left { 
+    left: -35px; 
+  }
+  
+  .nav.right { 
+    right: -35px; 
+  }
+  
+  .nav {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
   }
 }
 
@@ -896,9 +868,7 @@
   gap: 12px;
   align-items: center;
   overflow-x: auto;
-  overflow-y: visible; /* permitir que la sombra en hover no se recorte verticalmente */
-  padding-top: 8px; /* espacio superior para sombras/levitación */
-  padding-bottom: 12px; /* más espacio inferior para no chocar con acciones */
+  padding-bottom: 4px;
 }
 
 .member-card {
@@ -930,9 +900,8 @@
 .member-card:hover {
   background: #f3f4f6;
   border-color: var(--inacap-red);
-  transform: translateY(-2px); /* evitar recorte horizontal por escala */
+  transform: translateY(-2px) scale(1.02);
   box-shadow: 0 4px 12px rgba(196, 30, 58, 0.15);
-  z-index: 2; /* elevar sobre vecinos en hover */
 }
 
 .member-card:hover::before {
@@ -995,12 +964,4 @@
   font-weight: 600;
   color: #6b7280;
   border: 2px solid #fff;
-}
-
-/* Accesibilidad: foco visible en chips, botón info y CTA Ver más */
-.area-chip:focus-visible,
-.info-icon-btn:focus-visible,
-.ver-mas:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(196,30,58,.9);
 }
