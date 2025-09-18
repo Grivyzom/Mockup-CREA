@@ -1,0 +1,62 @@
+.toast-stack {
+  position: fixed;
+  top: 4.5rem; /* debajo del navbar (asumiendo ~64px + margen) */
+  right: 1rem;
+  left: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  z-index: 1100;
+  max-width: 380px;
+  width: calc(100% - 2rem);
+}
+
+@media (max-width: 640px) {
+  .toast-stack {
+    right: 0.75rem;
+    left: 0.75rem; /* centrado respecto viewport en móvil */
+    max-width: none;
+    width: auto;
+  }
+}
+
+.toast {
+  background: var(--inacap-primary); /* sólido temático */
+  border: 1px solid var(--inacap-primary-dark, #a30019);
+  color: #fff;
+  border-radius: .875rem;
+  padding: .85rem 1rem;
+  box-shadow: 0 6px 22px -4px rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.18);
+  animation: toast-in .35s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  outline: none;
+  backdrop-filter: none; /* asegurar que no sea translúcido */
+}
+
+.toast.toast-success { background: var(--inacap-success, #2e7d32); border-color: #256628; }
+.toast.toast-warning { background: var(--inacap-warning, #ff9800); border-color: #e68900; }
+.toast.toast-error { background: var(--inacap-error, #f44336); border-color: #d3372b; }
+
+.toast:focus-visible { box-shadow: 0 0 0 3px rgba(255,255,255,.5), 0 0 0 5px rgba(0,0,0,.4); }
+
+.toast-content { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: .75rem; width: 100%; }
+
+@media (max-width: 480px) { .toast-content { grid-template-columns: auto 1fr auto; } }
+
+.toast-icon { display:inline-flex; align-items:center; justify-content:center; color:#fff; }
+.toast-success .toast-icon { color:#fff; }
+.toast-warning .toast-icon { color:#000; }
+.toast-error .toast-icon { color:#fff; }
+
+.toast-message { font-size: .9rem; color: #fff; line-height: 1.35; font-weight: 600; }
+
+.toast-action { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.4); color: #fff; padding: .4rem .8rem; border-radius: .5rem; font-size: .7rem; font-weight:600; cursor:pointer; letter-spacing:.5px; }
+.toast-action:hover { background: rgba(255,255,255,.22); }
+
+.toast-close { background: transparent; border: none; color: rgba(255,255,255,.8); width: 1.75rem; height: 1.75rem; border-radius: .5rem; cursor: pointer; font-size: 1.1rem; display:flex; align-items:center; justify-content:center; }
+.toast-close:hover { background: rgba(255,255,255,.15); color:#fff; }
+
+@keyframes toast-in { from { opacity: 0; transform: translateY(-6px) scale(.97); } to { opacity:1; transform: translateY(0) scale(1);} }
+
+/* Variante centrada opcional si se requiere en futuro */
+/* .toast-stack.center { left: 50%; transform: translateX(-50%); right: auto; } */

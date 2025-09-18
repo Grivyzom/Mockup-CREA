@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfileService } from '../../services/profile.service';
+import { ToastService } from '../../components/ui/toast/toast.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +14,7 @@ import { ProfileService } from '../../services/profile.service';
 export class Profile implements OnInit {
   private fb = inject(FormBuilder);
   private profileService = inject(ProfileService);
+  private toast = inject(ToastService);
 
   // Perfil
   profile = this.profileService.getProfile();
@@ -23,6 +25,9 @@ export class Profile implements OnInit {
     username: [this.profile.username, [Validators.required, Validators.minLength(3)]],
     timezone: [this.profile.timezone ?? 'America/Los_Angeles']
   });
+  // Edición del perfil
+  isEditingProfile = false;
+  private originalProfileValue: any;
 
   // Cambio de contraseña
   passwordForm = this.fb.group({
@@ -84,6 +89,27 @@ export class Profile implements OnInit {
     this.passwordForm.get('newPass')?.valueChanges.subscribe((val) => {
       this.passwordStrength = this.calcStrength(val ?? '');
     });
+
+    // Deshabilitar formulario de perfil por defecto y guardar snapshot inicial
+    this.form.disable({ emitEvent: false });
+    this.originalProfileValue = this.form.getRawValue();
+  }
+
+  startEditProfile() {
+    this.isEditingProfile = true;
+    this.form.enable({ emitEvent: false });
+  }
+
+  cancelEditProfile() {
+    this.isEditingProfile = false;
+    // Restaurar valores originales y deshabilitar nuevamente
+    this.form.reset(this.originalProfileValue);
+    this.form.markAsPristine();
+    this.form.disable({ emitEvent: false });
+    this.submittedProfile = false;
+    this.saving = false;
+    this.saveSuccess = false;
+    this.toast.show({ message: 'Cambios descartados', type: 'info', duration: 3000 });
   }
 
   async saveProfile() {
@@ -94,8 +120,13 @@ export class Profile implements OnInit {
     this.profileService.updateProfile(merged);
     this.profile = merged;
     await new Promise(r => setTimeout(r, 300));
-    this.saving = false; this.saveSuccess = true;
+  this.saving = false; this.saveSuccess = true;
+  this.toast.show({ message: 'Perfil actualizado correctamente', type: 'success', duration: 4000 });
     this.form.markAsPristine();
+    // Actualizar snapshot, salir del modo edición y deshabilitar
+    this.originalProfileValue = this.form.getRawValue();
+    this.isEditingProfile = false;
+    this.form.disable({ emitEvent: false });
     setTimeout(() => this.saveSuccess = false, 2000);
   }
 
@@ -139,7 +170,7 @@ export class Profile implements OnInit {
   }
 
   // Utilidades
-  get canSaveProfile(): boolean { return this.form.valid && this.form.dirty && !this.saving; }
+  get canSaveProfile(): boolean { return this.isEditingProfile && this.form.valid && this.form.dirty && !this.saving; }
   get passMismatch(): boolean {
     const { newPass, confirm } = this.passwordForm.value as any;
     return !!newPass && !!confirm && newPass !== confirm;
@@ -197,6 +228,7 @@ export class Profile implements OnInit {
     this.setupStep = 1;
     this.twoFactorError = '';
     this.generateTwoFactorSecret();
+    this.toast.show({ message: 'Configuración 2FA iniciada', type: 'info', duration: 3500 });
   }
 
   cancelTwoFactorSetup() {
@@ -206,6 +238,7 @@ export class Profile implements OnInit {
     this.twoFactorSecret = '';
     this.twoFactorForm.reset();
     this.submittedTwoFactor = false;
+    this.toast.show({ message: 'Configuración 2FA cancelada', type: 'info', duration: 3000 });
   }
 
   generateTwoFactorSecret() {
@@ -255,8 +288,10 @@ export class Profile implements OnInit {
         this.twoFactorForm.reset();
         this.submittedTwoFactor = false;
         setTimeout(() => this.twoFactorSuccess = '', 3000);
+        this.toast.show({ message: '2FA activada correctamente', type: 'success', duration: 5000 });
       } else {
         this.twoFactorError = 'Código de verificación incorrecto. Inténtalo de nuevo.';
+        this.toast.show({ message: 'Código 2FA incorrecto', type: 'error', duration: 4500 });
       }
       
       this.twoFactorLoading = false;
@@ -274,6 +309,7 @@ export class Profile implements OnInit {
         this.twoFactorSuccess = 'Autenticación de dos factores desactivada';
         this.twoFactorLoading = false;
         setTimeout(() => this.twoFactorSuccess = '', 3000);
+        this.toast.show({ message: '2FA desactivada', type: 'warning', duration: 4500 });
       }, 1500);
     }
   }
@@ -292,6 +328,7 @@ export class Profile implements OnInit {
       this.generateBackupCodes();
       this.twoFactorSuccess = 'Códigos de respaldo regenerados';
       setTimeout(() => this.twoFactorSuccess = '', 3000);
+      this.toast.show({ message: 'Códigos de respaldo regenerados', type: 'success', duration: 4500 });
     }
   }
 
@@ -309,15 +346,18 @@ export class Profile implements OnInit {
     a.download = `inacap-backup-codes-${Date.now()}.txt`;
     a.click();
     window.URL.revokeObjectURL(url);
+    this.toast.show({ message: 'Códigos de respaldo descargados', type: 'info', duration: 4000 });
   }
 
   copySecret() {
     navigator.clipboard.writeText(this.twoFactorSecret).then(() => {
       this.twoFactorSuccess = 'Clave copiada al portapapeles';
       setTimeout(() => this.twoFactorSuccess = '', 2000);
+      this.toast.show({ message: 'Clave 2FA copiada', type: 'success', duration: 3000 });
     }).catch(() => {
       this.twoFactorError = 'No se pudo copiar la clave';
       setTimeout(() => this.twoFactorError = '', 2000);
+      this.toast.show({ message: 'No se pudo copiar la clave', type: 'error', duration: 4000 });
     });
   }
 

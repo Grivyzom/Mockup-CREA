@@ -128,27 +128,78 @@ Nota: en producción, `projectsData` vendría de un servicio/HTTP y se compartir
 
 ## Estilos y layout global
 
-- `app.css`: layout principal, márgenes/anchos de `main` y `footer` según sidebar
-- `home.css`: grilla responsive + carrusel móvil, chips y dropdown de áreas, efectos glass, badges
-- `project-modal.css`: backdrop blur, animaciones, chips por área y botón INACAP
-- `project-detail.css`: animaciones de entrada, chips, botones, scrollbars personalizados
 
 ## Interacciones y estados
 
-- Click afuera para cerrar dropdowns en Home y Sidebar
-- Bloqueo de scroll del body cuando el modal está abierto
-- Carrusel auto-advance sólo en móviles y respeta `prefers-reduced-motion`
 
 ## Decisiones de diseño
 
-- Componentes standalone para simplicidad (sin NgModules)
-- Estilos CSS utilitarios + clases propias para control fino (sin Tailwind en runtime)
-- Datos mock en componentes para desarrollo rápido; abstraer a servicio más adelante
 
 ## Próximos pasos sugeridos
 
-- Extraer `ProjectData` y utilidades a un `project.model.ts` y `project.utils.ts`
-- Crear `ProjectService` que provea datos (HTTP + caching)
-- Agregar tests de componentes (modal, home, detail)
-- Internacionalización (i18n) de labels
-- Accesibilidad: roles ARIA en modal y dropdowns
+
+## UI Global: Toast, Push Notifications y Modal/Dialog
+
+Se añadieron tres componentes reutilizables montados de forma global en `app.html`:
+
+### Toast (`components/ui/toast`)
+- Servicio: `ToastService` (`show(opts)`, `dismiss(id)`, `clear()`).
+- API `show` acepta: `message`, `type: 'info'|'success'|'warning'|'error'`, `duration` (ms, default 4000), `action` opcional (botón con callback), `dismissible`.
+- Contenedor: `<app-toast-container>` anclado arriba/derecha. Usa Angular signals para reaccionar.
+- Uso rápido:
+```ts
+toast.show({ message: 'Guardado', type: 'success' });
+```
+
+### Push Notification (`components/ui/push`)
+- Pensado para notificaciones más ricas (título + cuerpo + acciones) estilo "in-app notice" (esquina inferior derecha / móvil full width).
+- Servicio: `PushNotificationService` (`show`, `dismiss`, `clear`).
+- API `show`: `title`, `message`, `icon?`, `timeout` (default 8000, 0 = sticky), `actions[]` (cada una con `label`, `primary?`, `onClick`), `type`, `dismissible`.
+- Acciones cierran la notificación tras ejecutar su callback (se puede impedir retornando `false` o usando lógica adicional).
+
+### Modal/Dialog (`components/ui/modal`)
+- Servicio: `ModalService` (`open(config)`, `close(id?)`). Solo un modal activo (simple overlay). Ampliable a stack si se requiere.
+- Config `ModalConfig`:
+  - `title?`, `content?` (string simple por ahora), `width: 'sm'|'md'|'lg'|'xl'` (default `md`), `closable`, `backdropClose`, `buttons[]`.
+  - Cada botón: `label`, `variant: primary|secondary|danger|ghost`, `action` (puede retornar `false` o `Promise` que resuelva `false` para evitar cierre), `closeOnClick` (default true).
+- Focus trap básico + restauración del foco anterior al cerrar.
+- Escape cierra si `closable`.
+
+### Estilos y Tema INACAP
+- Colores y elevaciones reutilizan variables `--inacap-*` existentes (superficies elevadas, bordes, sombras).
+- Componentes usan animaciones suaves con cubic-bezier y opacidad + translate.
+
+### Próximas mejoras (pendientes opcionales)
+- Modal: soporte para proyección de contenido Angular (portal) y formularios internos.
+- Toast: colas con límite y compactación.
+- Push: agrupar notificaciones por categoría / canal.
+
+### Ejemplos de integración (no ejecutados aún)
+```ts
+// Toast
+toast.show({ message: 'Perfil actualizado', type: 'success' });
+
+// Push
+push.show({
+  title: 'Nuevo mensaje',
+  message: 'Tienes un comentario en tu proyecto',
+  type: 'info',
+  actions: [
+    { label: 'Ver', primary: true, onClick: () => router.navigate(['/proyecto', 12]) },
+    { label: 'Ignorar', onClick: () => {} }
+  ]
+});
+
+// Modal
+modal.open({
+  title: 'Eliminar recurso',
+  content: '¿Seguro que deseas eliminarlo? Esta acción no se puede deshacer.',
+  width: 'sm',
+  buttons: [
+    { label: 'Cancelar', variant: 'secondary' },
+    { label: 'Eliminar', variant: 'danger', action: () => {/* llamar servicio */} }
+  ]
+});
+```
+
+Los tres servicios son singleton `providedIn: 'root'`, por lo que pueden inyectarse desde cualquier componente/página.

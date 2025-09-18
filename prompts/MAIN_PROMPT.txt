@@ -1,0 +1,9 @@
+Necesito que me ayudes a desarrollar el siguiente componente respetando las siguientes instrucciones:   
+
+Debes respetar la temática grafica del instituto INACAP, desde su paleta de colores, información, etc. 
+No hagas mas de lo que el desarrollar te esta indicando. 
+Siempre prioriza ui y ux. 
+Quiero que en cada entrega priorices siempre la experiencia del usuario (UX) y la interfaz (UI). Eso significa que antes de pensar en funciones técnicas, te enfoques en que sea fácil, intuitivo y agradable de usar.
+
+Instrucciones del Desarrollador:
+

@@ -5,11 +5,40 @@
   font-family: var(--font-body);
 }
 
+/* Bloqueo de selección de texto global dentro del perfil (excepto campos editables) */
+.profile-wrap.no-select, .profile-wrap.no-select * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Permitir selección/copiar dentro de inputs, textareas, selects y botones para accesibilidad */
+.profile-wrap.no-select input,
+.profile-wrap.no-select textarea,
+.profile-wrap.no-select select,
+.profile-wrap.no-select button,
+.profile-wrap.no-select .secret-key code,
+.profile-wrap.no-select .backup-code,
+.profile-wrap.no-select .copy-btn {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 .container { 
   max-width: 1200px; 
   margin: 0 auto; 
   display: grid; 
   gap: 2rem; 
+}
+
+/* Centrado baseline de las cards; en desktop quedan alineadas naturalmente, en mobile se apilan centradas */
+.container > .card {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 100%;
 }
 
 .section-title { 
@@ -553,6 +582,27 @@
   font-weight: 500;
 }
 
+/* Apariencia cuando está readonly/disabled (modo vista) */
+.field input[readonly], .field select:disabled {
+  background: var(--inacap-surface);
+  color: var(--inacap-text-secondary);
+  border-color: var(--inacap-border-secondary);
+  cursor: default;
+  opacity: 0.9;
+}
+
+.field input[readonly]:hover, .field select:disabled:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--inacap-border-secondary);
+}
+
+.field input[readonly]:focus, .field select:disabled:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--inacap-border-secondary);
+}
+
 .field input::placeholder { 
   color: var(--inacap-text-tertiary); 
   font-size: .925rem;
@@ -763,6 +813,126 @@
   
   .avatar-col {
     justify-items: center;
+  }
+}
+
+/* ===== Ajustes Mobile Centrados ===== */
+@media (max-width: 760px) {
+  .profile-wrap { 
+    padding: 1rem 0.75rem 4rem; 
+  }
+  .container { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    gap: 1.75rem; 
+  }
+  .container > .card { 
+    max-width: 640px; 
+    width: 100%; 
+    margin: 0 auto; 
+  }
+  .section-title { 
+    justify-content: center; 
+    text-align: center; 
+  }
+  .section-desc { 
+    text-align: center; 
+    margin-bottom: 1.25rem; 
+  }
+  .actions { 
+    justify-content: center; 
+    flex-wrap: wrap; 
+  }
+  form .grid-2, form .grid-1 { 
+    width: 100%; 
+  }
+  .password-form-grid { 
+    width: 100%; 
+  }
+  .two-factor-status { 
+    flex-direction: column; 
+    text-align: center; 
+    align-items: center; 
+  }
+  .status-content { 
+    width: 100%; 
+  }
+  .two-factor-actions, .backup-codes-actions { 
+    justify-content: center; 
+  }
+  .backup-codes-grid { 
+    justify-content: center; 
+  }
+  .backup-code { 
+    justify-content: center; 
+    gap: 1rem; 
+  }
+  .card.danger { 
+    order: 99; /* mover eliminar cuenta al final explícitamente */
+  }
+}
+
+/* Refinar wizard 2FA para pantallas muy pequeñas */
+@media (max-width: 520px) {
+  .two-factor-setup { 
+    padding: 1.5rem 1.125rem; 
+  }
+  .setup-steps { 
+    gap: 1rem; 
+  }
+  .step-number { 
+    width: 2.5rem; 
+    height: 2.5rem; 
+    font-size: 0.95rem; 
+  }
+  .step-title { 
+    font-size: 0.8rem; 
+  }
+  .secret-key { 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 0.5rem; 
+  }
+  .secret-key code { 
+    text-align: center; 
+  }
+  .wizard-actions { 
+    flex-direction: column; 
+    align-items: stretch; 
+  }
+  .wizard-actions button { 
+    width: 100%; 
+  }
+  .qr-wrapper img { 
+    max-width: 160px; 
+    height: auto; 
+  }
+  .backup-codes-grid { 
+    grid-template-columns: 1fr; 
+  }
+}
+
+/* Micro-ajustes <=380px */
+@media (max-width: 380px) {
+  .profile-wrap { 
+    padding: 0.75rem 0.5rem 3rem; 
+  }
+  .two-factor-setup { 
+    padding: 1.25rem 0.875rem; 
+  }
+  .section-title { 
+    font-size: 1.25rem; 
+  }
+  .actions { 
+    gap: 0.75rem; 
+  }
+  .field input, .field select { 
+    padding: 0.875rem 0.9rem; 
+  }
+  .step-number { 
+    width: 2.25rem; 
+    height: 2.25rem; 
   }
 }
 
