@@ -8,6 +8,8 @@ import { Dashboard } from './pages/dashboard/dashboard';
 import { ProjectCreate } from './pages/project-create/project-create';
 import { Login } from './pages/login/login';
 import { Profile } from './pages/profile/profile';
+import { Help } from './pages/help/help';
+import { NotificationsPage } from './pages/notifications/notifications';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -16,6 +18,11 @@ export const routes: Routes = [
   { path: 'proyectos/nuevo', component: ProjectCreate },
   { path: 'login', component: Login },
   { path: 'perfil', component: Profile },
+  { path: 'ayuda', component: Help },
+  { path: 'notificaciones', component: NotificationsPage },
+  // Alias para usuarios que escriben la ruta con mayúscula inicial (evita 404)
+  { path: 'Notificaciones', redirectTo: '/notificaciones', pathMatch: 'full' },
+  { path: 'help', redirectTo: '/ayuda', pathMatch: 'full' },
   { path: 'proyecto/:id', component: ProjectDetail },
   { path: 'about', component: About },
   { path: 'contact', component: Contact },

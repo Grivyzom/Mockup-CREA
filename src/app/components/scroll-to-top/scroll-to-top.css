@@ -1,155 +1,24 @@
-.scroll-to-top-btn {
-  /* Posicionamiento fijo */
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 1000;
-  
-  /* Estilo del botón */
-  width: 3rem;
-  height: 3rem;
-  border-radius: 50%;
-  border: none;
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
-  cursor: pointer;
-  
-  /* Sombra */
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-  
-  /* Centrar contenido */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  /* Transiciones suaves */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateY(100px);
-  opacity: 0;
-  visibility: hidden;
-  
-  /* Efectos hover */
-  &:hover {
-    background: linear-gradient(135deg, #1d4ed8, #1e40af);
-    transform: translateY(0) scale(1.1);
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.6);
-  }
-  
-  /* Efectos active */
-  &:active {
-    transform: translateY(0) scale(0.95);
-  }
-  
-  /* Estado visible */
-  &.show {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-  }
-  
-  /* Focus para accesibilidad */
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
-  }
+/* Botón Scroll To Top - estilo unificado con tema INACAP (derivado del antiguo back-top del footer) */
+.scroll-to-top-btn { position:fixed; bottom:1.75rem; right:1.75rem; z-index:1000; width:3.1rem; height:3.1rem; border-radius:14px; border:0; background:var(--inacap-red); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 14px rgba(196,30,58,.45); transition: background .35s, transform .4s cubic-bezier(.4,0,.2,1), box-shadow .35s, opacity .4s, visibility .4s; transform:translateY(90px); opacity:0; visibility:hidden; }
+.scroll-to-top-btn.show { transform:translateY(0); opacity:1; visibility:visible; }
+.scroll-to-top-btn:hover { background:var(--inacap-red-hover, #b0122b); transform:translateY(-4px); box-shadow:0 6px 18px rgba(196,30,58,.55); }
+.scroll-to-top-btn:active { transform:translateY(-1px) scale(.96); }
+.scroll-to-top-btn:focus-visible { outline:2px solid #fff; outline-offset:3px; }
+.scroll-to-top-btn svg { width:1.35rem; height:1.35rem; stroke-width:2.2; }
+
+/* Glow/pulso sutil controlado (menos costoso que pulse anterior) */
+.scroll-to-top-btn::after { content:''; position:absolute; inset:0; border-radius:inherit; background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.55), rgba(255,255,255,0) 65%); mix-blend-mode:overlay; opacity:.35; pointer-events:none; transition:opacity .4s; }
+.scroll-to-top-btn:hover::after { opacity:.55; }
+
+@media (max-width:768px){
+  .scroll-to-top-btn { bottom:1.25rem; right:1.25rem; width:2.85rem; height:2.85rem; border-radius:12px; }
+  .scroll-to-top-btn:hover { transform:translateY(-2px); }
+}
+@media (max-width:480px){
+  .scroll-to-top-btn { bottom:.9rem; right:.9rem; width:2.65rem; height:2.65rem; }
 }
 
-/* Responsivo para tablets */
-@media (max-width: 768px) {
-  .scroll-to-top-btn {
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 2.75rem;
-    height: 2.75rem;
-    
-    &:hover {
-      transform: translateY(0) scale(1.05);
-    }
-  }
-}
-
-/* Responsivo para móviles */
-@media (max-width: 480px) {
-  .scroll-to-top-btn {
-    bottom: 1rem;
-    right: 1rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    
-    &:hover {
-      transform: translateY(0);
-      box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
-    }
-  }
-}
-
-/* Animación de entrada */
-@keyframes slideInUp {
-  from {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Animación de salida */
-@keyframes slideOutDown {
-  from {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(100px);
-    opacity: 0;
-  }
-}
-
-/* Variante con pulso sutil */
-.scroll-to-top-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 50%;
-  background: inherit;
-  z-index: -1;
-  animation: pulse 2s infinite;
-  opacity: 0.7;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  70% {
-    transform: scale(1.2);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0;
-  }
-}
-
-/* Modo oscuro */
-@media (prefers-color-scheme: dark) {
-  .scroll-to-top-btn {
-    background: linear-gradient(135deg, #4f46e5, #3730a3);
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
-    
-    &:hover {
-      background: linear-gradient(135deg, #3730a3, #312e81);
-      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.6);
-    }
-    
-    &:focus {
-      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.5);
-    }
-  }
+@media (prefers-reduced-motion:reduce){
+  .scroll-to-top-btn, .scroll-to-top-btn:hover { transition:none; transform:none !important; }
+  .scroll-to-top-btn { opacity:1; visibility:visible; }
 }

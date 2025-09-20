@@ -2,72 +2,20 @@
 .deck-wrapper { 
   width: 100%; 
   display: flex; 
-  justify-content: center; /* Mantener centrado dentro del contenedor principal */
+  flex-direction: column; /* Colocar la paginación debajo del deck */
+  align-items: center; /* Centrar contenido horizontalmente */
+  justify-content: flex-start; 
   position: relative;
   padding: 0 8px; /* Aún más compacto para aprovechar ancho */
+  gap: 12px; /* Espacio entre deck y paginación */
 }
 
-/* Control segmentado para cambiar vista */
-.view-toggle {
-  position: absolute;
-  top: -48px;
-  right: 8px;
-  display: inline-flex;
-  background: var(--inacap-white);
-  border: 1px solid var(--inacap-border);
-  border-radius: 999px;
-  padding: 4px;
-  box-shadow: 0 8px 20px rgba(0,0,0,.06);
-  gap: 4px;
-  z-index: 10;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.view-toggle:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.12);
-  z-index: 10;
-}
-
-.seg-btn {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  color: #374151;
-  font-weight: 700;
-  font-size: .85rem;
-  padding: 6px 12px;
-  border-radius: 999px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.seg-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--inacap-red), var(--inacap-red-hover));
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  border-radius: 999px;
-}
-
-.seg-btn:hover { 
-  background: #f3f4f6; 
-  transform: scale(1.02);
-}
-
-.seg-btn.active {
-  background: var(--inacap-red);
-  color: var(--inacap-white);
-  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.25);
-  transform: scale(1.05);
-  cursor: pointer;
-}
-
-.seg-btn:hover { background: #f3f4f6; }
+/* Control segmentado accesible (radiogrupo) */
+.view-toggle { position:absolute; top:-48px; right:8px; display:inline-flex; background:#fff; border:1px solid var(--inacap-border); border-radius:999px; padding:4px; box-shadow:0 6px 16px rgba(0,0,0,.08); gap:4px; z-index:10; font-size:0; }
+.seg-btn { appearance:none; border:0; background:transparent; color:#374151; font-weight:600; font-size:.75rem; padding:6px 12px; border-radius:999px; cursor:pointer; position:relative; line-height:1; transition:background .2s,color .2s, transform .25s cubic-bezier(.4,0,.2,1); }
+.seg-btn:hover,[role=radio]:focus-visible.seg-btn { background:#f3f4f6; }
+.seg-btn.active,[role=radio][aria-checked=true].seg-btn { background:var(--inacap-red); color:#fff; box-shadow:0 4px 10px rgba(196,30,58,.3); transform:translateY(-1px); }
+.seg-btn:focus-visible { outline:2px solid var(--inacap-red); outline-offset:2px; }
 
 .deck {
   position: relative;
@@ -117,20 +65,14 @@
   backface-visibility: hidden; /* Mejora el performance */
 }
 
-.card:hover {
-  transform: translateY(-2px) scale(1.002);
-  box-shadow: 0 20px 35px rgba(0,0,0,.15);
-}
+.card:hover { transform:translateY(-3px) scale(1.004); box-shadow:0 18px 42px -6px rgba(0,0,0,.18); }
 
 .card.top {
   box-shadow: 0 24px 45px rgba(0,0,0,.18);
   z-index: 10;
 }
 
-.card.top:hover {
-  transform: translateY(-4px) scale(1.005);
-  box-shadow: 0 28px 50px rgba(0,0,0,.2);
-}
+.card.top:hover { transform:translateY(-5px) scale(1.008); box-shadow:0 26px 56px -8px rgba(0,0,0,.22); }
 
 /* Banner de la carta */
 .banner { 
@@ -140,20 +82,9 @@
   overflow: hidden;
 }
 
-.banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.card:hover .banner::before {
-  left: 100%;
-}
+/* Shimmer optimizado */
+.banner::before { content:''; position:absolute; inset:0; background:linear-gradient(120deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.25) 40%,rgba(255,255,255,0) 80%); transform:translateX(-60%); transition:transform .8s ease; }
+.card:hover .banner::before { transform:translateX(60%); }
 .banner .overlay { position: absolute; inset: 0; background: rgba(0,0,0,.2); }
 .badge-left { position: absolute; left: 16px; top: 16px; display: flex; align-items: center; gap: 12px; }
 .icon-glass { width: 44px; height: 44px; border-radius: 12px; display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,.2); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,.25); }
@@ -357,7 +288,7 @@
 
 /* Indicador de progreso del carrusel */
 .carousel-progress {
-  position: absolute;
+  position: absolute; /* Comportamiento original (para futuras variantes flotantes) */
   top: 16px;
   left: 16px;
   display: flex;
@@ -371,39 +302,84 @@
   color: white;
 }
 
+/* Variante inferior (debajo del deck, sin superposición) */
+.carousel-progress-bottom {
+  position: static; /* Eliminar superposición */
+  top: auto; left: auto;
+  background: transparent;
+  backdrop-filter: none;
+  padding: 0;
+  color: inherit;
+  width: 100%;
+  max-width: 1280px; /* Alinear con el ancho máximo del deck */
+  justify-content: center;
+  gap: 16px;
+}
+
+.carousel-progress-bottom .progress-counter {
+  background: #f3f4f6;
+  color: #374151;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0,0,0,.08) inset;
+}
+
 .progress-dots {
   display: flex;
   gap: 6px;
 }
 
+/* Ajustes cuando está abajo: permitir wrap / centro */
+.carousel-progress-bottom .progress-dots {
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+}
+
 .progress-dot {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   transition: all 0.3s ease;
+  border: 0;
+  position: relative;
 }
-
 .progress-dot.active {
   background: white;
   transform: scale(1.3);
 }
-
 .progress-dot:hover {
   background: rgba(255, 255, 255, 0.7);
-  transform: scale(1.1);
+  transform: scale(1.15);
+}
+/* Variante abajo en fondo claro */
+.carousel-progress-bottom .progress-dot {
+  background: #d1d5db;
+}
+.carousel-progress-bottom .progress-dot.active {
+  background: var(--inacap-red);
+  box-shadow: 0 0 0 4px rgba(196,30,58,.15);
+}
+.carousel-progress-bottom .progress-dot:hover {
+  background: var(--inacap-red-hover);
+}
+.progress-dot:focus-visible {
+  outline: 2px solid var(--inacap-red);
+  outline-offset: 3px;
 }
 
-.progress-counter {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  min-width: 35px;
-  text-align: center;
+/* Preferencia de esquema oscuro */
+@media (prefers-color-scheme: dark) {
+  .carousel-progress-bottom .progress-counter { background:#1f2937; color:#f9fafb; box-shadow:0 0 0 1px #374151 inset; }
+  .carousel-progress-bottom .progress-dot { background:#4b5563; }
+  .carousel-progress-bottom .progress-dot.active { background: var(--inacap-red); }
 }
 
-/* Indicador de swipe para móvil */
+/* Indicador de swipe para móvil (restaurado) */
 .swipe-indicator {
   position: absolute;
   bottom: 20px;
@@ -541,7 +517,7 @@
   .view-toggle { display: none; }
   .deck-wrapper {
     padding: 0 16px; /* padding móvil */
-    justify-content: center; /* Restaurar centrado en móvil */
+    align-items: center; /* mantener centrado */
   }
   
   .deck { 
@@ -609,6 +585,10 @@
     height: calc(440px - 140px); /* Ajustar altura del contenido */
     padding: 16px; /* Reducir padding interno */
   }
+
+  /* Dots más grandes y cómodos para touch cuando abajo */
+  .carousel-progress-bottom .progress-dot { width:10px; height:10px; }
+  .carousel-progress-bottom { gap:12px; }
   
   .title {
     font-size: 1.1rem; /* Reducir ligeramente el tamaño del título */
@@ -897,16 +877,8 @@
   transition: left 0.4s ease;
 }
 
-.member-card:hover {
-  background: #f3f4f6;
-  border-color: var(--inacap-red);
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.15);
-}
-
-.member-card:hover::before {
-  left: 100%;
-}
+.member-card:hover { background:#f3f4f6; border-color:var(--inacap-red); transform:translateY(-3px); box-shadow:0 6px 18px -4px rgba(196,30,58,.28); }
+.member-card:hover::before { left:100%; }
 
 .member-avatar {
   width: 32px;

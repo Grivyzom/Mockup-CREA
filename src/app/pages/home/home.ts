@@ -1,12 +1,13 @@
 import { Component, ElementRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
 import { ProjectModal, ProjectData, ProjectMember } from '../../components/project-modal/project-modal';
 import { MonthlyProjectsCarousel } from '../../components/monthly-projects-carousel/monthly-projects-carousel';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ProjectModal, MonthlyProjectsCarousel],
+  imports: [CommonModule, RouterLink, ProjectModal, MonthlyProjectsCarousel],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
@@ -442,11 +443,18 @@ export class Home implements AfterViewInit, OnDestroy {
     }
   }
 
-  // CTA "Iniciar proyecto" (placeholder)
-  startNewProject() {
-    // Aquí podrías navegar a una ruta de creación o abrir un modal
-    // Por ahora, hacemos scroll al panel como fallback
+  constructor(private router: Router) {}
+
+  // CTA "Explorar proyectos" => solo scroll a la sección (sin forzar filtro específico)
+  exploreProjects() {
     const el = document.getElementById('panel-proyectos');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  // CTA "Iniciar proyecto" => navegación directa al formulario de creación
+  startNewProject() {
+    this.router.navigate(['/proyectos/nuevo']);
   }
 }

@@ -23,21 +23,8 @@
 }
 
 /* Footer ajustado para sidebar */
-app-footer {
-  margin-left: 0;
-  transition: margin-left 0.3s ease-in-out;
-  width: 100%;
-  display: block;
-}
-
-@media (min-width: 1024px) {
-  app-footer {
-    margin-left: 16rem; /* Ancho del sidebar */
-    width: calc(100% - 16rem); /* Solo el espacio disponible menos el sidebar */
-    position: relative;
-    z-index: 5; /* Por debajo del sidebar pero visible */
-  }
-}
+app-footer { display:block; width:100%; transition:margin-left .3s ease-in-out; }
+@media (min-width:1024px){ app-footer { margin-left:var(--sidebar-width,16rem); width:calc(100% - var(--sidebar-width,16rem)); } }
 
 /* Ajustar scroll-to-top para el sidebar */
 app-scroll-to-top {

@@ -1,0 +1,38 @@
+<div class="career-multi" [attr.data-open]="panelOpen" (click)="focusInput()">
+  <div class="career-field" (keydown)="onWrapperKeydown($event)">
+    <div class="career-input-wrapper" role="combobox" aria-haspopup="listbox" [attr.aria-expanded]="panelOpen" [attr.aria-controls]="panelId" [attr.aria-activedescendant]="activeOptionId || null">
+      <ng-container *ngFor="let sel of selected">
+        <span class="career-chip">{{ sel.name }}
+          <button type="button" aria-label="Quitar {{sel.name}}" (click)="remove(sel)">×</button>
+        </span>
+      </ng-container>
+      <input #inputEl type="text" class="career-input" [placeholder]="placeholder" [(ngModel)]="query" (input)="onQuery()" (focus)="open()" (keydown)="onInputKeydown($event)" aria-label="Filtrar carreras" />
+    </div>
+    <div class="career-meta" *ngIf="selected.length || query">
+      <span>{{ selected.length }} seleccionadas</span>
+      <span *ngIf="query">Filtrando: "{{query}}"</span>
+    </div>
+  <div *ngIf="panelOpen" class="career-panel" [class.drop-up]="dropUp" role="listbox" [id]="panelId">
+      <div class="career-actions">
+        <button type="button" (click)="selectAllVisible()" *ngIf="filtered.length">Seleccionar visibles</button>
+        <button type="button" (click)="clearAll()" *ngIf="selected.length">Limpiar</button>
+      </div>
+      <ng-container *ngIf="filtered.length; else empty">
+        <ng-container *ngFor="let g of groupedKeys">
+          <div class="career-group">
+            <h4 class="career-group-title">{{ g }}</h4>
+            <div>
+              <div *ngFor="let opt of grouped[g]; trackBy: trackOpt" class="career-option" role="option" [id]="optionId(opt)" [attr.aria-selected]="isSelected(opt)" [class.active]="activeOption === opt" (click)="toggle(opt)" (mouseenter)="activeOption = opt">
+                <span>{{ opt.name }}</span>
+                <span *ngIf="isSelected(opt)" aria-hidden="true">✓</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-template #empty>
+        <div class="career-empty">Sin coincidencias.</div>
+      </ng-template>
+    </div>
+  </div>
+</div>

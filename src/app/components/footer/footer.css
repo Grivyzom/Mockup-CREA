@@ -1,122 +1,74 @@
-/* Footer responsive adaptado al navbar */
-footer {
-  width: 100%;
-  margin-left: 0;
-  margin-top: auto;
-  position: relative;
-  z-index: 5; /* Por debajo del sidebar */
-  background-color: #1f2937 !important;
+/* Footer INACAP alineado al tema del sidebar */
+.app-footer { background: var(--inacap-black); color: var(--inacap-gray-300); margin-top:auto; position:relative; z-index:5; font-size:.875rem; }
+.app-footer * { user-select:none; }
+.footer-inner { max-width:none; margin:0; padding:3rem 1.5rem 2.5rem; }
+@media (min-width:1024px){ .footer-inner { padding-left:2rem; padding-right:2rem; } }
+
+/* El layout global (app.css) ya gestiona margin-left y width del footer en desktop para alinearlo con el sidebar */
+
+.footer-top { display:grid; gap:2.5rem; grid-template-columns:1fr; }
+@media (min-width:768px){ .footer-top { grid-template-columns:1.3fr 2fr 1.2fr; align-items:start; } }
+
+/* Marca */
+.footer-brand-block { display:flex; align-items:flex-start; gap:1rem; }
+.brand-mark { width:48px; height:48px; border-radius:12px; background:var(--inacap-red); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.25rem; color:#fff; box-shadow:0 4px 14px rgba(196,30,58,.45); }
+.brand-name { font-size:1.25rem; font-weight:700; color:#fff; margin:0 0 .25rem; letter-spacing:.5px; }
+.brand-desc { margin:0; font-size:.75rem; font-weight:500; color:var(--inacap-gray-400); text-transform:uppercase; letter-spacing:.08em; }
+
+/* Secciones de enlaces */
+.footer-sections { display:grid; gap:1.75rem; grid-auto-rows:min-content; }
+@media (min-width:768px){ .footer-sections { grid-template-columns:repeat(3,1fr); gap:2rem; } }
+
+.footer-section { border:1px solid rgba(255,255,255,.06); border-radius:14px; background:rgba(255,255,255,.02); backdrop-filter:blur(6px); position:relative; overflow:hidden; transition:border-color .25s, background .35s; }
+.footer-section:hover { border-color: rgba(255,255,255,.15); background:rgba(255,255,255,.04); }
+.section-trigger { width:100%; background:transparent; border:0; padding:.9rem 1.1rem; display:flex; align-items:center; justify-content:space-between; cursor:pointer; color:#fff; font-weight:600; letter-spacing:.03em; font-size:.8rem; text-transform:uppercase; gap:.75rem; }
+.section-trigger:disabled { cursor:default; }
+.section-trigger:focus-visible { outline:2px solid var(--inacap-red); outline-offset:2px; border-radius:12px; }
+.section-title { flex:1; text-align:left; }
+.chevron { width:16px; height:16px; color:var(--inacap-gray-400); transition: transform .35s cubic-bezier(.4,0,.2,1); }
+.footer-section.collapsed .chevron { transform:rotate(-90deg); }
+
+.section-links { list-style:none; margin:0; padding:0 1.1rem 1rem; display:grid; gap:.55rem; font-size:.78rem; line-height:1.2; max-height:600px; overflow:hidden; transition:max-height .55s cubic-bezier(.4,0,.2,1); }
+.footer-section.collapsed .section-links { max-height:0; padding-bottom:0; }
+
+.footer-nav-link { display:inline-flex; align-items:center; gap:.4rem; color:var(--inacap-gray-300); text-decoration:none; font-weight:500; padding:.35rem .5rem; border-radius:8px; position:relative; transition: color .25s, background .25s; }
+.footer-nav-link::before { content:''; position:absolute; inset:0; border:1px solid rgba(255,255,255,.05); border-radius:8px; opacity:0; transition: opacity .3s; }
+.footer-nav-link:hover { color:#fff; background:rgba(255,255,255,.06); }
+.footer-nav-link:hover::before { opacity:1; }
+.footer-nav-link:focus-visible { outline:2px solid var(--inacap-red); outline-offset:3px; }
+
+/* Contacto / social */
+.footer-contact-block { border:1px solid rgba(255,255,255,.06); border-radius:16px; padding:1.25rem 1.25rem 1.5rem; background:linear-gradient(145deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); backdrop-filter:blur(10px); display:flex; flex-direction:column; gap:1rem; position:relative; }
+.footer-contact-block::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 80% 15%, rgba(196,30,58,.35), transparent 70%); opacity:.15; pointer-events:none; }
+.contact-title { margin:0; font-size:.85rem; font-weight:700; color:#fff; text-transform:uppercase; letter-spacing:.05em; }
+.contact-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; font-size:.78rem; }
+.contact-item { display:flex; align-items:center; gap:.6rem; color:var(--inacap-gray-300); }
+.icon { width:18px; height:18px; color:var(--inacap-red); flex-shrink:0; }
+
+.social-row { display:flex; gap:.75rem; margin-top:.25rem; }
+.social-btn { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,.06); color:#fff; border:1px solid rgba(255,255,255,.08); transition:background .3s,border-color .3s, transform .35s cubic-bezier(.4,0,.2,1); position:relative; overflow:hidden; }
+.social-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.35) 45%, rgba(255,255,255,0) 80%); transform:translateX(-70%); transition:transform .85s ease; }
+.social-btn:hover { background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.2); transform:translateY(-3px); }
+.social-btn:hover::after { transform:translateX(65%); }
+.social-btn:focus-visible { outline:2px solid var(--inacap-red); outline-offset:3px; }
+
+/* Footer inferior */
+.footer-bottom { margin-top:3rem; padding-top:1.75rem; border-top:1px solid rgba(255,255,255,.08); display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+.legal { font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; color:var(--inacap-gray-500); font-weight:600; }
+
+/* Móvil: apilar bloques y permitir colapsar */
+@media (max-width:767px){
+  .footer-top { grid-template-columns:1fr; }
+  .footer-sections { grid-template-columns:1fr; }
+  .footer-section { background:rgba(255,255,255,.04); }
+  .footer-contact-block { order:3; }
+  .footer-brand-block { margin-bottom:.5rem; }
 }
 
-/* Contenedor principal del footer */
-.footer-container {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  margin-left: 0;
-  transition: margin-left 0.3s ease-in-out, padding-left 0.3s ease-in-out;
-  max-width: none;
-  width: 100%;
-}
-
-/* Adaptación para desktop con sidebar */
-@media (min-width: 1024px) {
-  footer {
-    width: 100%; /* Ocupar solo el ancho del contenedor padre */
-    margin-left: 0; /* Sin margen adicional aquí */
-    position: relative;
-  }
-  
-  .footer-container {
-    padding-left: 2rem;
-    padding-right: 1rem;
-    max-width: none;
-    width: 100%;
-  }
-}
-
-/* Grid responsive */
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-}
-
-@media (min-width: 640px) {
-  .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 768px) {
-  .footer-grid {
-    grid-template-columns: 2fr 1fr 1fr;
-  }
-}
-
-@media (min-width: 1024px) {
-  .footer-grid {
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 2.5rem;
-  }
-}
-
-/* Ajustes para móvil */
-@media (max-width: 767px) {
-  .footer-brand {
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .footer-links,
-  .footer-contact {
-    text-align: center;
-  }
-  
-  .footer-social {
-    justify-content: center;
-  }
-}
-
-/* Enlaces del footer */
-.footer-link {
-  color: #d1d5db;
-  transition: color 0.2s ease;
-  text-decoration: none;
-}
-
-.footer-link:hover {
-  color: #ffffff;
-}
-
-/* Iconos sociales */
-.footer-social {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.footer-social a {
-  color: #d1d5db;
-  transition: color 0.2s ease;
-}
-
-.footer-social a:hover {
-  color: #ffffff;
-}
-
-/* Copyright */
-.footer-copyright {
-  text-align: center;
-  border-top: 1px solid #374151;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  color: #9ca3af;
-}
-
-/* Texto no seleccionable */
-footer * {
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+@media (max-width:480px){
+  .footer-inner { padding:2.5rem 1.1rem 2rem; }
+  .brand-mark { width:42px; height:42px; font-size:1.1rem; }
+  .section-trigger { padding:.85rem 1rem; }
+  .footer-bottom { flex-direction:column; align-items:flex-start; }
+  .back-top { align-self:flex-end; }
 }

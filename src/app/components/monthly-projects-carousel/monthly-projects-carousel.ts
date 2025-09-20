@@ -62,8 +62,18 @@ export class MonthlyProjectsCarousel implements OnInit, OnDestroy {
   // Variante visual actual (interna) derivada de @Input variant
   currentVariant: 'standard' | 'compact' | 'showcase' = 'standard';
 
+  // Opciones de variante para renderizado dinámico y accesible
+  variantOptions: Array<{ id: 'standard' | 'compact' | 'showcase'; label: string; desc: string }> = [
+    { id: 'standard', label: 'Amplia', desc: 'Tarjeta con contenido equilibrado' },
+    { id: 'compact', label: 'Compacta', desc: 'Tarjeta más baja, vista rápida' },
+    { id: 'showcase', label: 'Vitrina', desc: 'Tarjeta destacada con banner grande' }
+  ];
+
   setVariant(v: 'standard' | 'compact' | 'showcase') {
+    if (this.currentVariant === v) return;
     this.currentVariant = v;
+    // Actualizar anuncio solo si cambia (evita ruido excesivo en lectores)
+    this.liveAnnouncement = `Vista cambiada a ${this.variantOptions.find(o => o.id === v)?.label}`;
   }
 
   get visibleStack(): ProjectData[] {
@@ -278,6 +288,40 @@ export class MonthlyProjectsCarousel implements OnInit, OnDestroy {
         ev.preventDefault();
         this.toggleAutoplay();
         break;
+    }
+  }
+
+  // Navegación por teclado en el radiogrupo de variantes
+  onVariantKeydown(ev: KeyboardEvent, index: number) {
+    const key = ev.key;
+    if (['ArrowLeft', 'ArrowRight'].includes(key)) {
+      ev.preventDefault();
+      const dir = key === 'ArrowRight' ? 1 : -1;
+      const nextIndex = (index + dir + this.variantOptions.length) % this.variantOptions.length;
+      const next = this.variantOptions[nextIndex];
+      this.setVariant(next.id);
+      // Mover el foco al botón correspondiente
+      const host = (ev.currentTarget as HTMLElement).parentElement;
+      if (host) {
+        const btns = host.querySelectorAll<HTMLButtonElement>('button[role="radio"]');
+        btns[nextIndex]?.focus();
+      }
+    }
+    if (['Home', 'End'].includes(key)) {
+      ev.preventDefault();
+      const targetIndex = key === 'Home' ? 0 : this.variantOptions.length - 1;
+      const target = this.variantOptions[targetIndex];
+      this.setVariant(target.id);
+      const host = (ev.currentTarget as HTMLElement).parentElement;
+      if (host) {
+        const btns = host.querySelectorAll<HTMLButtonElement>('button[role="radio"]');
+        btns[targetIndex]?.focus();
+      }
+    }
+    if (key === ' ' || key === 'Spacebar' || key === 'Enter') {
+      ev.preventDefault();
+      const current = this.variantOptions[index];
+      this.setVariant(current.id);
     }
   }
 

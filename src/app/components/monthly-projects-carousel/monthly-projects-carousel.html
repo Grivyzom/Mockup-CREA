@@ -1,10 +1,22 @@
 <div class="deck-wrapper select-none">
 	<!-- Selector de vista (oculto en móvil) -->
-	<div class="view-toggle" aria-label="Cambiar estilo de tarjeta">
-		<button type="button" class="seg-btn" [class.active]="currentVariant==='standard'" (click)="setVariant('standard')">Amplia</button>
-		<button type="button" class="seg-btn" [class.active]="currentVariant==='compact'" (click)="setVariant('compact')">Compacta</button>
-		<button type="button" class="seg-btn" [class.active]="currentVariant==='showcase'" (click)="setVariant('showcase')">Vitrina</button>
-	</div>
+		<div class="view-toggle" role="radiogroup" aria-label="Vista de tarjeta" aria-describedby="variant-help">
+			@for (opt of variantOptions; track opt.id; let idx = $index) {
+				<button
+					type="button"
+					class="seg-btn"
+					role="radio"
+					[attr.aria-checked]="currentVariant === opt.id"
+					[class.active]="currentVariant===opt.id"
+					(click)="setVariant(opt.id)"
+					(keydown)="onVariantKeydown($event, idx)"
+					[attr.tabindex]="currentVariant===opt.id ? 0 : -1"
+					[title]="opt.desc">
+					{{ opt.label }}
+				</button>
+			}
+		</div>
+		<p id="variant-help" class="sr-only">Usa flechas izquierda/derecha para cambiar vista, Enter o Espacio para activar.</p>
 
 	<!-- Stack de cartas -->
     <div class="deck"
@@ -180,30 +192,15 @@
 			</div>
 		}
 
-		<!-- Controles -->
-				<button class="nav left" (click)="prev()" aria-label="Anterior" type="button" [disabled]="isAnimating">
-			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-				<path d="M15 18l-6-6 6-6"/>
-			</svg>
-		</button>
-				<button class="nav right" (click)="next()" aria-label="Siguiente" type="button" [disabled]="isAnimating">
-			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-				<path d="M9 18l6-6-6-6"/>
-			</svg>
-		</button>
-
-				<!-- Botón Play/Pause de autoplay -->
-				<button class="nav autoplay-toggle" type="button"
-								[attr.aria-pressed]="isAutoplaying"
-								[attr.aria-label]="isAutoplaying ? 'Pausar carrusel' : 'Reanudar carrusel'"
-								(click)="toggleAutoplay()">
-					<svg *ngIf="isAutoplaying" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-						<path d="M10 5h-2v14h2V5zm6 0h-2v14h2V5z" />
-					</svg>
-					<svg *ngIf="!isAutoplaying" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-						<path d="M8 5v14l11-7z" />
-					</svg>
-				</button>
+		<!-- Controles accesibles (mantener ocultos visualmente si nav deshabilitada) -->
+		<div class="visually-hidden-controls">
+			<button class="nav left" (click)="prev()" aria-label="Anterior" type="button" [disabled]="isAnimating"></button>
+			<button class="nav right" (click)="next()" aria-label="Siguiente" type="button" [disabled]="isAnimating"></button>
+			<button class="nav autoplay-toggle" type="button"
+				[attr.aria-pressed]="isAutoplaying"
+				[attr.aria-label]="isAutoplaying ? 'Pausar carrusel' : 'Reanudar carrusel'"
+				(click)="toggleAutoplay()"></button>
+		</div>
 
 
 

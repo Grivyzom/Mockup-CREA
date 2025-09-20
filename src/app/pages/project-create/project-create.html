@@ -53,17 +53,9 @@
 
           <div class="md:col-span-2">
             <label class="block text-sm font-medium text-gray-700">Carreras involucradas *</label>
-            <div class="mt-2 flex flex-wrap gap-2">
-              <button type="button"
-                      *ngFor="let c of carrerasDisponibles"
-                      (click)="toggleCarrera(c)"
-                      [class.bg-inacap-red]="(carreras.value || []).includes(c)"
-                      [class.text-white]="(carreras.value || []).includes(c)"
-                      class="px-3 py-1 rounded-full border border-gray-300 text-sm hover:bg-inacap-red-light">
-                {{ c }}
-              </button>
-            </div>
-            <p *ngIf="form.get('carreras')?.invalid && form.get('carreras')?.touched" class="text-sm text-red-600 mt-1">Selecciona al menos una carrera.</p>
+            <app-career-multiselect formControlName="carreras" class="mt-2 block"></app-career-multiselect>
+            <p *ngIf="form.get('carreras')?.invalid && form.get('carreras')?.touched" class="text-sm text-red-600 mt-2">Selecciona al menos una carrera.</p>
+            <p class="text-xs text-gray-500 mt-1">Puedes escribir para filtrar, presiona Enter para añadir, ↑/↓ para navegar, ESC para cerrar. Máx 8 selecciones.</p>
           </div>
         </div>
       </section>

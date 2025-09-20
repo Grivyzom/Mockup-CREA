@@ -29,7 +29,6 @@ export class ScrollToTop implements OnInit, OnDestroy {
   }
 
   scrollToTop() {
-    // Scroll suave hasta arriba
     window.scrollTo({
       top: 0,
       behavior: 'smooth'

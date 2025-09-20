@@ -1,27 +1,19 @@
 import { Component, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
+import { CareerMultiselect } from '../../components/career-multiselect/career-multiselect';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-project-create',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgIf, NgFor],
+  imports: [CommonModule, ReactiveFormsModule, NgIf, NgFor, CareerMultiselect],
   templateUrl: './project-create.html',
   styleUrl: './project-create.css'
 })
 export class ProjectCreate implements OnDestroy {
   form: FormGroup;
 
-  carrerasDisponibles = [
-    'Informática',
-    'Diseño',
-    'Agricultura',
-    'Mecánica',
-    'Electrónica',
-    'Salud',
-    'Administración',
-    'Gastronomía'
-  ];
+  // Lista anterior reemplazada por el multiselect especializado
 
   // Eliminado: duraciones predefinidas. Usaremos fechas de inicio y fin.
 

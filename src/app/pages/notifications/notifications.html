@@ -1,0 +1,126 @@
+<div class="notifications-shell" (keydown)="onKey($event)">
+  <div class="notifications-page" [class.compact]="compactMode()">
+  <header class="notif-header compact-header">
+    <div class="title-block">
+      <h1 class="notif-title">Notificaciones</h1>
+      <p class="notif-sub">Bandeja central de alertas, mensajes y actividad de proyectos.</p>
+    </div>
+  </header>
+
+  <!-- Barra de herramientas -->
+  <div class="toolbar reorganized">
+    <div class="top-row">
+      <div class="search-wrapper">
+        <span class="icon" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+        </span>
+        <input type="text" placeholder="Buscar…" [value]="search()" (input)="setSearch($any($event.target).value)" aria-label="Buscar notificaciones"/>
+      </div>
+      <div class="chips-scroll" role="group" aria-label="Tipos">
+        <div class="chips-track">
+          <button type="button" class="chip" [class.active]="filterKind()==='all'" (click)="filterKind.set('all')">Todas ({{ totalVisibleCount() }})</button>
+          <button type="button" class="chip" [class.active]="filterKind()==='proyecto'" (click)="filterKind.set('proyecto')">Proyectos ({{ kindCounts().proyecto }})</button>
+          <button type="button" class="chip" [class.active]="filterKind()==='mensaje'" (click)="filterKind.set('mensaje')">Mensajes ({{ kindCounts().mensaje }})</button>
+          <button type="button" class="chip" [class.active]="filterKind()==='recordatorio'" (click)="filterKind.set('recordatorio')">Recordatorios ({{ kindCounts().recordatorio }})</button>
+          <button type="button" class="chip" [class.active]="filterKind()==='alerta'" (click)="filterKind.set('alerta')">Alertas ({{ kindCounts().alerta }})</button>
+          <button type="button" class="chip" [class.active]="filterKind()==='sistema'" (click)="filterKind.set('sistema')">Sistema ({{ kindCounts().sistema }})</button>
+        </div>
+      </div>
+      <div class="toolbar-actions" role="group" aria-label="Acciones de vista">
+        <button type="button" class="btn btn-icon-only" (click)="toggleSelectAllVisible()" [disabled]="filtered().length===0" [attr.aria-pressed]="allFilteredSelected()" [title]="allFilteredSelected() ? 'Deseleccionar visibles' : 'Seleccionar visibles'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <path *ngIf="allFilteredSelected()" d="M5 7l2 2 3-3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="visually-hidden">{{ allFilteredSelected() ? 'Deseleccionar visibles' : 'Seleccionar visibles' }}</span>
+        </button>
+  <button type="button" class="btn btn-icon-only gear" (click)="toggleAdvancedFilters()" [attr.aria-expanded]="showAdvancedFilters()" aria-controls="advancedFilters" [attr.aria-pressed]="showAdvancedFilters()" [attr.aria-label]="showAdvancedFilters() ? 'Ocultar opciones' : 'Mostrar opciones'" [class.is-open]="showAdvancedFilters()" title="Opciones">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09c0 .69.4 1.31 1 1.51.61.21 1.28.05 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.21.61.05 1.28-.33 1.82-.38.54-1 .88-1.67.88a1.65 1.65 0 0 0-1.51 1c-.21.61-.05 1.28.33 1.82.38.54 1 .88 1.67.88.69 0 1.31-.4 1.51-1z"/>
+          </svg>
+          <span class="visually-hidden">Opciones</span>
+        </button>
+      </div>
+    </div>
+    <div id="advancedFilters" class="advanced-filters" *ngIf="showAdvancedFilters()" role="region" aria-label="Filtros avanzados y acciones">
+      <div class="filters-grid">
+        <div class="col col-state">
+          <label class="field-label">Estado</label>
+          <select class="state-select" [value]="filterState()" (change)="filterState.set($any($event.target).value)">
+            <option value="all">Todos</option>
+            <option value="unread">No leídos</option>
+            <option value="read">Leídos</option>
+            <option value="archived">Archivados</option>
+          </select>
+        </div>
+        <div class="col col-view">
+          <label class="field-label">Vista</label>
+          <button type="button" class="btn btn-sm" (click)="toggleCompact()" [attr.aria-pressed]="compactMode()">{{ compactMode() ? 'Modo cómodo' : 'Modo compacto' }}</button>
+        </div>
+        <div class="col col-actions">
+          <label class="field-label">Acciones globales</label>
+          <div class="global-actions">
+            <button type="button" class="btn btn-secondary" (click)="markAllRead()" [disabled]="unreadCount()===0">Marcar todas leídas ({{ unreadCount() }})</button>
+            <button type="button" class="btn btn-outline" (click)="deleteAll()" [disabled]="filtered().length===0">Eliminar todas</button>
+          </div>
+        </div>
+        <div class="col col-reset">
+          <label class="field-label">Filtros</label>
+          <button *ngIf="filtersDirty()" type="button" class="btn btn-sm" (click)="resetFilters()">Restablecer</button>
+        </div>
+      </div>
+    </div>
+    <div class="bulk-bar" *ngIf="selectedCount()>0" role="region" aria-label="Acciones de selección">
+      <span class="bulk-info">{{ selectedCount() }} seleccionada(s)</span>
+      <div class="bulk-actions">
+        <button type="button" class="btn btn-sm btn-outline" (click)="markSelectedRead()" [disabled]="selectedCount()===0">Marcar leídas</button>
+        <button type="button" class="btn btn-sm btn-outline" (click)="archiveSelected()" [disabled]="selectedCount()===0">Archivar</button>
+        <button type="button" class="btn btn-sm btn-outline" (click)="shareSelected()" [disabled]="selectedCount()===0">Compartir</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="deleteSelected()" [disabled]="selectedCount()===0">Eliminar</button>
+        <button type="button" class="btn btn-sm" (click)="clearSelection()">Limpiar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lista -->
+  <div class="list-wrapper" [class.empty]="filtered().length===0">
+    <div *ngIf="filtered().length===0" class="empty-state" role="status">
+      <div class="illustration" aria-hidden="true">
+        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#c41e3a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z"/><path d="M4 9h16"/><path d="M10 14h4"/></svg>
+      </div>
+      <h2>No hay notificaciones</h2>
+      <p>Aquí verás actividad y avisos importantes.</p>
+    </div>
+    <div class="groups" *ngIf="filtered().length>0">
+      <div class="group" *ngFor="let g of grouped()">
+  <h3 class="group-title" [class.group-title-right]="g.label==='Fecha'">{{ g.label }}</h3>
+        <ul class="notif-list">
+          <li *ngFor="let n of g.items; trackBy: trackById" class="notif-item" [class.unread]="n.state==='unread'" [class.selected]="selectedIds().has(n.id)" [class.kind-proyecto]="n.kind==='proyecto'" [class.kind-mensaje]="n.kind==='mensaje'" [class.kind-recordatorio]="n.kind==='recordatorio'" [class.kind-alerta]="n.kind==='alerta'" [class.kind-sistema]="n.kind==='sistema'" (click)="toggleSelect(n.id)" (keydown.enter)="toggleSelect(n.id)" (keydown.space)="$event.preventDefault(); toggleSelect(n.id)" tabindex="0">
+            <div class="item-left">
+              <div class="select-indicator" [class.on]="selectedIds().has(n.id)" aria-hidden="true">
+                <svg *ngIf="selectedIds().has(n.id)" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+              </div>
+              <div class="kind-badge" [attr.data-kind]="n.kind">{{ kindLabel(n.kind) }}</div>
+            </div>
+            <div class="item-main">
+              <div class="row1">
+                <span class="title" [title]="n.title">{{ n.title }}</span>
+                <time class="time" [attr.datetime]="n.createdAt.toISOString()" [title]="n.createdAt | date:'medium'">{{ relativeTime(n.createdAt) }}</time>
+              </div>
+              <p class="body">{{ n.body }}</p>
+              <div class="meta" *ngIf="n.state==='archived'">Archivada</div>
+            </div>
+            <!-- Estado leído se indica solo con la barra lateral roja y estilo unread -->
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!-- Live region accesible -->
+  <div class="visually-hidden" aria-live="polite">{{ feedbackMessage() }}</div>
+  </div>
+</div>

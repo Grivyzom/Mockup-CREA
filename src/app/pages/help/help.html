@@ -1,0 +1,159 @@
+<div class="help-container">
+  <header class="help-hero">
+    <h1>Centro de Ayuda</h1>
+    <p class="lead">Guía rápida para entender y aprovechar la plataforma de proyectos colaborativos.</p>
+  </header>
+
+  <nav class="help-toc" aria-label="Índice de contenidos">
+    <h2 class="sr-only">Índice</h2>
+    <ol>
+      <li><a href="#faq">Preguntas frecuentes</a></li>
+      <li><a href="#crear-proyecto">Cómo crear un proyecto</a></li>
+      <li><a href="#objetivos">Objetivos de la plataforma</a></li>
+      <li><a href="#retencion">Tiempo de almacenamiento</a></li>
+      <li><a href="#limites">Límites actuales</a></li>
+    </ol>
+  </nav>
+
+  <!-- FAQ al inicio -->
+  <section id="faq" class="help-section faq-section" aria-labelledby="h-faq">
+    <h2 id="h-faq">Preguntas frecuentes</h2>
+    <div class="faq-toolbar">
+      <label class="faq-search">
+        <span class="sr-only">Buscar en preguntas frecuentes</span>
+        <input type="search" placeholder="Buscar pregunta..." (input)="onQueryInput($event)" aria-label="Buscar en preguntas frecuentes" />
+      </label>
+      <div class="faq-actions">
+        <button type="button" class="btn-faq" (click)="expandAllVisible()">Expandir todo</button>
+        <button type="button" class="btn-faq outline" (click)="collapseAll()">Colapsar</button>
+      </div>
+    </div>
+    <div class="faq-empty" *ngIf="filteredFaqs().length===0" aria-live="polite">Sin coincidencias. Ajusta tu búsqueda.</div>
+    <ul class="faq-list" role="list">
+      <li class="faq-item" *ngFor="let f of filteredFaqs()">
+        <h3 class="faq-q">
+          <button type="button" class="faq-trigger"
+                  [attr.aria-expanded]="isOpen(f.id)" [attr.aria-controls]="f.id + '-panel'"
+                  (click)="toggleFaq(f.id)">
+            <span>{{ f.q }}</span>
+            <span class="faq-icon" aria-hidden="true">{{ isOpen(f.id) ? '−' : '+' }}</span>
+          </button>
+        </h3>
+        <div class="faq-panel" [id]="f.id + '-panel'" role="region" [hidden]="!isOpen(f.id)">
+          <p>{{ f.a }}</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="crear-proyecto" class="help-section" aria-labelledby="h-crear">
+    <h2 id="h-crear">Cómo crear un proyecto</h2>
+    <ol class="steps enhanced-steps" aria-describedby="steps-desc">
+      <p id="steps-desc" class="visually-hidden">Secuencia guiada para registrar un nuevo proyecto colaborativo.</p>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">1</span>
+          <h3 class="step-title">Acceder al flujo</h3>
+        </div>
+        <p class="step-body"><strong>Usa</strong> el botón <em>“Iniciar proyecto”</em> en la portada o navega directo a <code>/proyectos/nuevo</code>. Se crea un borrador en cuanto empieces a escribir.</p>
+      </li>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">2</span>
+          <h3 class="step-title">Información básica</h3>
+        </div>
+        <p class="step-body">Completa título (6–100), descripción (20–1000), fechas y número estimado de estudiantes. Los campos inválidos muestran borde de alerta.</p>
+        <ul class="micro"><li>Fin sugerido: +3 meses desde la fecha de inicio.</li><li>La barra de progreso indica completitud.</li></ul>
+      </li>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">3</span>
+          <h3 class="step-title">Carreras involucradas</h3>
+        </div>
+        <p class="step-body">Selecciona hasta <strong>8</strong> carreras usando el multiselect. Escribe para filtrar, presiona <kbd>Enter</kbd> o haz clic para añadir. <em>Tab</em> y flechas navegan opciones.</p>
+        <p class="hint">Al alcanzar el límite se bloquean nuevas selecciones hasta quitar alguna.</p>
+      </li>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">4</span>
+          <h3 class="step-title">Roles y responsables</h3>
+        </div>
+        <p class="step-body">Ingresa profesor monitor y datos del líder. El correo institucional se valida en formato. No se expone públicamente completo.</p>
+      </li>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">5</span>
+          <h3 class="step-title">Material visual</h3>
+        </div>
+        <p class="step-body">Adjunta banner y fotos opcionales para enriquecer el detalle del proyecto. Próximamente se mostrará optimización automática.</p>
+      </li>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">6</span>
+          <h3 class="step-title">Invitaciones</h3>
+        </div>
+        <p class="step-body">Agrega correos de miembros. Se valida formato y se evitan duplicados. Podrás editar la lista antes de publicar.</p>
+      </li>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">7</span>
+          <h3 class="step-title">Guardar o publicar</h3>
+        </div>
+        <p class="step-body">Usa <strong>Guardar borrador</strong> para pausar (se almacena localmente) o <strong>Publicar</strong> cuando los campos estén validados.</p>
+        <ul class="micro"><li>El borrador nunca se sincroniza entre dispositivos.</li><li>Vaciar caché del navegador lo elimina.</li></ul>
+      </li>
+      <li class="step-card">
+        <div class="step-head">
+          <span class="step-badge" aria-hidden="true">8</span>
+          <h3 class="step-title">Visibilidad futura</h3>
+        </div>
+        <p class="step-body">Tras publicar, el proyecto podrá aparecer en carruseles mensuales si cumple reglas de selección (criterios de diversidad y avance – próximamente).</p>
+      </li>
+    </ol>
+    <p class="note">Nota: El borrador se guarda sólo en este navegador usando <code>localStorage</code>. No es compartido entre dispositivos.</p>
+  </section>
+
+  <section id="objetivos" class="help-section" aria-labelledby="h-objetivos">
+    <h2 id="h-objetivos">Objetivos de la plataforma</h2>
+    <ul class="bullets">
+      <li><strong>Colaboración transversal:</strong> conectar estudiantes y docentes de diversas áreas.</li>
+      <li><strong>Portafolio verificable:</strong> generar evidencia de proyectos para empleabilidad y continuidad académica.</li>
+      <li><strong>Innovación aplicada:</strong> impulsar soluciones reales alineadas con desafíos institucionales y sectoriales.</li>
+      <li><strong>Aprender haciendo:</strong> reforzar competencias técnico-profesionales mediante práctica estructurada.</li>
+      <li><strong>Visibilidad institucional:</strong> destacar iniciativas ejemplares y casos de éxito.</li>
+    </ul>
+  </section>
+
+  <section id="retencion" class="help-section" aria-labelledby="h-retencion">
+    <h2 id="h-retencion">Tiempo de almacenamiento de proyectos</h2>
+    <p class="retencion-text">Actualmente los proyectos publicados se conservan <strong>por un mínimo de 24 meses</strong> desde su fecha de publicación. Posteriormente pueden pasar a un estado de <em>archivo</em> (sólo lectura) durante 12 meses adicionales antes de una eventual depuración programada.</p>
+    <p class="retencion-text">Los borradores guardados localmente (opción “Guardar borrador”) se mantienen mientras no borres el almacenamiento del navegador o limpies manualmente la caché. No se sincronizan en la nube.</p>
+    <p class="note">Esta política es preliminar y puede ajustarse cuando se integre almacenamiento central con versiones y auditoría.</p>
+  </section>
+
+  <section id="limites" class="help-section" aria-labelledby="h-limites">
+    <h2 id="h-limites">Límites actuales del sistema</h2>
+    <table class="limits" aria-describedby="limits-caption">
+      <caption id="limits-caption">Parámetros y validaciones vigentes</caption>
+      <thead>
+        <tr><th>Elemento</th><th>Límite / Regla</th><th>Motivo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Título</td><td>6 – 100 caracteres</td><td>Claridad y síntesis</td></tr>
+        <tr><td>Descripción</td><td>20 – 1000 caracteres</td><td>Detalle suficiente sin extenderse</td></tr>
+        <tr><td>N° estudiantes</td><td>1 – 50</td><td>Manejo operativo y tutoría</td></tr>
+        <tr><td>Carreras</td><td>Máx 8 seleccionadas</td><td>Enfoque y relevancia</td></tr>
+        <tr><td>Fechas</td><td>Fin ≥ Inicio (autoajuste +3 meses sugerido)</td><td>Integridad temporal</td></tr>
+        <tr><td>Miembros invitados</td><td>Ilimitado práctico (emails válidos)</td><td>Colaboración abierta controlada</td></tr>
+        <tr><td>Banner</td><td>1 imagen opcional</td><td>Identidad visual</td></tr>
+        <tr><td>Fotos</td><td>Galería múltiple (sin límite duro actual)</td><td>Pendiente política de peso</td></tr>
+        <tr><td>Borrador local</td><td>Persistencia en localStorage</td><td>Continuar luego sin publicar</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Próximos: límite de peso total de imágenes, versiones de proyecto y archivado automatizado.</p>
+  </section>
+
+  <footer class="help-footer" aria-label="Información complementaria">
+    <p>¿Necesitas más soporte? Pronto añadiremos un módulo de contacto y FAQs.</p>
+  </footer>
+</div>

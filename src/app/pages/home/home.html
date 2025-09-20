@@ -25,7 +25,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 items-start">
         <!-- Columna izquierda: texto y CTA -->
-        <div class="no-select">
+  <div class="no-select">
           <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
             Explora proyectos reales
             <br class="hidden sm:block"/>
@@ -35,9 +35,9 @@
             Descubre iniciativas de estudiantes y docentes de INACAP. Inspírate, participa y aporta en proyectos con impacto real.
           </p>
           <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <button type="button" class="btn-inacap px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2" (click)="filterBy('active')">
+            <a routerLink="/about" class="btn-inacap px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2 inline-flex items-center justify-center" aria-label="Ir a la página Acerca de / Proyectos">
               Explorar proyectos
-            </button>
+            </a>
             <button type="button" class="btn-inacap-secondary px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2" (click)="startNewProject()">
               Iniciar proyecto
             </button>
@@ -86,11 +86,13 @@
 
           <!-- Métricas -->
           
+          <!-- Promo Cards removidas de aquí para ampliar a ancho completo -->
         </div>
+
 
         <!-- Columna derecha: panel usuario logueado -->
   <div class="no-select lg:justify-self-end w-full greeting-card-wrap">
-          <div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-xl max-w-md w-full">
+    <div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-xl w-full greeting-card">
             <div class="flex items-start justify-between gap-4">
               <div>
                 <h2 class="text-xl md:text-2xl font-bold">¡Hola, Juan! 👋</h2>
@@ -134,6 +136,37 @@
               </div>
             </div>
           </div>
+          <!-- (Se eliminó el banner lateral; ahora las promos viven en la columna izquierda) -->
+        </div>
+        
+        <!-- Promo Cards (Convocatoria + Robótica) ancho completo debajo del saludo -->
+        <div class="promo-callouts promo-callouts--wide mt-8 col-span-1 lg:col-span-2">
+          <article class="promo-card promo-card--primary" role="complementary" aria-label="Convocatoria Proyectos 2025 (principal)">
+            <div class="promo-card-inner">
+              <header class="promo-card-header">
+                <span class="promo-badge">NOVEDAD</span>
+              </header>
+              <h2 class="promo-title">Convocatoria Proyectos 2025</h2>
+              <p class="promo-desc">Postula ideas interdisciplinarias y recibe mentoría de docentes y expertos de la industria.</p>
+              <div class="promo-actions">
+                <a routerLink="/ayuda" class="promo-link" aria-label="Ver bases de la convocatoria 2025">Ver bases</a>
+                <button type="button" class="promo-cta" (click)="startNewProject()" aria-label="Postular ahora a la convocatoria 2025">Postular ahora</button>
+              </div>
+            </div>
+          </article>
+          <article class="promo-card promo-card--robotics" role="complementary" aria-label="Mes de la Robótica: proyectos de robótica priorizados">
+            <div class="promo-card-inner">
+              <header class="promo-card-header">
+                <span class="promo-badge" aria-label="Etiqueta: Mes de la Robótica">MES DE LA ROBÓTICA</span>
+              </header>
+              <h2 class="promo-title">Impulsa tu Proyecto de Robótica</h2>
+              <p class="promo-desc">Durante este mes los proyectos de robótica reciben revisión acelerada y visibilidad destacada en la plataforma.</p>
+              <div class="promo-actions">
+                <a routerLink="/ayuda" class="promo-link" aria-label="Ver criterios de prioridad para proyectos de robótica">Ver criterios</a>
+                <button type="button" class="promo-cta" (click)="startNewProject()" aria-label="Crear un nuevo proyecto de robótica">Crear proyecto</button>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </div>
