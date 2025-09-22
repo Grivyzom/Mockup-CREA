@@ -1,5 +1,6 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from '../../core/services/notification.service';
 
 // Tipos base para futura integración con backend
 export type NotificationKind = 'proyecto' | 'sistema' | 'mensaje' | 'recordatorio' | 'alerta';
@@ -24,8 +25,9 @@ export interface NotificationItem {
   styleUrl: './notifications.css'
 })
 export class NotificationsPage {
-  // Estado reactivo
-  private allNotifications = signal<NotificationItem[]>(this.mockData());
+  // Estado reactivo principal ahora proviene del servicio compartido
+  constructor(private notificationService: NotificationService){ }
+  private allNotifications = computed(() => this.notificationService.items());
   search = signal('');
   filterKind = signal<NotificationKind | 'all'>('all');
   filterState = signal<'all' | NotificationState>('all');
@@ -65,7 +67,7 @@ export class NotificationsPage {
   });
 
   // Derivados
-  unreadCount = computed(() => this.allNotifications().filter(n => n.state === 'unread').length);
+  unreadCount = computed(() => this.notificationService.unreadCount());
 
   filtered = computed(() => {
     const term = this.search().trim().toLowerCase();
@@ -128,20 +130,20 @@ export class NotificationsPage {
   }
 
   markAllRead() {
-    this.allNotifications.update(items => items.map(n => n.state === 'unread' ? { ...n, state: 'read' } : n));
+    this.notificationService.markAllRead();
     this.emitFeedback('Todas marcadas como leídas.');
   }
   markSelectedRead() {
     const ids = this.selectedIds();
     if (!ids.size) return;
-    this.allNotifications.update(items => items.map(n => ids.has(n.id) ? { ...n, state: 'read' } : n));
+    ids.forEach(id => this.notificationService.markRead(id));
     this.clearSelection();
     this.emitFeedback('Selección marcada como leída.');
   }
   deleteSelected() {
     const ids = this.selectedIds();
     if (!ids.size) return; // validación
-    this.allNotifications.update(items => items.filter(n => !ids.has(n.id)));
+    ids.forEach(id => this.notificationService.delete(id));
     this.clearSelection();
     this.emitFeedback(`${ids.size} notificación(es) eliminada(s).`);
   }
@@ -149,7 +151,8 @@ export class NotificationsPage {
     const count = this.allNotifications().length;
     if (!count) return;
     if (!window.confirm(`¿Eliminar TODAS las ${count} notificaciones? Esta acción no se puede deshacer.`)) return;
-    this.allNotifications.set([]);
+    // Reemplazar por arreglo vacío
+    this.notificationService.replaceAll([]);
     this.clearSelection();
     this.emitFeedback('Todas las notificaciones fueron eliminadas.');
   }
@@ -157,13 +160,16 @@ export class NotificationsPage {
   archiveSelected() {
     const ids = this.selectedIds();
     if (!ids.size) return;
-    this.allNotifications.update(items => items.map(n => ids.has(n.id) ? { ...n, state: 'archived' } : n));
+    // Archivar equivaldrá a marcar como archived (iterar manualmente)
+    const current = this.allNotifications();
+    const updated = current.map(n => ids.has(n.id) ? { ...n, state: 'archived' as NotificationState } : n) as NotificationItem[];
+    this.notificationService.replaceAll(updated);
     this.clearSelection();
     this.emitFeedback(`${ids.size} notificación(es) archivada(s).`);
   }
 
   toggleRead(id: number) {
-    this.allNotifications.update(items => items.map(n => n.id === id ? { ...n, state: n.state === 'unread' ? 'read' : n.state } : n));
+    this.notificationService.markRead(id); // solo marca si estaba unread
     const n = this.allNotifications().find(x => x.id === id);
     if (n) this.emitFeedback(`Notificación '${n.title}' marcada como ${n.state === 'unread' ? 'no leída' : 'leída'}.`);
   }
@@ -225,7 +231,7 @@ export class NotificationsPage {
   shareSelected() {
     const ids = this.selectedIds();
     if (!ids.size) return;
-    const selected = this.allNotifications().filter(n => ids.has(n.id));
+  const selected = this.allNotifications().filter(n => ids.has(n.id));
     const payload = selected.map(n => `• ${n.title} — ${n.body}`).join('\n');
     const nav: any = navigator;
     if (nav && nav.share) {
@@ -274,19 +280,7 @@ export class NotificationsPage {
     }, 5000);
   }
 
-  private mockData(): NotificationItem[] {
-    const base = Date.now();
-    return [
-      { id:1, kind:'proyecto', state:'unread', title:'Nuevo comentario en tu proyecto', body:'María comentó en "Sistema de Gestión Hospitalaria"', createdAt:new Date(base-5*60000)},
-      { id:2, kind:'sistema', state:'unread', title:'Actualización de plataforma', body:'Se aplicará mantenimiento programado mañana a las 08:00.', createdAt:new Date(base-55*60000)},
-      { id:3, kind:'mensaje', state:'read', title:'Mensaje de Coordinador', body:'Revisa las pautas de la próxima feria tecnológica.', createdAt:new Date(base-4*3600000)},
-      { id:4, kind:'recordatorio', state:'unread', title:'Entrega intermedia', body:'Tu proyecto tiene una entrega en 2 días.', createdAt:new Date(base-9*3600000)},
-      { id:5, kind:'alerta', state:'unread', title:'Posible conflicto de versiones', body:'Biblioteca X requiere actualización para compatibilidad.', createdAt:new Date(base-26*3600000)},
-      { id:6, kind:'proyecto', state:'read', title:'Nuevo miembro agregado', body:'Se unió Javier al proyecto de Robótica.', createdAt:new Date(base-2*86400000)},
-      { id:7, kind:'mensaje', state:'read', title:'Canal general', body:'Recuerda responder la encuesta de satisfacción.', createdAt:new Date(base-3*86400000)},
-      { id:8, kind:'recordatorio', state:'archived', title:'Reunión semanal', body:'Stand-up semanal en 30 minutos.', createdAt:new Date(base-90*60000)},
-    ];
-  }
+  // mockData ya movido al servicio
 }
 
 // Export nominal adicional (mantener mientras se estabiliza build) para asegurar módulo

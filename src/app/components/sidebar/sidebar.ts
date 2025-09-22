@@ -1,8 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, effect } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
+import { NotificationService } from '../../core/services/notification.service';
+import type { NotificationItem } from '../../pages/notifications/notifications';
 
 @Component({
   selector: 'app-sidebar',
@@ -32,7 +34,14 @@ export class Sidebar implements OnInit {
     currentSemester: '2025-2'
   };
 
-  constructor(private router: Router) {}
+  // Datos de notificaciones (se cargarán desde el servicio compartido)
+  recentNotifications: NotificationItem[] = [];
+  unreadTotal = 0;
+
+  private clickTimeout: any = null; // para distinguir simple vs doble click
+  private dblClickDelay = 240; // ms
+
+  constructor(private router: Router, private notificationService: NotificationService) {}
 
   ngOnInit() {
     // Actualizar el título de la página basado en la ruta actual
@@ -44,6 +53,14 @@ export class Sidebar implements OnInit {
     
     // Establecer título inicial
     this.updatePageTitle(this.router.url);
+    // Efecto reactivo para sincronizar lista reciente y contador sin invocaciones manuales
+    effect(() => {
+      const unread = this.notificationService.unreadCount();
+      const recent = this.notificationService.getRecent(3);
+      // Asignaciones (Angular detecta cambios porque son propiedades de la clase)
+      this.unreadTotal = unread;
+      this.recentNotifications = recent;
+    });
   }
 
   toggleMobileMenu() {
@@ -121,6 +138,32 @@ export class Sidebar implements OnInit {
     this.isNotificationDropdownPinned = false;
     this.isProfileDropdownPinned = false;
   }
+
+  // Interacción de ítems de notificación en dropdown
+  onNotificationItemClick(ev: MouseEvent, notif: NotificationItem){
+    ev.preventDefault();
+    // Si ya hay timeout, aún no determinamos double click
+    if(this.clickTimeout){
+      // Interpreta como doble click
+      clearTimeout(this.clickTimeout);
+      this.clickTimeout = null;
+      this.navigateToNotifications();
+      return;
+    }
+    // Programar acción de single click: marcar leída
+    this.clickTimeout = setTimeout(()=>{
+      this.notificationService.markRead(notif.id);
+      this.clickTimeout = null;
+    }, this.dblClickDelay);
+  }
+
+  navigateToNotifications(){
+    this.closeDropdowns();
+    this.router.navigate(['/notificaciones']);
+  }
+
+  // trackBy reutilizable para ngFor en dropdown
+  trackById(_index: number, item: NotificationItem){ return item.id; }
 
   // Método para cerrar dropdowns al hacer click fuera
   @HostListener('document:click', ['$event'])

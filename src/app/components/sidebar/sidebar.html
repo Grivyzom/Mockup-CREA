@@ -94,19 +94,7 @@
 
 
 
-          <li>
-            <a routerLink="/notificaciones" 
-               routerLinkActive="nav-link-active"
-               class="nav-link select-none"
-               (click)="closeMobileMenu()">
-              <div class="nav-icon select-none">
-                <svg class="w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                </svg>
-              </div>
-              <span class="select-none">Notificaciones</span>
-            </a>
-          </li>
+
           <li>
             <a routerLink="/dashboard" 
                routerLinkActive="nav-link-active"
@@ -225,11 +213,11 @@
            (mouseleave)="closeNotificationDropdown()">
         <button class="notification-btn select-none" 
                 (click)="toggleNotificationDropdown()"
-                aria-label="Notificaciones">
+                aria-label="Notificaciones ({{ unreadTotal }} sin leer)">
           <svg class="w-6 h-6 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
           </svg>
-          <span class="notification-badge select-none">3</span>
+          <span class="notification-badge select-none" *ngIf="unreadTotal > 0">{{ unreadTotal }}</span>
         </button>
         
         <!-- Dropdown de notificaciones -->
@@ -237,46 +225,41 @@
              [class.show]="isNotificationDropdownOpen">
           <div class="dropdown-header select-none">
             <h3 class="select-none">Notificaciones</h3>
-            <span class="notification-count select-none">3 nuevas</span>
+            <span class="notification-count select-none" *ngIf="unreadTotal > 0">{{ unreadTotal }} nuevas</span>
+            <span class="notification-count select-none" *ngIf="unreadTotal === 0">Al día</span>
           </div>
           <div class="dropdown-content select-none">
-            <div class="notification-item select-none">
-              <div class="notification-icon bg-blue-500 select-none">
+            <div class="notification-item select-none"
+                 *ngFor="let n of recentNotifications; trackBy: trackById"
+                 (click)="onNotificationItemClick($event, n)"
+                 [attr.data-state]="n.state"
+                 [class.opacity-60]="n.state !== 'unread'"
+                 [attr.aria-label]="'Notificación: ' + n.title + (n.state==='unread' ? ' (no leída)' : ' (leída)')">
+              <div class="notification-icon select-none"
+                   [ngClass]="{
+                     'bg-blue-500': n.kind==='proyecto' || n.kind==='mensaje',
+                     'bg-green-500': n.kind==='sistema',
+                     'bg-yellow-500': n.kind==='recordatorio',
+                     'bg-red-500': n.kind==='alerta'
+                   }">
                 <svg class="w-4 h-4 select-none" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                  <circle cx="10" cy="10" r="4" />
                 </svg>
               </div>
               <div class="notification-content select-none">
-                <p class="notification-title select-none">Nuevo proyecto asignado</p>
-                <p class="notification-time select-none">Hace 2 minutos</p>
+                <p class="notification-title select-none">{{ n.title }}</p>
+                <p class="notification-time select-none">{{ n.createdAt | date:'shortTime' }}</p>
               </div>
             </div>
-            <div class="notification-item select-none">
-              <div class="notification-icon bg-green-500 select-none">
-                <svg class="w-4 h-4 select-none" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-              </div>
+            <div class="notification-item select-none" *ngIf="recentNotifications.length === 0">
               <div class="notification-content select-none">
-                <p class="notification-title select-none">Proyecto completado</p>
-                <p class="notification-time select-none">Hace 1 hora</p>
-              </div>
-            </div>
-            <div class="notification-item select-none">
-              <div class="notification-icon bg-yellow-500 select-none">
-                <svg class="w-4 h-4 select-none" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                </svg>
-              </div>
-              <div class="notification-content select-none">
-                <p class="notification-title select-none">Recordatorio de entrega</p>
-                <p class="notification-time select-none">Hace 3 horas</p>
+                <p class="notification-title select-none">Sin notificaciones</p>
+                <p class="notification-time select-none">Todo limpio</p>
               </div>
             </div>
           </div>
           <div class="dropdown-footer select-none">
-            <a href="#" class="view-all-link select-none">Ver todas las notificaciones</a>
+            <a routerLink="/notificaciones" (click)="closeDropdowns()" class="view-all-link select-none" aria-label="Ver todas las notificaciones (ir a la página completa)">Ver todas las notificaciones</a>
           </div>
         </div>
       </div>
