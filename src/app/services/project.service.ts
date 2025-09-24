@@ -6,6 +6,8 @@ export interface Project {
   description: string;
   template?: string; // id de plantilla usada
   createdAt: Date;
+  progress: number; // 0-100
+  members: number;  // número de integrantes
 }
 
 @Injectable({ providedIn: 'root' })
@@ -35,7 +37,12 @@ export class ProjectService {
       const raw = localStorage.getItem(this.storageKey);
       if(!raw) return [];
       const parsed = JSON.parse(raw) as any[];
-      return parsed.map(p => ({ ...p, createdAt: new Date(p.createdAt)}));
+      return parsed.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+        progress: typeof p.progress === 'number' ? p.progress : 0,
+        members: typeof p.members === 'number' ? p.members : 1
+      }));
     } catch { return []; }
   }
 
@@ -53,7 +60,9 @@ export class ProjectService {
       id: crypto.randomUUID(),
       name: 'Nuevo Proyecto',
       description: 'Descripción pendiente',
-      createdAt: new Date()
+      createdAt: new Date(),
+      progress: 0,
+      members: 1
     };
     this.projects.update(list => [...list, proj]);
     this.persist();
@@ -92,7 +101,9 @@ export class ProjectService {
       name: data.name,
       description: data.description,
       template: data.template,
-      createdAt: new Date()
+      createdAt: new Date(),
+      progress: 0,
+      members: 1
     };
     this.projects.update(list => [...list, proj]);
     this.persist();

@@ -53,9 +53,17 @@
                 <h3 class="proj-title-light">{{ p.name }}</h3>
                 <span *ngIf="p.template" class="badge-template-light">TEMPLATE</span>
               </div>
-              <p class="proj-desc-light line-clamp-2 mb-4">{{ p.description }}</p>
+              <p class="proj-desc-light line-clamp-2 mb-3">{{ p.description }}</p>
+              <!-- Progress bar -->
+              <div class="progress-wrap mb-3" aria-label="Progreso del proyecto" [attr.aria-valuenow]="p.progress" aria-valuemin="0" aria-valuemax="100" role="progressbar">
+                <div class="progress-bar" [style.width.%]="p.progress"></div>
+                <div class="progress-text">{{ p.progress }}%</div>
+              </div>
               <div class="flex items-center justify-between text-[11px] text-gray-500 mb-3">
-                <span>{{ p.createdAt | date:'mediumDate' }}</span>
+                <span class="inline-flex items-center gap-1">
+                  <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                  {{ p.members }}
+                </span>
                 <div class="flex items-center gap-2">
                   <button type="button" class="icon-btn view" (click)="$event.stopPropagation(); openProject(p)" aria-label="Abrir proyecto" title="Abrir">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
