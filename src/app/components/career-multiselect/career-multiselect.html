@@ -2,13 +2,13 @@
   <div class="career-field" (keydown)="onWrapperKeydown($event)">
     <div class="career-input-wrapper" role="combobox" aria-haspopup="listbox" [attr.aria-expanded]="panelOpen" [attr.aria-controls]="panelId" [attr.aria-activedescendant]="activeOptionId || null">
       <ng-container *ngFor="let sel of selected">
-        <span class="career-chip">{{ sel.name }}
+        <span class="career-chip" tabindex="0">{{ sel.name }}
           <button type="button" aria-label="Quitar {{sel.name}}" (click)="remove(sel)">×</button>
         </span>
       </ng-container>
       <input #inputEl type="text" class="career-input" [placeholder]="placeholder" [(ngModel)]="query" (input)="onQuery()" (focus)="open()" (keydown)="onInputKeydown($event)" aria-label="Filtrar carreras" />
     </div>
-    <div class="career-meta" *ngIf="selected.length || query">
+    <div class="career-meta" *ngIf="showInlineMeta && (selected.length || query)" aria-live="polite">
       <span>{{ selected.length }} seleccionadas</span>
       <span *ngIf="query">Filtrando: "{{query}}"</span>
     </div>

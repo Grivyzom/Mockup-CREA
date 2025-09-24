@@ -18,6 +18,8 @@ import { CAREERS, CareerOption, groupCareers } from './career-data';
 export class CareerMultiselect implements ControlValueAccessor, OnInit, OnDestroy {
   @Input() placeholder = 'Escribe para filtrar...';
   @Input() maxSelections = 8; // límite actualizado a 8
+  // Controla si el resumen (X seleccionadas / filtro) aparece dentro del campo o se externaliza
+  @Input() showInlineMeta = true;
   @ViewChild('inputEl') inputEl?: ElementRef<HTMLInputElement>;
 
   careers: CareerOption[] = CAREERS;

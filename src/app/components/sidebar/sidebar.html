@@ -144,21 +144,12 @@
         <h3 class="nav-section-title select-none">Proyectos</h3>
         <ul class="nav-list select-none">
           <li>
-            <a href="#" class="nav-link team-link select-none">
-              <div class="team-icon inacap-ip select-none">IP</div>
-              <span class="select-none">Instituto Profesional</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link team-link select-none">
-              <div class="team-icon inacap-cft select-none">CFT</div>
-              <span class="select-none">Centro de Formación Técnica</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="nav-link team-link select-none">
-              <div class="team-icon inacap-uni select-none">U</div>
-              <span class="select-none">Universidad</span>
+            <a routerLink="/proyectos/nuevo"
+               class="nav-link team-link select-none iniciar-proyecto-link"
+               (click)="closeMobileMenu()"
+               aria-label="Iniciar un nuevo proyecto">
+              <div class="team-icon inacap-new select-none">+</div>
+              <span class="select-none">Iniciar Proyecto</span>
             </a>
           </li>
         </ul>

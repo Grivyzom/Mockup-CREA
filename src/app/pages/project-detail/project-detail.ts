@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectData, ProjectMember } from '../../components/project-modal/project-modal';
+import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-project-detail',
@@ -140,13 +141,43 @@ export class ProjectDetail implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private projectService: ProjectService
   ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      const projectId = parseInt(params['id']);
-      this.loadProject(projectId);
+      const rawId = params['id'];
+      const numeric = parseInt(rawId, 10);
+      if(!isNaN(numeric)) {
+        this.loadProject(numeric);
+      } else {
+        // Buscar en proyectos locales simples
+        const local = this.projectService.projects().find(p => p.id === rawId);
+        if(local){
+          // Adaptar a ProjectData mínimamente
+            this.project = {
+              id: local.id as any,
+              title: local.name,
+              description: local.description,
+              fullDescription: local.description,
+              duration: '—',
+              difficulty: 'N/D',
+              students: 0,
+              members: [],
+              area: 'informatica',
+              areaDisplay: 'Informática',
+              areas: ['informatica'],
+              status: 'En progreso',
+              progress: 0,
+              technologies: [],
+              objectives: []
+            } as ProjectData;
+            this.isLoading = false;
+        } else {
+          this.loadProject(numeric); // forzará 404 -> redirect
+        }
+      }
     });
   }
 

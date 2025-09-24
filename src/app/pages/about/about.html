@@ -1,68 +1,108 @@
-<div class="min-h-screen bg-gray-50 py-16">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16">
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">Sobre Nosotros</h1>
-      <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-        Conoce más sobre nuestra historia, misión y el equipo que hace posible MiWeb.
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-      <div>
-        <h2 class="text-3xl font-bold text-gray-900 mb-6">Nuestra Historia</h2>
-        <p class="text-gray-600 mb-4">
-          MiWeb nació de la idea de crear experiencias digitales excepcionales utilizando las 
-          mejores tecnologías modernas. Desde nuestros inicios, hemos estado comprometidos 
-          con la innovación y la excelencia.
-        </p>
-        <p class="text-gray-600">
-          Utilizamos Angular como framework principal, combinado con Tailwind CSS para crear 
-          interfaces elegantes y responsivas que brindan la mejor experiencia de usuario.
-        </p>
-      </div>
-      <div class="bg-white rounded-lg shadow-lg p-8">
-        <h3 class="text-2xl font-bold text-gray-900 mb-4">Nuestra Misión</h3>
-        <p class="text-gray-600 mb-6">
-          Crear soluciones web innovadoras que impulsen el éxito de nuestros clientes 
-          y mejoren la vida digital de los usuarios.
-        </p>
-        <div class="space-y-4">
-          <div class="flex items-center">
-            <div class="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-            <span class="text-gray-700">Innovación constante</span>
+<div class="min-h-screen py-16 bg-white text-gray-900">
+  <div class="max-w-5xl mx-auto px-8">
+    <!-- Estado vacío -->
+    <ng-container *ngIf="showEmptyState(); else normalContent">
+      <h1 class="text-xl font-semibold tracking-tight mb-1">Projects</h1>
+      <p class="text-sm text-gray-600 mb-8 max-w-2xl">You haven't created a project yet. Get started by selecting a template or start from an empty project.</p>
+      <hr class="border-t border-gray-200 mb-8" />
+      <!-- Grid plantillas -->
+      <div class="template-grid" role="list">
+        <div *ngFor="let t of templates" role="listitem" class="template-item group" (click)="useTemplate(t)" tabindex="0" (keyup.enter)="useTemplate(t)" (keyup.space)="useTemplate(t)" aria-label="Create using template {{t.name}}">
+          <div class="template-icon" [ngClass]="'color-'+t.id">
+            <span class="icon-inner">{{ t.icon }}</span>
           </div>
-          <div class="flex items-center">
-            <div class="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-            <span class="text-gray-700">Calidad excepcional</span>
-          </div>
-          <div class="flex items-center">
-            <div class="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
-            <span class="text-gray-700">Experiencia centrada en el usuario</span>
-          </div>
+            <div class="template-body">
+              <p class="template-title">Create a {{ t.name.split(' ')[0] }} <span class="arrow">→</span></p>
+              <p class="template-desc line-clamp-2">{{ t.description }}</p>
+            </div>
         </div>
       </div>
-    </div>
+      <hr class="border-t border-gray-200 my-8" />
+      <button type="button" (click)="startEmpty()" class="start-empty-link" aria-label="Start from an empty project">Or start from an empty project →</button>
+    </ng-container>
 
-    <div class="text-center">
-      <h2 class="text-3xl font-bold text-gray-900 mb-12">Nuestro Equipo</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white rounded-lg shadow-lg p-6">
-          <div class="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">Ana García</h3>
-          <p class="text-blue-600 mb-2">CEO & Fundadora</p>
-          <p class="text-gray-600 text-sm">Líder visionaria con más de 10 años de experiencia en tecnología.</p>
+    <!-- Contenido normal (si ya hay proyectos o no es primera visita) -->
+    <ng-template #normalContent>
+      <div class="py-4">
+        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-6">
+          <div class="flex-1">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Projects</h2>
+            <p class="text-sm text-gray-600">Manage and explore your created projects.</p>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <div class="relative flex-1 md:w-72">
+              <input type="text" class="search-input" placeholder="Search projects..." [value]="query()" (input)="query.set($any($event.target).value)" aria-label="Buscar proyectos" />
+              <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </div>
+            <select class="sort-select" [value]="sortMode()" (change)="sortMode.set($any($event.target).value)" aria-label="Ordenar proyectos">
+              <option value="recent">Más recientes</option>
+              <option value="name">Nombre (A-Z)</option>
+            </select>
+            <button class="px-4 py-2 rounded-md bg-inacap-red hover:bg-inacap-red/90 text-sm font-medium text-white" (click)="startEmpty()">New empty</button>
+          </div>
         </div>
-        <div class="bg-white rounded-lg shadow-lg p-6">
-          <div class="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">Carlos López</h3>
-          <p class="text-blue-600 mb-2">CTO</p>
-          <p class="text-gray-600 text-sm">Experto en Angular y arquitectura de aplicaciones web modernas.</p>
+  <p class="sr-only" aria-live="polite">{{ filteredProjects().length }} proyectos encontrados</p>
+  <div class="grid gap-6 md:grid-cols-2" *ngIf="filteredProjects().length; else noProjectsYet">
+    <div *ngFor="let p of visibleProjects(); let i = index" 
+      class="proj-card-light group fade-in-item cursor-pointer" 
+      [class.item-enter]="i >= animateFromIndex()" 
+      [style.--stagger-index]="(i - animateFromIndex())"
+      [class.is-new]="highlightNewId()===p.id" tabindex="0">
+            <ng-container *ngIf="editingId() !== p.id; else editForm">
+              <div class="flex items-start justify-between gap-4 mb-2">
+                <h3 class="proj-title-light">{{ p.name }}</h3>
+                <span *ngIf="p.template" class="badge-template-light">TEMPLATE</span>
+              </div>
+              <p class="proj-desc-light line-clamp-2 mb-4">{{ p.description }}</p>
+              <div class="flex items-center justify-between text-[11px] text-gray-500 mb-3">
+                <span>{{ p.createdAt | date:'mediumDate' }}</span>
+                <div class="flex items-center gap-2">
+                  <button type="button" class="icon-btn view" (click)="$event.stopPropagation(); openProject(p)" aria-label="Abrir proyecto" title="Abrir">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                  <button type="button" class="icon-btn" (click)="beginEdit(p)" aria-label="Editar proyecto">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
+                  </button>
+                   <button type="button" class="icon-btn danger" (click)="openDelete(p)" aria-label="Eliminar proyecto">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="absolute inset-0" (click)="openProject(p)" (keyup.enter)="openProject(p)" (keyup.space)="openProject(p)" role="button" aria-label="Abrir proyecto {{p.name}}" tabindex="-1"></div>
+            </ng-container>
+            <ng-template #editForm>
+              <form (submit)="$event.preventDefault(); saveEdit();" class="space-y-3">
+                <div>
+                  <input type="text" [value]="editTitle()" (input)="editTitle.set($any($event.target).value)" name="title-{{p.id}}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-inacap-red focus:border-inacap-red" />
+                </div>
+                <div>
+                  <textarea rows="3" [value]="editDescription()" (input)="editDescription.set($any($event.target).value)" name="desc-{{p.id}}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-inacap-red focus:border-inacap-red"></textarea>
+                </div>
+                <div class="flex items-center gap-2 justify-end pt-1">
+                  <button type="button" (click)="cancelEdit()" class="btn-xs-secondary">Cancel</button>
+                  <button type="button" (click)="saveEdit()" class="btn-xs-primary">Save</button>
+                </div>
+              </form>
+            </ng-template>
+          </div>
         </div>
-        <div class="bg-white rounded-lg shadow-lg p-6">
-          <div class="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4"></div>
-          <h3 class="text-xl font-semibold text-gray-900 mb-2">María Rodríguez</h3>
-          <p class="text-blue-600 mb-2">Diseñadora UX/UI</p>
-          <p class="text-gray-600 text-sm">Especialista en crear experiencias de usuario intuitivas y atractivas.</p>
+        <!-- Sentinel para lazy loading (IntersectionObserver) -->
+        <div #sentinel class="h-4" *ngIf="visibleProjects().length < filteredProjects().length"></div>
+        <ng-template #noProjectsYet>
+          <div class="text-center py-16 text-sm text-gray-500">No projects yet.</div>
+        </ng-template>
+      </div>
+    </ng-template>
+    <!-- Modal de confirmación eliminación -->
+    <div class="modal-overlay" *ngIf="confirmDeleteId() as delId" (click)="closeDelete()" aria-modal="true" role="dialog" aria-label="Confirmar eliminación" (keydown)="handleModalKey($event)">
+      <div #modalPanel class="modal-panel" tabindex="-1" (click)="$event.stopPropagation()">
+        <h3 class="modal-title">Eliminar proyecto</h3>
+        <p class="modal-text">
+          ¿Seguro que deseas eliminar <strong>{{ confirmDeleteName() }}</strong>? Esta acción no se puede deshacer.
+        </p>
+        <div class="modal-actions">
+          <button type="button" class="btn-xs-secondary" (click)="closeDelete()">Cancelar</button>
+          <button type="button" class="btn-xs-primary danger" (click)="confirmDelete()">Eliminar</button>
         </div>
       </div>
     </div>

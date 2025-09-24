@@ -5,9 +5,7 @@
       <p class="text-gray-600 mt-2">Completa la información para publicar tu proyecto. Los campos con * son obligatorios.</p>
     </header>
 
-    <div class="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-4" aria-label="Progreso del formulario">
-      <div class="h-full bg-[var(--inacap-red)] transition-all" [style.width.%]="progressPercent"></div>
-    </div>
+    <!-- Barra de progreso movida al final; se eliminó la versión superior -->
 
     <form [formGroup]="form" (ngSubmit)="submit()" class="space-y-8" novalidate>
       <!-- Sección básica -->
@@ -52,8 +50,14 @@
           </div>
 
           <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-gray-700">Carreras involucradas *</label>
-            <app-career-multiselect formControlName="carreras" class="mt-2 block"></app-career-multiselect>
+            <div class="flex items-center justify-between gap-4 mb-1">
+              <label class="block text-sm font-medium text-gray-700 m-0">Carreras involucradas *</label>
+              <div class="text-[10px] tracking-wide uppercase font-semibold text-gray-500 flex items-center gap-2" *ngIf="form.get('carreras')?.value as carreras" aria-live="polite" id="carreras-count" role="status">
+                <span class="px-2 py-1 rounded-full bg-gray-100 border border-gray-200 text-gray-600" *ngIf="carreras?.length">{{ carreras.length }} seleccionada{{ carreras.length===1?'':'s' }}</span>
+                <span *ngIf="carreras?.length === maxCarreras" class="text-red-600 font-medium">Límite alcanzado</span>
+              </div>
+            </div>
+            <app-career-multiselect formControlName="carreras" class="mt-1 block" [showInlineMeta]="false"></app-career-multiselect>
             <p *ngIf="form.get('carreras')?.invalid && form.get('carreras')?.touched" class="text-sm text-red-600 mt-2">Selecciona al menos una carrera.</p>
             <p class="text-xs text-gray-500 mt-1">Puedes escribir para filtrar, presiona Enter para añadir, ↑/↓ para navegar, ESC para cerrar. Máx 8 selecciones.</p>
           </div>
@@ -179,5 +183,17 @@
         </div>
       </div>
     </form>
+  </div>
+
+  <!-- Barra de progreso fija inferior simple y centrada (desktop & mobile) -->
+  <div class="fixed left-0 right-0 bottom-0 z-30 flex justify-center pointer-events-none progress-simple-wrapper">
+    <div class="progress-simple-container pointer-events-auto" role="progressbar" aria-label="Progreso creación de proyecto" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="progressPercent">
+      <div class="progress-simple-track">
+        <div class="progress-simple-fill" [style.width.%]="progressPercent">
+          <span class="progress-simple-label">{{ progressPercent }}%</span>
+        </div>
+      </div>
+      <div class="progress-simple-meta">{{ stepsCompleted }} / 3 pasos</div>
+    </div>
   </div>
 </div>

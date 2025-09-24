@@ -1,4 +1,5 @@
 import { Component, OnDestroy, HostListener } from '@angular/core';
+import { ProjectService } from '../../services/project.service';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { CareerMultiselect } from '../../components/career-multiselect/career-multiselect';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -12,6 +13,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
 })
 export class ProjectCreate implements OnDestroy {
   form: FormGroup;
+  maxCarreras = 8; // Mantener sincronizado con CareerMultiselect.maxSelections por defecto
 
   // Lista anterior reemplazada por el multiselect especializado
 
@@ -23,7 +25,9 @@ export class ProjectCreate implements OnDestroy {
   get miembros(): FormArray { return this.form.get('miembros') as FormArray; }
   get carreras(): FormControl { return this.form.get('carreras') as FormControl; }
 
-  constructor(private fb: FormBuilder) {
+  pendingTemplateUsed: string | null = null;
+
+  constructor(private fb: FormBuilder, private projectService: ProjectService) {
     this.form = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
       descripcion: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(1000)]],
@@ -73,8 +77,18 @@ export class ProjectCreate implements OnDestroy {
       this.validateDateRange();
     });
 
-    // Restaurar borrador si existe
-    this.restoreDraft();
+    // Si hay plantilla pendiente la aplicamos antes de restaurar borrador (el borrador no debe sobrescribir la intención de plantilla seleccionada).
+    const tpl = this.projectService.consumePendingTemplate();
+    if(tpl){
+      this.form.patchValue({
+        titulo: tpl.name,
+        descripcion: tpl.description
+      });
+      this.pendingTemplateUsed = tpl.id;
+    } else {
+      // Restaurar borrador si existe sólo si no venimos de plantilla
+      this.restoreDraft();
+    }
   }
 
   addMiembro(email = '') {
@@ -134,9 +148,16 @@ export class ProjectCreate implements OnDestroy {
       return;
     }
     const value = this.form.value;
-    // Simulación de envío; en real, construir FormData si hay archivos
+    // Persistir en servicio para que aparezca en /about
+    this.projectService.addProject({
+      name: value.titulo,
+      description: value.descripcion,
+      template: this.pendingTemplateUsed || undefined
+    });
     console.log('Proyecto creado', value);
-    alert('Proyecto enviado. ¡Gracias!');
+    alert('Proyecto guardado. ¡Gracias! (visible en Projects)');
+    // Marcar primera visita como reconocida (si era la primera vez)
+    try { this.projectService.acknowledgeVisit(); } catch {}
     this.form.reset({ numeroEstudiantes: 1, permitirExAlumnos: false, carreras: [] });
     this.miembros.clear();
     this.bannerPreview = null;
@@ -212,6 +233,14 @@ export class ProjectCreate implements OnDestroy {
     if (this.participacionComplete) done++;
     if (this.leaderComplete) done++;
     return Math.round((done / stepsTotal) * 100);
+  }
+
+  get stepsCompleted(): number {
+    let done = 0;
+    if (this.basicComplete) done++;
+    if (this.participacionComplete) done++;
+    if (this.leaderComplete) done++;
+    return done;
   }
 
   // Contadores de caracteres y avisos

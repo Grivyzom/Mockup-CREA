@@ -177,6 +177,23 @@
   background-color: var(--inacap-red);
 }
 
+/* Nuevo proyecto (icono '+') reutiliza rojo pero con leve degradado */
+.inacap-new {
+  background: linear-gradient(135deg, var(--inacap-red) 0%, #b41028 100%);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.iniciar-proyecto-link {
+  border: 1px dashed rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.04);
+}
+
+.iniciar-proyecto-link:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: var(--inacap-red);
+}
+
 .team-link:hover .team-icon {
   opacity: 0.9;
 }

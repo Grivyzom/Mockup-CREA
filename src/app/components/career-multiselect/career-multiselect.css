@@ -1,13 +1,21 @@
 .career-multi { position:relative; display:flex; flex-direction:column; gap:.5rem; }
+/* Contenedor principal del campo */
 .career-field { position:relative; }
-.career-input-wrapper { display:flex; flex-wrap:wrap; gap:.4rem; align-items:center; min-height:3rem; border:1px solid #d1d5db; border-radius:.75rem; padding:.4rem .6rem; background:#fff; cursor:text; }
+/* Wrapper de input + chips; se agrega padding adicional inferior para que no se solape con la línea inferior y aumentamos gap para chips más legibles */
+.career-input-wrapper { display:flex; flex-wrap:wrap; row-gap:.5rem; column-gap:.5rem; align-items:flex-start; min-height:3.25rem; border:1px solid #d1d5db; border-radius:.85rem; padding:.65rem .75rem .7rem; background:#fff; cursor:text; position:relative; }
+.career-input-wrapper:before { content:""; position:absolute; inset:0; border-radius:.85rem; pointer-events:none; }
 .career-input-wrapper:focus-within { outline:2px solid var(--inacap-red); outline-offset:2px; }
-.career-chip { display:inline-flex; align-items:center; gap:.35rem; background:var(--inacap-red-light); color:#801628; font-weight:500; padding:.35rem .6rem; font-size:.72rem; border-radius:1rem; line-height:1; }
+.career-chip { display:inline-flex; align-items:center; gap:.35rem; background:var(--inacap-red-light); color:#801628; font-weight:500; padding:.42rem .7rem; font-size:.7rem; border-radius:1rem; line-height:1.1; max-width:220px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
+.career-chip button { line-height:1; }
 .career-chip button { background:transparent; border:0; color:inherit; cursor:pointer; padding:0; display:flex; align-items:center; }
 .career-chip button:focus-visible { outline:2px solid var(--inacap-red); border-radius:50%; }
-.career-input { flex:1; min-width:140px; border:0; outline:none; padding:.35rem; font-size:.8rem; }
+.career-input { flex:1 1 180px; min-width:140px; border:0; outline:none; padding:.35rem .25rem; font-size:.78rem; }
 .career-input::placeholder { color:#9ca3af; }
-.career-panel { position:absolute; top:100%; left:0; right:0; margin-top:.4rem; background:#fff; border:1px solid #e5e7eb; border-radius:1rem; box-shadow:0 8px 28px rgba(0,0,0,.08); max-height:340px; overflow:auto; z-index:40; padding:.6rem .75rem 1rem; }
+/* Panel desplegable: se aumenta z-index y se añade un ligero margen y separación visual */
+.career-panel { position:absolute; top:calc(100% + .5rem); left:0; right:0; background:#fff; border:1px solid #e5e7eb; border-radius:1rem; box-shadow:0 12px 32px -4px rgba(0,0,0,.12); max-height:340px; overflow:auto; z-index:120; padding:.65rem .75rem 1rem; overscroll-behavior:contain; }
+.career-panel::-webkit-scrollbar { width:8px; }
+.career-panel::-webkit-scrollbar-thumb { background:#d1d5db; border-radius:4px; }
+.career-panel::-webkit-scrollbar-thumb:hover { background:#b9bdc2; }
 .career-panel.drop-up { top:auto; bottom:100%; margin-top:0; margin-bottom:.4rem; }
 .career-group { margin-top:.75rem; }
 .career-group:first-child { margin-top:.25rem; }
@@ -18,9 +26,17 @@
 .career-option.active:not([aria-selected="true"]) { background:#f3f4f6; }
 .career-option.active[aria-selected="true"] { box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--inacap-red); }
 .career-empty { padding:.75rem; font-size:.7rem; color:#6b7280; text-align:center; }
-.career-meta { display:flex; align-items:center; justify-content:space-between; font-size:.6rem; text-transform:uppercase; letter-spacing:.05em; color:#6b7280; padding:0 .25rem; }
+.career-meta { display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; font-size:.6rem; text-transform:uppercase; letter-spacing:.05em; color:#6b7280; padding:0 .35rem .15rem; }
 .career-actions { display:flex; justify-content:space-between; gap:.75rem; margin-top:.4rem; }
 .career-actions button { background:transparent; border:0; font-size:.65rem; text-transform:uppercase; letter-spacing:.05em; color:var(--inacap-red); font-weight:600; cursor:pointer; padding:.3rem .4rem; border-radius:.5rem; }
 .career-actions button:hover { background:var(--inacap-red-light); }
 .career-actions button:focus-visible { outline:2px solid var(--inacap-red); outline-offset:2px; }
-@media (max-width:640px){ .career-panel { max-height:300px; } .career-input-wrapper { min-height:2.75rem; } }
+@media (max-width:640px){
+	.career-panel { max-height:300px; top:calc(100% + .4rem); }
+	.career-input-wrapper { min-height:2.9rem; padding:.45rem .55rem .5rem; }
+	.career-chip { font-size:.68rem; }
+}
+
+/* Mejora: evitar que el panel tape textarea siguiente agregando margen dinámico mediante atributo data-open */
+.career-multi[data-open="true"] { margin-bottom:360px; }
+@media (max-width:900px){ .career-multi[data-open="true"] { margin-bottom:320px; } }
