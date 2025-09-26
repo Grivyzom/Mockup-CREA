@@ -8,7 +8,7 @@ import { ProjectService } from '../../services/project.service';
   selector: 'app-project-detail',
   imports: [CommonModule],
   templateUrl: './project-detail.html',
-  styleUrl: './project-detail.css'
+  styleUrls: ['./project-detail.css']
 })
 export class ProjectDetail implements OnInit {
   project: ProjectData | null = null;

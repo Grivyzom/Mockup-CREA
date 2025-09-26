@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './help.html',
-  styleUrl: './help.css'
+  styleUrls: ['./help.css']
 })
 export class Help {
   // FAQ data (podría migrarse a servicio si crece)

@@ -4,7 +4,7 @@ import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
   selector: 'app-scroll-to-top',
   imports: [],
   templateUrl: './scroll-to-top.html',
-  styleUrl: './scroll-to-top.css'
+  styleUrls: ['./scroll-to-top.css']
 })
 export class ScrollToTop implements OnInit, OnDestroy {
   isVisible = false;

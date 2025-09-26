@@ -8,7 +8,7 @@ import { CAREERS, CareerOption, groupCareers } from './career-data';
   standalone: true,
   imports: [CommonModule, NgIf, NgFor, FormsModule],
   templateUrl: './career-multiselect.html',
-  styleUrl: './career-multiselect.css',
+  styleUrls: ['./career-multiselect.css'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => CareerMultiselect),

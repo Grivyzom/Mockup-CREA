@@ -15,7 +15,7 @@ interface DashboardCard {
   selector: 'app-dashboard',
   imports: [CommonModule, CalendarComponent],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.css'
+  styleUrls: ['./dashboard.css']
 })
 export class Dashboard {
   

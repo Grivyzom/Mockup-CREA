@@ -1,0 +1,6 @@
+.chips-scroll { overflow:auto; -webkit-overflow-scrolling: touch; }
+.chips-track { display:flex; gap:.5rem; }
+.chip { padding:.45rem .8rem; border-radius:999px; border:1px solid #e5e7eb; background:#fff; font-size:.85rem; color:#374151; cursor:pointer; transition: all .18s ease; display:inline-flex; align-items:center; gap:.4rem; }
+.chip:hover { background:#f8fafc; }
+.chip.active { background:#c41e3a; color:#fff; border-color:#c41e3a; }
+.chip .chip-icon { display:inline-flex; align-items:center; justify-content:center; }

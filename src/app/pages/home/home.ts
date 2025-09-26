@@ -9,7 +9,7 @@ import { MonthlyProjectsCarousel } from '../../components/monthly-projects-carou
   standalone: true,
   imports: [CommonModule, RouterLink, ProjectModal, MonthlyProjectsCarousel],
   templateUrl: './home.html',
-  styleUrl: './home.css'
+  styleUrls: ['./home.css']
 })
 export class Home implements AfterViewInit, OnDestroy {
   @ViewChild('projectCarousel', { static: false }) projectCarousel?: ElementRef<HTMLElement>;

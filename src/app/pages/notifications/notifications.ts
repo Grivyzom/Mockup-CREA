@@ -1,6 +1,7 @@
-import { Component, computed, signal, effect } from '@angular/core';
+import { Component, computed, signal, effect, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService } from '../../core/services/notification.service';
+import { FilterChips } from '../../components/ui/filter/filter-chips';
 
 // Tipos base para futura integración con backend
 export type NotificationKind = 'proyecto' | 'sistema' | 'mensaje' | 'recordatorio' | 'alerta';
@@ -20,14 +21,15 @@ export interface NotificationItem {
 @Component({
   selector: 'app-notifications',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FilterChips],
   templateUrl: './notifications.html',
-  styleUrl: './notifications.css'
+  styleUrls: ['./notifications.css']
 })
 export class NotificationsPage {
   // Estado reactivo principal ahora proviene del servicio compartido
   constructor(private notificationService: NotificationService){ }
   private allNotifications = computed(() => this.notificationService.items());
+  @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   search = signal('');
   filterKind = signal<NotificationKind | 'all'>('all');
   filterState = signal<'all' | NotificationState>('all');
@@ -35,6 +37,7 @@ export class NotificationsPage {
   compactMode = signal(false);
   feedbackMessage = signal('');
   showAdvancedFilters = signal(false);
+  sortBy = signal<'reciente' | 'antiguo' | 'titulo-az' | 'titulo-za'>('reciente');
   // Conteo seleccionado
   selectedCount = computed(() => this.selectedIds().size);
   // Conteos por tipo (sobre conjunto filtrado por estado/archivado y búsqueda, pero antes de filtrar por kind para mostrar totales contextuales)
@@ -56,6 +59,19 @@ export class NotificationsPage {
     return counts;
   });
 
+  // Conteos por estado (sobre conjunto filtrado por tipo y búsqueda, antes de aplicar estado)
+  stateCounts = computed(() => {
+    const term = this.search().trim().toLowerCase();
+    let all = 0, unread = 0, read = 0, archived = 0;
+    for (const n of this.allNotifications()) {
+      if (this.filterKind() !== 'all' && n.kind !== this.filterKind()) continue;
+      if (term && !(n.title.toLowerCase().includes(term) || n.body.toLowerCase().includes(term))) continue;
+      all++;
+      if (n.state === 'unread') unread++; else if (n.state === 'read') read++; else archived++;
+    }
+    return { all, unread, read, archived };
+  });
+
   totalVisibleCount = computed(() => this.filtered().length);
   filtersDirty = computed(() => !!this.search().trim() || this.filterKind() !== 'all' || this.filterState() !== 'all');
   allFilteredSelected = computed(() => {
@@ -71,7 +87,7 @@ export class NotificationsPage {
 
   filtered = computed(() => {
     const term = this.search().trim().toLowerCase();
-    return this.allNotifications().filter(n => {
+    const base = this.allNotifications().filter(n => {
       if (this.filterKind() !== 'all' && n.kind !== this.filterKind()) return false;
       if (this.filterState() !== 'all' && n.state !== this.filterState()) return false;
       if (term) {
@@ -82,6 +98,24 @@ export class NotificationsPage {
       }
       return true;
     });
+    // Ordenar según preferencia
+    const s = this.sortBy();
+    const arr = [...base];
+    switch(s){
+      case 'reciente':
+        arr.sort((a,b) => b.createdAt.getTime() - a.createdAt.getTime());
+        break;
+      case 'antiguo':
+        arr.sort((a,b) => a.createdAt.getTime() - b.createdAt.getTime());
+        break;
+      case 'titulo-az':
+        arr.sort((a,b) => a.title.localeCompare(b.title));
+        break;
+      case 'titulo-za':
+        arr.sort((a,b) => b.title.localeCompare(a.title));
+        break;
+    }
+    return arr;
   });
 
   // Agrupación por fecha para UX (Hoy / Últimos 7 días / Anteriores)
@@ -196,11 +230,35 @@ export class NotificationsPage {
     this.showAdvancedFilters.update(v => !v);
   }
 
+  // Persistencia de preferencias en localStorage
+  private readonly LS_KEY = 'notifications_prefs';
+  ngOnInit(){
+    try {
+      const raw = localStorage.getItem(this.LS_KEY);
+      if (raw) {
+        const pref = JSON.parse(raw);
+        if (typeof pref?.compact === 'boolean') this.compactMode.set(pref.compact);
+        if (typeof pref?.sortBy === 'string') this.sortBy.set(pref.sortBy);
+      }
+    } catch {}
+    // Efecto para guardar cambios
+    effect(() => {
+      const snapshot = { compact: this.compactMode(), sortBy: this.sortBy() };
+      try { localStorage.setItem(this.LS_KEY, JSON.stringify(snapshot)); } catch {}
+    });
+  }
+
+  setSortBy(v: 'reciente' | 'antiguo' | 'titulo-az' | 'titulo-za'){ this.sortBy.set(v); }
+
   onKey(ev: KeyboardEvent) {
     const target = ev.target as HTMLElement;
     const tag = target?.tagName?.toLowerCase();
     if (tag === 'input' || tag === 'textarea' || target?.isContentEditable) return; // no interceptar escritura
     switch(ev.key) {
+      case '/':
+        ev.preventDefault();
+        this.focusSearch();
+        break;
       case 'a': case 'A':
         ev.preventDefault();
         this.selectAllVisible();
@@ -225,6 +283,15 @@ export class NotificationsPage {
           this.emitFeedback('Selección limpiada.');
         }
         break;
+    }
+  }
+
+  focusSearch() {
+    const el = this.searchInput?.nativeElement;
+    if (el) {
+      el.focus();
+      // Seleccionar para escribir sobre lo anterior
+      setTimeout(() => el.select(), 0);
     }
   }
 

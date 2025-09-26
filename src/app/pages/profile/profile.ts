@@ -10,9 +10,12 @@ import { FALLBACK_TIMEZONES, buildTimezoneGroups } from '../../shared/timezones'
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './profile.html',
-  styleUrl: './profile.css'
+  styleUrls: ['./profile.css']
 })
 export class Profile implements OnInit {
+  // Para tooltips de info (popover de nombre de usuario y nombre público)
+  showUserInfo = false;
+  showPublicInfo = false;
   private fb = inject(FormBuilder);
   private profileService = inject(ProfileService);
   private toast = inject(ToastService);
@@ -26,7 +29,10 @@ export class Profile implements OnInit {
     lastName: [this.profile.lastName, [Validators.required]],
     institutionalEmail: [this.profile.institutionalEmail, [Validators.required, Validators.email]],
     username: [this.profile.username, [Validators.required, Validators.minLength(3)]],
-    timezone: [this.profile.timezone ?? 'America/Los_Angeles']
+    timezone: [this.profile.timezone ?? 'America/Los_Angeles'],
+    // Campos movidos desde Configuración → Apariencia
+    displayName: [this.profile.displayName ?? (this.profile.username || ''), [Validators.required, Validators.minLength(4), Validators.maxLength(12), Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúÑñ]+$/)]],
+    bio: [this.profile.bio ?? '', [Validators.maxLength(200)]]
   });
   // Timezones
   allTimezones: string[] = [];
@@ -34,6 +40,28 @@ export class Profile implements OnInit {
   // Edición del perfil
   isEditingProfile = false;
   private originalProfileValue: any;
+  // Preferencia de tono de piel
+  skinTone: string = 'default';
+  skinTones = [
+    { value: 'default', emoji: '👋', label: 'Predeterminado' },
+    { value: 'light', emoji: '👋🏻', label: 'Claro' },
+    { value: 'medium-light', emoji: '👋🏼', label: 'Claro medio' },
+    { value: 'medium', emoji: '👋🏽', label: 'Medio' },
+    { value: 'medium-dark', emoji: '👋🏾', label: 'Oscuro medio' },
+    { value: 'dark', emoji: '👋🏿', label: 'Oscuro' },
+  ];
+
+  // Género
+  gender: string = 'prefer-not';
+  genders = [
+    { value: 'prefer-not', label: 'Prefiero no decir', icon: 'M5 5l14 14M19 5L5 19' },
+    { value: 'woman', label: 'Mujer', icon: 'M11 5h2v2h-2zM12 7v10M9 12h6M10 17h4' },
+    { value: 'man', label: 'Hombre', icon: 'M12 5h2v3h3v2h-3v7h-2v-7H9V8h3V5z' },
+    { value: 'nonbinary', label: 'No binario', icon: 'M12 4l4 4-4 4-4-4 4-4M8 16h8' },
+    { value: 'trans', label: 'Trans', icon: 'M11 2h2v3h3v2h-3v3h-2v-3H8V5h3V2z' },
+    { value: 'agender', label: 'Agénero', icon: 'M12 2v20M2 12h20' },
+    { value: 'other', label: 'Otro', icon: 'M12 4l3 6h6l-5 4 2 6-6-4-6 4 2-6-5-4h6z' },
+  ];
 
   // Cambio de contraseña
   passwordForm = this.fb.group({
@@ -113,6 +141,16 @@ export class Profile implements OnInit {
     // Deshabilitar formulario de perfil por defecto y guardar snapshot inicial
     this.form.disable({ emitEvent: false });
     this.originalProfileValue = this.form.getRawValue();
+
+    // Cargar preferencia de tono de piel y género
+    try {
+      const raw = localStorage.getItem('appearance_prefs');
+      if (raw) {
+        const prefs = JSON.parse(raw) as { skinTone?: string, gender?: string };
+        if (prefs.skinTone) this.skinTone = prefs.skinTone;
+        if (prefs.gender) this.gender = prefs.gender;
+      }
+    } catch {}
   }
 
   startEditProfile() {
@@ -136,18 +174,27 @@ export class Profile implements OnInit {
     this.submittedProfile = true;
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.saving = true; this.saveSuccess = false;
-    const merged = { ...this.profile, ...(this.form.value as any) } as any;
+    const merged = { ...this.profile, ...(this.form.value as any), gender: this.gender } as any;
     this.profileService.updateProfile(merged);
     this.profile = merged;
     await new Promise(r => setTimeout(r, 300));
-  this.saving = false; this.saveSuccess = true;
-  this.toast.show({ message: 'Perfil actualizado correctamente', type: 'success', duration: 4000 });
+    this.saving = false; this.saveSuccess = true;
+    this.toast.show({ message: 'Perfil actualizado correctamente', type: 'success', duration: 4000 });
     this.form.markAsPristine();
     // Actualizar snapshot, salir del modo edición y deshabilitar
     this.originalProfileValue = this.form.getRawValue();
     this.isEditingProfile = false;
     this.form.disable({ emitEvent: false });
     setTimeout(() => this.saveSuccess = false, 2000);
+
+    // Persistir tono de piel y género
+    try {
+      const raw = localStorage.getItem('appearance_prefs');
+      const prefs = raw ? JSON.parse(raw) : {};
+      prefs.skinTone = this.skinTone;
+      prefs.gender = this.gender;
+      localStorage.setItem('appearance_prefs', JSON.stringify(prefs));
+    } catch {}
   }
 
   async changePassword() {

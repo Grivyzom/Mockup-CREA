@@ -39,7 +39,7 @@
 .modal-title { margin: 0 0 1rem; font-size: 1.25rem; font-weight: 700; letter-spacing: -.02em; color: var(--inacap-text-primary); }
 .modal-content { font-size: .95rem; line-height: 1.6; color: var(--inacap-text-secondary); }
 
-.modal-buttons { margin-top: 1.75rem; display: flex; gap: .75rem; flex-wrap: wrap; }
+.modal-buttons { margin-top: 1.75rem; display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
 .modal-btn { background: var(--inacap-surface); border: 1px solid var(--inacap-border-secondary); color: var(--inacap-text-primary); padding: .7rem 1.1rem; border-radius: .75rem; font-weight:600; font-size:.85rem; cursor:pointer; transition:.2s; }
 .modal-btn:hover { border-color: var(--inacap-primary); color: var(--inacap-primary); }
 .modal-btn.btn-primary { background: var(--inacap-primary); border-color: var(--inacap-primary); color:#fff; }

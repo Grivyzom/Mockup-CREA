@@ -2,8 +2,8 @@
   <div class="max-w-5xl mx-auto px-8">
     <!-- Estado vacío -->
     <ng-container *ngIf="showEmptyState(); else normalContent">
-      <h1 class="text-xl font-semibold tracking-tight mb-1">Projects</h1>
-      <p class="text-sm text-gray-600 mb-8 max-w-2xl">You haven't created a project yet. Get started by selecting a template or start from an empty project.</p>
+  <h1 class="text-xl font-semibold tracking-tight mb-1">Proyectos</h1>
+  <p class="text-sm text-gray-600 mb-8 max-w-2xl">Aún no has creado ningún proyecto. Comienza seleccionando una plantilla o inicia uno en blanco.</p>
       <hr class="border-t border-gray-200 mb-8" />
       <!-- Grid plantillas -->
       <div class="template-grid" role="list">
@@ -12,13 +12,13 @@
             <span class="icon-inner">{{ t.icon }}</span>
           </div>
             <div class="template-body">
-              <p class="template-title">Create a {{ t.name.split(' ')[0] }} <span class="arrow">→</span></p>
+              <p class="template-title">Crear {{ t.name }} <span class="arrow">→</span></p>
               <p class="template-desc line-clamp-2">{{ t.description }}</p>
             </div>
         </div>
       </div>
       <hr class="border-t border-gray-200 my-8" />
-      <button type="button" (click)="startEmpty()" class="start-empty-link" aria-label="Start from an empty project">Or start from an empty project →</button>
+  <button type="button" (click)="startEmpty()" class="start-empty-link" aria-label="Iniciar un proyecto en blanco">O comenzar desde un proyecto en blanco →</button>
     </ng-container>
 
     <!-- Contenido normal (si ya hay proyectos o no es primera visita) -->
@@ -26,19 +26,19 @@
       <div class="py-4">
         <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between mb-6">
           <div class="flex-1">
-            <h2 class="text-xl font-semibold tracking-tight mb-1">Projects</h2>
-            <p class="text-sm text-gray-600">Manage and explore your created projects.</p>
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Proyectos</h2>
+            <p class="text-sm text-gray-600">Administra y explora los proyectos que has creado.</p>
           </div>
           <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <div class="relative flex-1 md:w-72">
-              <input type="text" class="search-input" placeholder="Search projects..." [value]="query()" (input)="query.set($any($event.target).value)" aria-label="Buscar proyectos" />
+              <input type="text" class="search-input" placeholder="Buscar proyectos..." [value]="query()" (input)="query.set($any($event.target).value)" aria-label="Buscar proyectos" />
               <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </div>
             <select class="sort-select" [value]="sortMode()" (change)="sortMode.set($any($event.target).value)" aria-label="Ordenar proyectos">
               <option value="recent">Más recientes</option>
               <option value="name">Nombre (A-Z)</option>
             </select>
-            <button class="px-4 py-2 rounded-md bg-inacap-red hover:bg-inacap-red/90 text-sm font-medium text-white" (click)="startEmpty()">New empty</button>
+            <button class="px-4 py-2 rounded-md bg-inacap-red hover:bg-inacap-red/90 text-sm font-medium text-white" (click)="startEmpty()">Nuevo en blanco</button>
           </div>
         </div>
   <p class="sr-only" aria-live="polite">{{ filteredProjects().length }} proyectos encontrados</p>
@@ -47,48 +47,84 @@
       class="proj-card-light group fade-in-item cursor-pointer" 
       [class.item-enter]="i >= animateFromIndex()" 
       [style.--stagger-index]="(i - animateFromIndex())"
-      [class.is-new]="highlightNewId()===p.id" tabindex="0">
+      [class.is-new]="highlightNewId()===p.id" 
+      [class.editing-mode]="editingId()===p.id"
+      [class.edit-exit]="exitingEditId()===p.id"
+      tabindex="0"
+      (click)="editingId()!==p.id && openProject(p)"
+      (keyup.enter)="editingId()!==p.id && openProject(p)"
+      (keyup.space)="editingId()!==p.id && openProject(p)"
+      role="button" aria-label="Abrir proyecto {{p.name}}">
             <ng-container *ngIf="editingId() !== p.id; else editForm">
               <div class="flex items-start justify-between gap-4 mb-2">
                 <h3 class="proj-title-light">{{ p.name }}</h3>
-                <span *ngIf="p.template" class="badge-template-light">TEMPLATE</span>
+                <span *ngIf="p.template" class="badge-template-light">PLANTILLA</span>
               </div>
               <p class="proj-desc-light line-clamp-2 mb-3">{{ p.description }}</p>
+              <div class="flex items-center gap-2 mb-3 text-[10px] font-medium tracking-wide text-gray-500 uppercase">
+                <span class="status-chip" *ngIf="isRecent(p.createdAt)">Nuevo</span>
+                <span class="status-chip muted" title="Creado {{ p.createdAt | date:'medium' }}">{{ timeAgo(p.createdAt) }}</span>
+              </div>
               <!-- Progress bar -->
               <div class="progress-wrap mb-3" aria-label="Progreso del proyecto" [attr.aria-valuenow]="p.progress" aria-valuemin="0" aria-valuemax="100" role="progressbar">
                 <div class="progress-bar" [style.width.%]="p.progress"></div>
                 <div class="progress-text">{{ p.progress }}%</div>
               </div>
-              <div class="flex items-center justify-between text-[11px] text-gray-500 mb-3">
-                <span class="inline-flex items-center gap-1">
-                  <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                  {{ p.members }}
-                </span>
-                <div class="flex items-center gap-2">
+              <div class="flex items-end justify-between gap-4 mb-2 meta-flex-wrap">
+                <div class="flex flex-wrap items-center gap-4 grow min-w-0">
+                  <span class="leader-wrap inline-flex items-center gap-1.5 min-w-[56px]" tabindex="0" role="button" [attr.aria-describedby]="'leader-tip-'+p.id" [attr.aria-label]="p.leaderName || 'Líder no definido'">
+                    <svg width="13" height="13" viewBox="0 0 24 24" stroke="#eab308" fill="#facc15" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" class="drop-shadow crown-icon" style="border-radius:2px"><path d="M3 7l4.5 4 4.5-8 4.5 8L21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>
+                    <span class="leader-avatar">{{ leaderInitials(p.leaderName) }}</span>
+                    <span class="leader-tooltip" [id]="'leader-tip-'+p.id" role="tooltip">{{ p.leaderName || 'Líder no definido' }}</span>
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-gray-600" title="Miembros">
+                    <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    {{ p.members }}
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 text-gray-600" [title]="'Creado: ' + (p.createdAt | date:'medium')">
+                    <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    {{ p.createdAt | date:'dd/MM/yy' }}
+                  </span>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
                   <button type="button" class="icon-btn view" (click)="$event.stopPropagation(); openProject(p)" aria-label="Abrir proyecto" title="Abrir">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
-                  <button type="button" class="icon-btn" (click)="beginEdit(p)" aria-label="Editar proyecto">
+                  <button type="button" class="icon-btn" (click)="$event.stopPropagation(); beginEdit(p)" aria-label="Editar proyecto">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
                   </button>
-                   <button type="button" class="icon-btn danger" (click)="openDelete(p)" aria-label="Eliminar proyecto">
+                   <button type="button" class="icon-btn danger" (click)="$event.stopPropagation(); openDelete(p)" aria-label="Eliminar proyecto">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
                   </button>
                 </div>
               </div>
-              <div class="absolute inset-0" (click)="openProject(p)" (keyup.enter)="openProject(p)" (keyup.space)="openProject(p)" role="button" aria-label="Abrir proyecto {{p.name}}" tabindex="-1"></div>
             </ng-container>
             <ng-template #editForm>
-              <form (submit)="$event.preventDefault(); saveEdit();" class="space-y-3">
-                <div>
-                  <input type="text" [value]="editTitle()" (input)="editTitle.set($any($event.target).value)" name="title-{{p.id}}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-inacap-red focus:border-inacap-red" />
+              <form (click)="$event.stopPropagation()" (submit)="$event.preventDefault(); isEditValid() && saveEdit();" (keydown.escape)="cancelEdit()" (keydown.ctrl.enter)="isEditValid() && saveEdit()" (keydown.meta.enter)="isEditValid() && saveEdit()" class="edit-form space-y-3 edit-anim">
+                <div class="flex flex-col gap-1">
+                  <label class="edit-label" [attr.for]="'title-'+p.id">Título</label>
+                  <input type="text" [value]="editTitle()" (input)="editTitle.set($any($event.target).value)" [class.changed]="isFieldChanged('title')" [attr.data-editing]="p.id" name="title-{{p.id}}" class="edit-input"/>
+                  <p class="edit-hint" [class.error]="editTitle().trim().length>0 && editTitle().trim().length<3">{{ editTitle().trim().length<3 ? 'Mínimo 3 caracteres' : ' '}}</p>
                 </div>
-                <div>
-                  <textarea rows="3" [value]="editDescription()" (input)="editDescription.set($any($event.target).value)" name="desc-{{p.id}}" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-inacap-red focus:border-inacap-red"></textarea>
+                <div class="flex flex-col gap-1">
+                  <label class="edit-label" [attr.for]="'desc-'+p.id">Descripción</label>
+                  <textarea rows="3" [value]="editDescription()" (input)="autoGrow($event); editDescription.set($any($event.target).value)" [class.changed]="isFieldChanged('description')" name="desc-{{p.id}}" class="edit-textarea"></textarea>
+                  <p class="edit-hint" [class.error]="editDescription().trim().length>0 && editDescription().trim().length<5">{{ editDescription().trim().length<5 ? 'Mínimo 5 caracteres' : ' '}}</p>
                 </div>
-                <div class="flex items-center gap-2 justify-end pt-1">
-                  <button type="button" (click)="cancelEdit()" class="btn-xs-secondary">Cancel</button>
-                  <button type="button" (click)="saveEdit()" class="btn-xs-primary">Save</button>
+                <div class="flex items-center gap-2 justify-between pt-2 flex-wrap">
+                  <span class="shortcut-hint text-[10px] text-gray-400">Ctrl/⌘+Enter para guardar · Esc para cancelar</span>
+                  <div class="flex items-center gap-2">
+                    <button type="button" (click)="$event.stopPropagation(); cancelEdit()" class="btn-xs-secondary subtle">Cancelar</button>
+                    <button type="submit" (click)="$event.stopPropagation()" [disabled]="!isEditValid() || saving()" class="btn-xs-primary" [class.btn-disabled]="!isEditValid() || saving()">
+                      <span *ngIf="!saving(); else savingTpl">Guardar</span>
+                      <ng-template #savingTpl>
+                        <span class="inline-flex items-center gap-1">
+                          <svg class="animate-spin" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                          Guardando
+                        </span>
+                      </ng-template>
+                    </button>
+                  </div>
                 </div>
               </form>
             </ng-template>
@@ -97,7 +133,7 @@
         <!-- Sentinel para lazy loading (IntersectionObserver) -->
         <div #sentinel class="h-4" *ngIf="visibleProjects().length < filteredProjects().length"></div>
         <ng-template #noProjectsYet>
-          <div class="text-center py-16 text-sm text-gray-500">No projects yet.</div>
+          <div class="text-center py-16 text-sm text-gray-500">No hay proyectos todavía.</div>
         </ng-template>
       </div>
     </ng-template>
@@ -114,5 +150,12 @@
         </div>
       </div>
     </div>
+  </div>
+  <!-- Toast simple -->
+  <div *ngIf="lastToast() as msg" class="toast-fixed" aria-live="assertive">
+    <ng-container *ngIf="msg.startsWith('Proyecto eliminado'); else simpleToast">
+      <span (click)="undoDelete()" class="underline cursor-pointer decoration-inacap-red/60 hover:decoration-inacap-red">Deshacer</span>
+    </ng-container>
+    <ng-template #simpleToast>{{ msg }}</ng-template>
   </div>
 </div>

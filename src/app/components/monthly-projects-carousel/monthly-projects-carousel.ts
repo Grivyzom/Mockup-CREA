@@ -8,7 +8,7 @@ import { ProjectData } from '../project-modal/project-modal';
   standalone: true,
   imports: [CommonModule, OverflowMarqueeDirective],
   templateUrl: './monthly-projects-carousel.html',
-  styleUrl: './monthly-projects-carousel.css'
+  styleUrls: ['./monthly-projects-carousel.css']
 })
 export class MonthlyProjectsCarousel implements OnInit, OnDestroy {
   @Input() projects: ProjectData[] = [];

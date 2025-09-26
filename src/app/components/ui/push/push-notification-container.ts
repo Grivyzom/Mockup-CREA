@@ -31,7 +31,7 @@ import { PushNotificationService } from './push-notification.service';
       </div>
     }
   `,
-  styleUrl: './push-notification-container.css'
+  styleUrls: ['./push-notification-container.css']
 })
 export class PushNotificationContainer {
   constructor(private svc: PushNotificationService) {}

@@ -95,6 +95,10 @@
 
 
 
+
+
+
+
           <li>
             <a routerLink="/dashboard" 
                routerLinkActive="nav-link-active"
@@ -158,7 +162,7 @@
 
     <!-- Settings en la parte inferior -->
     <div class="sidebar-footer select-none">
-      <a href="#" class="nav-link select-none">
+      <a routerLink="/settings" class="nav-link select-none" (click)="closeMobileMenu()">
         <div class="nav-icon select-none">
           <svg class="w-5 h-5 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
@@ -265,7 +269,7 @@
           <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
                alt="Estudiante INACAP" class="select-none">
           <div class="user-info select-none">
-            <span class="user-name select-none">Estudiante INACAP</span>
+            <span class="user-name select-none">{{ publicName }}</span>
           </div>
           <svg class="user-dropdown-icon w-4 h-4 select-none" 
                [class.rotate]="isProfileDropdownOpen"
@@ -282,8 +286,8 @@
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
                    alt="Estudiante INACAP" class="profile-avatar select-none">
               <div class="select-none">
-                <p class="profile-name select-none">Juan Pérez</p>
-                <p class="profile-email select-none">juan.perez@inacapmail.cl</p>
+                <p class="profile-name select-none">{{ publicName }}</p>
+                <p class="profile-email select-none">{{ publicEmail }}</p>
               </div>
             </div>
           </div>
@@ -294,7 +298,7 @@
               </svg>
               <span class="select-none">Mi Perfil</span>
             </a>
-            <a href="#" class="dropdown-item select-none">
+            <a routerLink="/settings" class="dropdown-item select-none" (click)="closeMobileMenu(); closeDropdowns()">
               <svg class="w-4 h-4 select-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>

@@ -7,6 +7,8 @@ export interface StudentProfile {
   username: string;
   avatarUrl?: string;
   timezone?: string;
+  displayName?: string;
+  bio?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -27,6 +29,8 @@ export class ProfileService {
       username: 'jperez',
       avatarUrl: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=256&h=256&fit=facearea&facepad=2&auto=format',
       timezone: 'America/Los_Angeles',
+      displayName: 'JuanPerez',
+      bio: ''
     };
   }
 

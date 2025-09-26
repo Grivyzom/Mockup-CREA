@@ -33,7 +33,7 @@ export interface ProjectData {
   selector: 'app-project-modal',
   imports: [CommonModule],
   templateUrl: './project-modal.html',
-  styleUrl: './project-modal.css'
+  styleUrls: ['./project-modal.css']
 })
 export class ProjectModal {
   @Input() isOpen = false;

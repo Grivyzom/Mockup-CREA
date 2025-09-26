@@ -26,7 +26,7 @@ import { ToastService } from './toast.service';
       </div>
     }
   `,
-  styleUrl: './toast-container.css'
+  styleUrls: ['./toast-container.css']
 })
 export class ToastContainer {
   constructor(private toastService: ToastService) {}

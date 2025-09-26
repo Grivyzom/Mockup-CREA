@@ -11,7 +11,8 @@ import { ModalContainer } from './components/ui/modal/modal-container';
   selector: 'app-root',
   imports: [RouterOutlet, Sidebar, Footer, ScrollToTop, ToastContainer, PushNotificationContainer, ModalContainer],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  // styleUrls plural para alinearse con la API estándar (evita tooling confuso)
+  styleUrls: ['./app.css']
 })
 export class App {
   protected readonly title = signal('mockup-crea');

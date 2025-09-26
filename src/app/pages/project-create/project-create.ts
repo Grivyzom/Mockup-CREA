@@ -1,4 +1,5 @@
 import { Component, OnDestroy, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { CareerMultiselect } from '../../components/career-multiselect/career-multiselect';
@@ -9,7 +10,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Va
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, NgIf, NgFor, CareerMultiselect],
   templateUrl: './project-create.html',
-  styleUrl: './project-create.css'
+  styleUrls: ['./project-create.css']
 })
 export class ProjectCreate implements OnDestroy {
   form: FormGroup;
@@ -27,7 +28,14 @@ export class ProjectCreate implements OnDestroy {
 
   pendingTemplateUsed: string | null = null;
 
-  constructor(private fb: FormBuilder, private projectService: ProjectService) {
+  // Modal de éxito
+  showSuccess = false;
+  createdProjectId: string | null = null;
+  autosaveInterval: any = null;
+  lastAutosaveAt: Date | null = null;
+  submitting = false;
+
+  constructor(private fb: FormBuilder, private projectService: ProjectService, private router: Router) {
     this.form = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]],
       descripcion: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(1000)]],
@@ -89,6 +97,13 @@ export class ProjectCreate implements OnDestroy {
       // Restaurar borrador si existe sólo si no venimos de plantilla
       this.restoreDraft();
     }
+
+    // Autosave cada 20s si hay cambios
+    this.autosaveInterval = setInterval(()=>{
+      if(this.form.dirty){
+        this.saveDraftSilently();
+      }
+    }, 20000);
   }
 
   addMiembro(email = '') {
@@ -142,31 +157,33 @@ export class ProjectCreate implements OnDestroy {
   }
 
   submit() {
+    if(this.submitting) return;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.scrollToFirstInvalid();
       return;
     }
+    this.submitting = true;
     const value = this.form.value;
-    // Persistir en servicio para que aparezca en /about
-    this.projectService.addProject({
+    const created = this.projectService.addProject({
       name: value.titulo,
       description: value.descripcion,
-      template: this.pendingTemplateUsed || undefined
+      template: this.pendingTemplateUsed || undefined,
+      leaderName: (value.lider?.firstName ? value.lider.firstName : '') + (value.lider?.lastName ? ' ' + value.lider.lastName : '')
     });
-    console.log('Proyecto creado', value);
-    alert('Proyecto guardado. ¡Gracias! (visible en Projects)');
+    this.createdProjectId = created.id;
+    console.log('Proyecto creado', created, value);
+    this.showSuccess = true;
     // Marcar primera visita como reconocida (si era la primera vez)
     try { this.projectService.acknowledgeVisit(); } catch {}
-    this.form.reset({ numeroEstudiantes: 1, permitirExAlumnos: false, carreras: [] });
-    this.miembros.clear();
-    this.bannerPreview = null;
-    this.fotosPreview = [];
+    // Mantener datos para permitir segundo paso (ej: abrir directamente proyecto) - no limpiamos inmediatamente.
     localStorage.removeItem('project-create-draft');
+    this.submitting = false;
   }
 
   ngOnDestroy(): void {
     // Limpieza si fuese necesaria
+    if(this.autosaveInterval) clearInterval(this.autosaveInterval);
   }
 
   private validateDateRange() {
@@ -278,6 +295,26 @@ export class ProjectCreate implements OnDestroy {
       localStorage.setItem('project-create-draft', JSON.stringify(val));
       alert('Borrador guardado en este dispositivo.');
     } catch {}
+  }
+
+  private saveDraftSilently(){
+    try {
+      const val = this.form.getRawValue();
+      localStorage.setItem('project-create-draft', JSON.stringify(val));
+      this.lastAutosaveAt = new Date();
+    } catch {}
+  }
+
+  acceptSuccess(){
+    // Limpiar formulario y redirigir a lista de proyectos
+    this.form.reset({ numeroEstudiantes: 1, permitirExAlumnos: false, carreras: [] });
+    this.miembros.clear();
+    this.bannerPreview = null;
+    this.fotosPreview = [];
+    this.pendingTemplateUsed = null;
+    this.createdProjectId = null;
+    this.showSuccess = false;
+    this.router.navigate(['/about']);
   }
 
   restoreDraft() {

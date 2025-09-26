@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, AfterViewChecked, OnDestroy, HostListener } from '@angular/core';
 import { NgClass, NgIf, NgFor } from '@angular/common';
 import { ModalService } from './modal.service';
 
@@ -16,6 +16,7 @@ import { ModalService } from './modal.service';
           }
           @if (active()!.title) {<h3 class="modal-title">{{ active()!.title }}</h3>}
           @if (active()!.content && isStringContent()) {<div class="modal-content" [innerHTML]="active()!.content"></div>}
+          @if (active()!.content && !isStringContent()) {<div class="modal-content" #slot></div>}
           <div class="modal-buttons" *ngIf="active()!.buttons.length">
             <button *ngFor="let b of active()!.buttons" type="button" class="modal-btn" [ngClass]="'btn-' + (b.variant||'secondary')" [disabled]="b.disabled" (click)="buttonClick(b)">{{ b.label }}</button>
           </div>
@@ -23,10 +24,11 @@ import { ModalService } from './modal.service';
       </div>
     }
   `,
-  styleUrl: './modal-container.css'
+  styleUrls: ['./modal-container.css']
 })
-export class ModalContainer implements AfterViewInit, OnDestroy {
+export class ModalContainer implements AfterViewInit, AfterViewChecked, OnDestroy {
   @ViewChild('panel') panel?: ElementRef<HTMLDivElement>;
+  @ViewChild('slot') slot?: ElementRef<HTMLDivElement>;
   private lastFocused: HTMLElement | null = null;
   constructor(private modal: ModalService) {}
 
@@ -61,7 +63,23 @@ export class ModalContainer implements AfterViewInit, OnDestroy {
         this.lastFocused = document.activeElement as HTMLElement;
         this.panel.nativeElement.focus();
       }
+      this.renderElementContent();
     });
+  }
+
+  ngAfterViewChecked() {
+    this.renderElementContent();
+  }
+
+  private renderElementContent() {
+    const a = this.active();
+    if (!a || !this.slot?.nativeElement) return;
+    if (typeof a.content === 'string') return;
+    const host = this.slot.nativeElement;
+    if (a.content && !host.contains(a.content)) {
+      host.innerHTML = '';
+      try { host.appendChild(a.content); } catch {}
+    }
   }
 
   restoreFocus() {

@@ -77,3 +77,19 @@ input:focus, textarea:focus, select:focus {
 @media (prefers-reduced-motion: reduce){
   .progress-simple-fill { transition:none; }
 }
+
+/* Modal genérico reutilizable (similar al de about, adaptado) */
+.modal-overlay { position:fixed; inset:0; background:rgba(17,24,39,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; z-index:70; padding:1.5rem; animation: fadeIn .25s ease; }
+.modal-panel { background:#fff; width:100%; max-width:480px; border-radius:1rem; padding:1.75rem 1.75rem 1.9rem; box-shadow:0 10px 40px -8px rgba(0,0,0,.25), 0 2px 8px -2px rgba(0,0,0,.12); position:relative; animation: scaleIn .28s cubic-bezier(.4,0,.2,1); }
+.modal-panel.success { border:1px solid #e2e8f0; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes scaleIn { from { opacity:0; transform:translateY(6px) scale(.97); } to { opacity:1; transform:translateY(0) scale(1); } }
+
+.btn-inacap-primary { background:var(--inacap-red); color:#fff; border-radius:.65rem; padding:.7rem 1.1rem; font-weight:600; font-size:.9rem; letter-spacing:.3px; display:inline-flex; align-items:center; justify-content:center; gap:.4rem; box-shadow:0 2px 4px -1px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.04); transition:background .2s, box-shadow .2s; }
+.btn-inacap-primary:hover { background:#b41028; }
+.btn-inacap-secondary { background:#f1f5f9; color:#111827; border-radius:.65rem; padding:.7rem 1.1rem; font-weight:600; font-size:.9rem; letter-spacing:.3px; display:inline-flex; align-items:center; justify-content:center; gap:.4rem; box-shadow:0 1px 2px rgba(0,0,0,.14) inset, 0 0 0 1px #e2e8f0; transition:background .2s, color .2s; }
+.btn-inacap-secondary:hover { background:#e2e8f0; }
+
+@media (max-width:640px){
+  .modal-panel { padding:1.25rem 1.25rem 1.5rem; border-radius:.95rem; }
+}

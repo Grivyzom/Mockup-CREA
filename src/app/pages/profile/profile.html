@@ -44,11 +44,72 @@
           </div>
         </div>
 
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="username">Nombre de usuario
+              <span class="info-icon info-trigger" tabindex="0" (mouseenter)="showUserInfo=true" (mouseleave)="showUserInfo=false" (focus)="showUserInfo=true" (blur)="showUserInfo=false" (click)="showUserInfo=!showUserInfo">ⓘ
+                <div class="popover-info" *ngIf="showUserInfo">
+                  <strong>Privado.</strong> Es tu identificador único para iniciar sesión. No se muestra públicamente.<br>
+                  Ejemplo: <span class="example">jperez</span>
+                </div>
+              </span>
+            </label>
+            <input id="username" type="text" formControlName="username" autocomplete="username" placeholder="Ej: jperez" [readonly]="!isEditingProfile"/>
+            @if ((form.get('username')?.touched || submittedProfile) && form.get('username')?.invalid) {<div class="field-error">Mínimo 3 caracteres</div>}
+          </div>
+          <div class="field">
+            <label for="displayName">Nombre público
+              <span class="info-icon info-trigger" tabindex="0" (mouseenter)="showPublicInfo=true" (mouseleave)="showPublicInfo=false" (focus)="showPublicInfo=true" (blur)="showPublicInfo=false" (click)="showPublicInfo=!showPublicInfo">ⓘ
+                <div class="popover-info" *ngIf="showPublicInfo">
+                  <strong>Público.</strong> Es el nombre que verán otros usuarios en tus proyectos, comentarios y listados.<br>
+                  Ejemplo: <span class="example">Juan Pérez</span>
+                </div>
+              </span>
+            </label>
+            <input id="displayName" type="text" formControlName="displayName" placeholder="Tu nombre visible (4–12 letras)" [readonly]="!isEditingProfile" minlength="4" maxlength="12"/>
+            @if ((form.get('displayName')?.touched || submittedProfile) && form.get('displayName')?.invalid) {<div class="field-error">Entre 4 y 12 letras (A–Z, sin espacios ni números).</div>}
+          </div>
+        </div>
+
         <div class="grid-1">
           <div class="field">
-            <label for="username">Nombre de usuario</label>
-            <input id="username" type="text" formControlName="username" autocomplete="username" placeholder="ejemplo.com/ Jane Smith" [readonly]="!isEditingProfile"/>
-            @if ((form.get('username')?.touched || submittedProfile) && form.get('username')?.invalid) {<div class="field-error">Mínimo 3 caracteres</div>}
+            <label for="bio">Biografía</label>
+            <textarea id="bio" rows="3" formControlName="bio" placeholder="Cuéntanos algo breve sobre ti" [readonly]="!isEditingProfile"></textarea>
+            <small class="hint">Hasta 200 caracteres.</small>
+          </div>
+        </div>
+
+
+        <!-- Preferencia de tono de piel (emoji) -->
+        <div class="grid-1">
+          <div class="field">
+            <label>Preferencia de tono de piel (emoji)</label>
+            <div class="skin-tone-row">
+              @for (t of skinTones; track t.value) {
+                <label class="skin-opt">
+                  <input type="radio" name="skinTone" [value]="t.value" [checked]="skinTone===t.value" (change)="skinTone=t.value" [disabled]="!isEditingProfile"/>
+                  <span [title]="t.label" style="font-size:1.4rem;line-height:1;">{{ t.emoji }}</span>
+                </label>
+              }
+            </div>
+            <small class="hint">Se usará en emojis compatibles.</small>
+          </div>
+        </div>
+
+        <!-- Género -->
+        <div class="grid-1">
+          <div class="field">
+            <label>Género (opcional)</label>
+            <div class="gender-select" style="display:flex;gap:1.2rem;flex-wrap:wrap;">
+              <button type="button" class="gender-chip" *ngFor="let g of genders" [class.active]="gender===g.value" (click)="isEditingProfile && (gender=g.value)" [attr.aria-pressed]="gender===g.value" [title]="g.label" [disabled]="!isEditingProfile"
+                style="display:flex;align-items:center;gap:.5rem;padding:.35rem 0.7rem;border-radius:.7rem;border:1.5px solid #ddd;background:#fff;font-size:0.85rem;cursor:pointer;min-width:70px;transition:all .18s;"
+                [ngStyle]="{'background': gender===g.value ? '#ffeaea' : '#fff', 'border-color': gender===g.value ? '#e53935' : '#ddd', 'color': gender===g.value ? '#b71c1c' : '#222'}">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24"><path [attr.d]="g.icon" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                <span>{{ g.label }}</span>
+              </button>
+            </div>
+            <small class="hint">Puedes elegir cómo te identificas o dejarlo sin especificar.</small>
           </div>
         </div>
 

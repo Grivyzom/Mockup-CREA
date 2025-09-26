@@ -14,20 +14,60 @@ html {
 
 /* Tokens de color INACAP */
 :root {
-  --inacap-red: #c41e3a; /* TODO: Reemplazar con HEX oficial cuando lo entreguen */
-  --inacap-black: #1f1f1f;
+  --inacap-red: #cc0000; /* TODO: Reemplazar con HEX oficial cuando lo entreguen */
+  --inacap-black: #1e1e1e;
   --inacap-gray-700: #444;
   --inacap-gray-300: #d9d9d9;
-  --inacap-white: #fff;
+  --inacap-white: #fffffd;
   
   /* Colores semánticos basados en la paleta INACAP */
-  --inacap-red-hover: #a01729;
+  --inacap-red-hover: rgb(144, 20, 37);
   --inacap-red-light: #f5e6e8;
   --inacap-border: #eaeaea;
   --inacap-text-primary: var(--inacap-black);
   --inacap-text-secondary: var(--inacap-gray-700);
   --inacap-background: var(--inacap-white);
+  /* Superficies/elevación */
+  --surface-1: #ffffff; /* tarjetas, paneles */
+  --text-muted: var(--inacap-text-secondary);
+  /* Tokens adicionales usados por componentes (modales, etc.) */
+  --inacap-surface-elevated: #ffffff;
+  --inacap-border-secondary: #ececec;
+  --inacap-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.18);
+  --inacap-surface: #fafafa;
+  --inacap-primary: var(--inacap-red);
+  --inacap-error: #dc2626;
 }
+
+/* Modo oscuro: override tokens al aplicar .theme-dark en <html> */
+html.theme-dark {
+  --inacap-text-primary: #f5f5f5;
+  --inacap-text-secondary: #d1d5db;
+  --inacap-background: #0f1115;
+  --inacap-border: #2a2e35;
+  --surface-1: #161a20;
+  --text-muted: #a3aab5;
+  /* Elevación y bordes para dark */
+  --inacap-surface-elevated: #1c2027;
+  --inacap-border-secondary: #353a42;
+  --inacap-shadow-xl: 0 28px 80px rgba(0, 0, 0, 0.55);
+  --inacap-surface: #141820;
+  --inacap-primary: var(--inacap-red);
+  --inacap-error: #ef4444;
+}
+
+/* Alto contraste: reforzar colores de foreground/background y bordes */
+html.contrast-high {
+  --inacap-text-primary: #000000;
+  --inacap-text-secondary: #000000;
+  --inacap-background: #ffffff;
+  --inacap-border: #000000;
+}
+
+/* Escala de fuente accesible (aplicada al html) */
+html.font-md { font-size: 100%; }
+html.font-lg { font-size: 112.5%; }  /* ~18px si base 16 */
+html.font-xl { font-size: 125%; }    /* ~20px si base 16 */
 
 /* Clases utilitarias INACAP */
 @layer utilities {
@@ -90,6 +130,12 @@ html {
   .contrast-check {
     color: var(--inacap-text-primary);
     background-color: var(--inacap-background);
+  }
+  /* Utilidad de focus visible accesible */
+  .focus-visible:focus-visible,
+  [data-focus-visible-added] {
+    outline: 2px solid var(--inacap-red);
+    outline-offset: 2px;
   }
 }
 

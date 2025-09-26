@@ -8,6 +8,7 @@ export interface Project {
   createdAt: Date;
   progress: number; // 0-100
   members: number;  // número de integrantes
+  leaderName?: string; // nombre del líder del proyecto
 }
 
 @Injectable({ providedIn: 'root' })
@@ -41,7 +42,8 @@ export class ProjectService {
         ...p,
         createdAt: new Date(p.createdAt),
         progress: typeof p.progress === 'number' ? p.progress : 0,
-        members: typeof p.members === 'number' ? p.members : 1
+        members: typeof p.members === 'number' ? p.members : 1,
+        leaderName: typeof p.leaderName === 'string' ? p.leaderName : '—'
       }));
     } catch { return []; }
   }
@@ -62,7 +64,8 @@ export class ProjectService {
       description: 'Descripción pendiente',
       createdAt: new Date(),
       progress: 0,
-      members: 1
+      members: 1,
+      leaderName: '—'
     };
     this.projects.update(list => [...list, proj]);
     this.persist();
@@ -87,6 +90,26 @@ export class ProjectService {
     if(changed) this.persist();
   }
 
+  // Permite simular persistencia remota con rollback ante error
+  updateProjectOptimistic(id: string, changes: Partial<Pick<Project,'name'|'description'>>, simulateDelay = 650, failChance = 0){
+    const before = this.projects();
+    let applied = false;
+    this.projects.update(list => list.map(p => p.id === id ? (applied = true, { ...p, ...changes }) : p));
+    if(applied) this.persist();
+    return new Promise<{ ok: boolean }>((resolve) => {
+      setTimeout(() => {
+        const fail = Math.random() < failChance;
+        if(fail){
+          this.projects.set(before); // rollback
+          this.persist();
+          resolve({ ok:false });
+        } else {
+          resolve({ ok:true });
+        }
+      }, simulateDelay);
+    });
+  }
+
   deleteProject(id: string){
     const before = this.projects().length;
     this.projects.update(list => list.filter(p => p.id !== id));
@@ -95,7 +118,29 @@ export class ProjectService {
     }
   }
 
-  addProject(data: { name: string; description: string; template?: string }){
+  deleteProjectAndReturn(id: string){
+    let removed: Project | null = null;
+    this.projects.update(list => {
+      return list.filter(p => {
+        if(p.id === id){
+          removed = p;
+          return false;
+        }
+        return true;
+      });
+    });
+    if(removed){ this.persist(); }
+    return removed;
+  }
+
+  restoreProject(project: Project){
+    // Evitar duplicados si ya existe
+    if(this.projects().some(p => p.id === project.id)) return;
+    this.projects.update(list => [...list, project]);
+    this.persist();
+  }
+
+  addProject(data: { name: string; description: string; template?: string; leaderName?: string }): Project {
     const proj: Project = {
       id: crypto.randomUUID(),
       name: data.name,
@@ -103,9 +148,11 @@ export class ProjectService {
       template: data.template,
       createdAt: new Date(),
       progress: 0,
-      members: 1
+      members: 1,
+      leaderName: data.leaderName || '—'
     };
     this.projects.update(list => [...list, proj]);
     this.persist();
+    return proj;
   }
 }

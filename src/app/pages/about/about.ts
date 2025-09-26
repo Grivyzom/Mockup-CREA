@@ -6,9 +6,10 @@ import { ProjectService } from '../../services/project.service';
 
 @Component({
   selector: 'app-about',
+  standalone: true,
   imports: [CommonModule, NgIf, NgFor, FormsModule],
   templateUrl: './about.html',
-  styleUrl: './about.css'
+  styleUrls: ['./about.css']
 })
 export class About implements AfterViewInit, OnDestroy {
   templates = [
@@ -21,6 +22,10 @@ export class About implements AfterViewInit, OnDestroy {
   editingId = signal<string | null>(null);
   editTitle = signal('');
   editDescription = signal('');
+  originalTitle = signal('');
+  originalDescription = signal('');
+  saving = signal(false);
+  lastToast = signal<string | null>(null);
   query = signal('');
   sortMode = signal<'recent'|'name'>('recent');
   highlightNewId = signal<string | null>(null);
@@ -28,6 +33,9 @@ export class About implements AfterViewInit, OnDestroy {
   confirmDeleteId = signal<string | null>(null);
   confirmDeleteName = signal<string>('');
   animateFromIndex = signal<number>(0);
+  lastDeleted = signal<any | null>(null);
+  undoTimeout: any = null;
+  exitingEditId = signal<string | null>(null); // para animación salida
 
   @ViewChild('sentinel') sentinel?: ElementRef<HTMLDivElement>;
   @ViewChild('modalPanel') modalPanel?: ElementRef<HTMLDivElement>;
@@ -107,10 +115,28 @@ export class About implements AfterViewInit, OnDestroy {
     this.editingId.set(p.id);
     this.editTitle.set(p.name);
     this.editDescription.set(p.description);
+    this.originalTitle.set(p.name);
+    this.originalDescription.set(p.description);
+    // Enfocar input título tras render
+    setTimeout(() => {
+      const el = document.querySelector<HTMLInputElement>(`input[data-editing='${p.id}']`);
+      el?.focus();
+      el?.select();
+    });
   }
 
   cancelEdit(){
+    const id = this.editingId();
+    if(id){
+      this.exitingEditId.set(id);
+      // esperar animación de salida antes de limpiar
+      setTimeout(()=>{ if(this.exitingEditId()==id) this.exitingEditId.set(null); }, 250);
+    }
     this.editingId.set(null);
+    this.saving.set(false);
+    if(this.originalTitle() || this.originalDescription()){
+      this.showToast('Cambios descartados');
+    }
   }
 
   saveEdit(){
@@ -119,8 +145,46 @@ export class About implements AfterViewInit, OnDestroy {
     const name = this.editTitle().trim();
     const desc = this.editDescription().trim();
     if(name.length < 3 || desc.length < 5) return; // validaciones simples
-    this.projectService.updateProject(id, { name, description: desc });
-    this.editingId.set(null);
+    this.saving.set(true);
+    const optimistic = { name, description: desc };
+    this.projectService.updateProjectOptimistic(id, optimistic, 500, 0) // failChance 0 ahora
+      .then(res => {
+        if(res.ok){
+          this.showToast('Proyecto guardado');
+        } else {
+          this.showToast('Error al guardar (rollback)');
+        }
+      })
+      .finally(() => {
+        this.saving.set(false);
+        const exiting = this.editingId();
+        if(exiting){
+          this.exitingEditId.set(exiting);
+          setTimeout(()=>{ if(this.exitingEditId()==exiting) this.exitingEditId.set(null); }, 250);
+        }
+        this.editingId.set(null);
+      });
+  }
+
+  isEditValid(){
+    return this.editTitle().trim().length >= 3 && this.editDescription().trim().length >= 5;
+  }
+
+  isFieldChanged(field: 'title'|'description'){
+    if(field==='title') return this.editTitle().trim() !== this.originalTitle().trim();
+    return this.editDescription().trim() !== this.originalDescription().trim();
+  }
+
+  showToast(message: string){
+    this.lastToast.set(message);
+    setTimeout(()=> { if(this.lastToast() === message) this.lastToast.set(null); }, 3000);
+  }
+
+  autoGrow(event: Event){
+    const el = event.target as HTMLTextAreaElement;
+    if(!el) return;
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 400) + 'px';
   }
 
   deleteProject(p: any){
@@ -147,9 +211,28 @@ export class About implements AfterViewInit, OnDestroy {
   confirmDelete(){
     const id = this.confirmDeleteId();
     if(id){
-      this.projectService.deleteProject(id);
+      const removed = this.projectService.deleteProjectAndReturn(id);
+      if(removed){
+        this.lastDeleted.set(removed);
+        if(this.undoTimeout) clearTimeout(this.undoTimeout);
+        this.showToast('Proyecto eliminado · Deshacer');
+        this.undoTimeout = setTimeout(()=>{
+          if(this.lastDeleted() === removed){
+            this.lastDeleted.set(null);
+          }
+        }, 5000);
+      }
     }
     this.closeDelete();
+  }
+
+  undoDelete(){
+    const proj = this.lastDeleted();
+    if(!proj) return;
+    this.projectService.restoreProject(proj);
+    this.lastDeleted.set(null);
+    if(this.undoTimeout) clearTimeout(this.undoTimeout);
+    this.showToast('Restaurado');
   }
 
   handleModalKey(event: KeyboardEvent){
@@ -205,6 +288,35 @@ export class About implements AfterViewInit, OnDestroy {
   markNew(id: string){
     this.highlightNewId.set(id);
     setTimeout(()=>{ if(this.highlightNewId()==id) this.highlightNewId.set(null); }, 3500);
+  }
+
+  leaderInitials(name?: string){
+    if(!name) return '–';
+    const parts = name.trim().split(/\s+/).slice(0,2);
+    return parts.map(p=>p[0]?.toUpperCase()||'').join('');
+  }
+
+  timeAgo(date: Date){
+    const now = Date.now();
+    const diffMs = now - date.getTime();
+    const sec = Math.floor(diffMs/1000);
+    if(sec < 60) return 'hace ' + sec + 's';
+    const min = Math.floor(sec/60);
+    if(min < 60) return 'hace ' + min + 'm';
+    const hrs = Math.floor(min/60);
+    if(hrs < 24) return 'hace ' + hrs + 'h';
+    const days = Math.floor(hrs/24);
+    if(days < 7) return 'hace ' + days + 'd';
+    const weeks = Math.floor(days/7);
+    if(weeks < 4) return 'hace ' + weeks + 'sem';
+    const months = Math.floor(days/30);
+    if(months < 12) return 'hace ' + months + 'm';
+    const years = Math.floor(days/365);
+    return 'hace ' + years + 'a';
+  }
+
+  isRecent(date: Date){
+    return Date.now() - date.getTime() < 1000*60*60*24; // < 24h
   }
 
 }

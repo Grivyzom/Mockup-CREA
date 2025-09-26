@@ -1,0 +1,32 @@
+<div class="a11y-widget" [class.open]="open()">
+  <button type="button" class="a11y-toggle" (click)="toggle()" [attr.aria-expanded]="open()" aria-label="Opciones de accesibilidad">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/>
+    </svg>
+  </button>
+  <div class="a11y-panel" role="dialog" aria-label="Accesibilidad" *ngIf="open()">
+    <div class="row">
+      <label>Tema</label>
+      <div class="group">
+        <button class="btn" [class.active]="a11y.theme()==='light'" (click)="a11y.setTheme('light')">Claro</button>
+        <button class="btn" [class.active]="a11y.theme()==='dark'" (click)="a11y.setTheme('dark')">Oscuro</button>
+        <button class="btn" [class.active]="a11y.theme()==='system'" (click)="a11y.setTheme('system')">Sistema</button>
+      </div>
+    </div>
+    <div class="row">
+      <label>Letra</label>
+      <div class="group">
+        <button class="btn" [class.active]="a11y.font()==='md'" (click)="a11y.setFont('md')">Normal</button>
+        <button class="btn" [class.active]="a11y.font()==='lg'" (click)="a11y.setFont('lg')">Grande</button>
+        <button class="btn" [class.active]="a11y.font()==='xl'" (click)="a11y.setFont('xl')">Muy grande</button>
+      </div>
+    </div>
+    <div class="row">
+      <label>Contraste</label>
+      <div class="group">
+        <button class="btn" [class.active]="a11y.contrast()==='normal'" (click)="a11y.setContrast('normal')">Normal</button>
+        <button class="btn" [class.active]="a11y.contrast()==='high'" (click)="a11y.setContrast('high')">Alto</button>
+      </div>
+    </div>
+  </div>
+</div>

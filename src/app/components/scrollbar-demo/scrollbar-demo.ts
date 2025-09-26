@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './scrollbar-demo.html',
-  styleUrl: './scrollbar-demo.css'
+  styleUrls: ['./scrollbar-demo.css']
 })
 export class ScrollbarDemo {
   // Datos de ejemplo para las demos

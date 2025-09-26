@@ -1,0 +1,16 @@
+<div class="settings-shell">
+  <h1 class="page-title">Configuración</h1>
+
+  <nav class="tabs" aria-label="Secciones de configuración">
+    <a *ngFor="let s of sections"
+       [routerLink]="s.path"
+       routerLinkActive="active"
+       class="tab">
+      {{ s.label }}
+    </a>
+  </nav>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

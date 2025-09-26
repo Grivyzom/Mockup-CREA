@@ -1,17 +1,18 @@
-import { Component, OnInit, HostListener, effect } from '@angular/core';
+import { Component, OnInit, HostListener, effect, inject, runInInjectionContext } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
 import { NotificationService } from '../../core/services/notification.service';
 import type { NotificationItem } from '../../pages/notifications/notifications';
+import { ProfileService, type StudentProfile } from '../../services/profile.service';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule, FormsModule],
   templateUrl: './sidebar.html',
-  styleUrl: './sidebar.css'
+  styleUrls: ['./sidebar.css']
 })
 export class Sidebar implements OnInit {
   isMobileMenuOpen = false;
@@ -41,7 +42,15 @@ export class Sidebar implements OnInit {
   private clickTimeout: any = null; // para distinguir simple vs doble click
   private dblClickDelay = 240; // ms
 
-  constructor(private router: Router, private notificationService: NotificationService) {}
+  constructor(private router: Router, private notificationService: NotificationService, private profileService: ProfileService) {
+    // Mover effect al constructor para asegurar el contexto de inyección
+    effect(() => {
+      const unread = this.notificationService.unreadCount();
+      const recent = this.notificationService.getRecent(3);
+      this.unreadTotal = unread;
+      this.recentNotifications = recent;
+    });
+  }
 
   ngOnInit() {
     // Actualizar el título de la página basado en la ruta actual
@@ -53,14 +62,6 @@ export class Sidebar implements OnInit {
     
     // Establecer título inicial
     this.updatePageTitle(this.router.url);
-    // Efecto reactivo para sincronizar lista reciente y contador sin invocaciones manuales
-    effect(() => {
-      const unread = this.notificationService.unreadCount();
-      const recent = this.notificationService.getRecent(3);
-      // Asignaciones (Angular detecta cambios porque son propiedades de la clase)
-      this.unreadTotal = unread;
-      this.recentNotifications = recent;
-    });
   }
 
   toggleMobileMenu() {
@@ -192,5 +193,19 @@ export class Sidebar implements OnInit {
       default:
         this.pageTitle = 'Dashboard';
     }
+  }
+
+  // Exponer nombre público para la vista
+  get publicName(): string {
+    const p = this.profileService.getProfile() as any;
+    const display = p?.displayName as string | undefined;
+    if (display && display.trim().length) return display.trim();
+    if (p?.firstName || p?.lastName) return `${p.firstName ?? ''} ${p.lastName ?? ''}`.trim();
+    return p?.username ?? 'Estudiante INACAP';
+  }
+
+  get publicEmail(): string {
+    const p = this.profileService.getProfile();
+    return p?.institutionalEmail ?? 'correo@inacap.cl';
   }
 }

@@ -1,0 +1,115 @@
+<div class="settings-page">
+  <h1 class="page-title">Configuración</h1>
+
+  <!-- Sección: Historial de actividad / inicios de sesión -->
+  <section class="card">
+    <header class="card-header">
+      <h2>Actividad reciente</h2>
+      <p class="sub">Historial de inicios de sesión con fecha, IP y navegador.</p>
+    </header>
+    <div class="card-body">
+      <div class="activity-list" *ngIf="entries().length; else emptyActivity">
+        <div class="activity-item" *ngFor="let e of entries()">
+          <div class="row">
+            <div class="cell time">{{ e.date | date:'medium' }}</div>
+            <div class="cell ip">IP: {{ e.ip }}</div>
+            <div class="cell ua">{{ e.userAgent }}</div>
+          </div>
+        </div>
+      </div>
+      <ng-template #emptyActivity>
+        <p class="muted">Sin actividad registrada aún.</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Sección: Opciones de Accesibilidad -->
+  <section class="card">
+    <header class="card-header">
+      <h2>Accesibilidad</h2>
+      <p class="sub">Tema, tamaño de letra y contraste.</p>
+    </header>
+    <div class="card-body grid-3">
+      <div class="field">
+        <label>Tema</label>
+        <div class="choices">
+          <button class="btn" [class.active]="theme()==='light'" (click)="setTheme('light')">Claro</button>
+          <button class="btn" [class.active]="theme()==='dark'" (click)="setTheme('dark')">Oscuro</button>
+          <button class="btn" [class.active]="theme()==='system'" (click)="setTheme('system')">Sistema</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Letra</label>
+        <div class="choices">
+          <button class="btn" [class.active]="font()==='md'" (click)="setFont('md')">Normal</button>
+          <button class="btn" [class.active]="font()==='lg'" (click)="setFont('lg')">Grande</button>
+          <button class="btn" [class.active]="font()==='xl'" (click)="setFont('xl')">Muy grande</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Contraste</label>
+        <div class="choices">
+          <button class="btn" [class.active]="contrast()==='normal'" (click)="setContrast('normal')">Normal</button>
+          <button class="btn" [class.active]="contrast()==='high'" (click)="setContrast('high')">Alto</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección: Perfil público -->
+  <section class="card">
+    <header class="card-header">
+      <h2>Perfil público</h2>
+      <p class="sub">Nombre visible y biografía corta.</p>
+    </header>
+    <div class="card-body form-cols">
+      <div class="form-field">
+        <label for="displayName">Nombre público</label>
+        <input id="displayName" type="text" [ngModel]="displayName()" (ngModelChange)="displayName.set($event)" placeholder="Tu nombre visible" />
+      </div>
+      <div class="form-field">
+        <label for="bio">Biografía</label>
+        <textarea id="bio" rows="3" [ngModel]="bio()" (ngModelChange)="bio.set($event)" placeholder="Cuéntanos algo breve sobre ti"></textarea>
+      </div>
+      <div class="actions">
+        <button class="btn primary" (click)="savePublicProfile()">Guardar cambios</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección: Datos -->
+  <section class="card">
+    <header class="card-header">
+      <h2>Mis datos</h2>
+      <p class="sub">Exporta tu información de cuenta.</p>
+    </header>
+    <div class="card-body">
+      <button class="btn" (click)="exportMyData()">Descargar mis datos (JSON)</button>
+    </div>
+  </section>
+
+  <!-- Sección: Cookies y consentimiento -->
+  <section class="card">
+    <header class="card-header">
+      <h2>Cookies y consentimiento</h2>
+      <p class="sub">Gestiona tus preferencias.</p>
+    </header>
+    <div class="card-body cookie-grid">
+      <label class="cookie-item">
+        <input type="checkbox" [checked]="cookiePrefs().necessary" disabled />
+        <span>Necesarias (siempre activas)</span>
+      </label>
+      <label class="cookie-item">
+        <input type="checkbox" [ngModel]="cookiePrefs().analytics" (ngModelChange)="updateCookie('analytics', $event)" />
+        <span>Analíticas</span>
+      </label>
+      <label class="cookie-item">
+        <input type="checkbox" [ngModel]="cookiePrefs().marketing" (ngModelChange)="updateCookie('marketing', $event)" />
+        <span>Marketing</span>
+      </label>
+      <div class="actions">
+        <button class="btn" (click)="saveCookiePrefs()">Guardar preferencias</button>
+      </div>
+    </div>
+  </section>
+</div>
