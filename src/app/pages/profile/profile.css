@@ -1023,6 +1023,68 @@
   font-weight: 500;
 }
 
+/* Modal de confirmación (estilo tarjeta similar al mockup) */
+.confirm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 2rem;
+}
+.confirm-modal {
+  background: var(--card-bg, #fff);
+  color: var(--inacap-text-primary, #111);
+  width: 680px;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.45);
+  padding: 1.25rem 1.5rem 1.5rem;
+  position: relative;
+}
+.confirm-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--inacap-text-secondary, #666);
+}
+.confirm-modal__header h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+}
+.confirm-modal__body .muted {
+  color: var(--inacap-text-secondary, #666);
+  margin: 0 0 8px 0;
+}
+.confirm-modal__footer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.btn-danger-inacap {
+  background: #c62828;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.btn-danger-inacap:hover { background: #b71c1c; }
+.btn-inacap-secondary { background: #f3f3f3; padding: 0.45rem 0.9rem; border-radius: 8px; }
+
+/* Asegurar que el recuadro 'Eliminar cuenta' tenga el mismo borde que otras cards (p. ej. Cerrar otras sesiones) */
+.card.danger {
+  border: 1px solid var(--inacap-border-secondary);
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 900px) {
   .grid-3 { 

@@ -399,6 +399,120 @@
 .notification-icon {
   flex-shrink: 0;
 }
+
+/* Dark mode overrides when html.theme-dark is present */
+html.theme-dark .home-root { background: linear-gradient(180deg,#0b0d10,#0f1115) !important; }
+/* override Tailwind bg-white on the hero section */
+/* Use the theme variable so hero follows dark tokens */
+html.theme-dark .home-hero { background: var(--inacap-background) !important; color: var(--inacap-text-primary); }
+html.theme-dark .home-hero, html.theme-dark .home-hero .max-w-7xl { background: var(--inacap-background) !important; }
+html.theme-dark .home-hero h1 { color: var(--inacap-text-primary); opacity: 0.98; }
+html.theme-dark .home-hero p { color: var(--inacap-text-secondary); }
+html.theme-dark .greeting-card { background: var(--inacap-surface-elevated); border-color: var(--inacap-border); box-shadow: var(--inacap-shadow-xl); }
+html.theme-dark .greeting-card .text-gray-500 { color: var(--text-muted); }
+html.theme-dark .hero-panel { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important; border-color: var(--inacap-border); }
+html.theme-dark .hero-kpis .text-gray-900, html.theme-dark .hero-kpis .text-gray-900\/90 { color: var(--inacap-text-primary); }
+html.theme-dark .hero-kpis .kpi-icon { color: var(--inacap-text-secondary); }
+html.theme-dark .promo-callouts--wide { background: transparent; }
+html.theme-dark .promo-card { background: #17181b; border-color: #232428; }
+
+/* Strong overrides to neutralize any bg-white inside the home area */
+html.theme-dark .home-root section.bg-white,
+html.theme-dark .home-root section[class*="bg-white"],
+html.theme-dark .home-root .bg-white,
+html.theme-dark .home-root .max-w-7xl,
+html.theme-dark .home-root .max-w-7xl > * {
+  background: transparent !important;
+  color: var(--inacap-text-primary) !important;
+}
+
+/* Force containers to use theme surface tokens */
+html.theme-dark .home-root,
+html.theme-dark .home-root .max-w-7xl,
+html.theme-dark #panel-proyectos,
+html.theme-dark .promo-callouts--wide {
+  background: var(--inacap-background) !important;
+}
+
+/* Make the reserved gutters (the vertical side strips) use the same background tone in dark mode */
+html.theme-dark .reserved-space,
+html.theme-dark .carousel-container .reserved-space,
+html.theme-dark .home-root > .reserved-space,
+html.theme-dark .home-root .reserved-space {
+  background: var(--inacap-background) !important;
+}
+
+/* Ensure internal hero/panel surfaces use the elevated surface token in dark mode */
+html.theme-dark .home-hero .hero-panel,
+html.theme-dark .home-root .hero-panel {
+  background: var(--inacap-surface-elevated) !important;
+  box-shadow: var(--inacap-shadow-xl);
+  color: var(--inacap-text-primary);
+}
+
+/* Ensure promo cards and panels use elevated surfaces in dark */
+html.theme-dark .promo-card,
+html.theme-dark .greeting-card,
+html.theme-dark .hero-panel {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+}
+
+/* Hide any remaining light gradients inside home in dark mode */
+html.theme-dark .home-root [class*="gradient-to-"],
+html.theme-dark .home-root [class*="from-gray-"],
+html.theme-dark .home-root [class*="to-white"] {
+  background-image: none !important;
+}
+
+/* Watermark: ensure single layer behind headline and not repeated */
+.hero-text-wrap { position: relative; }
+.hero-text-wrap h1 { position: relative; z-index: 2; }
+.hero-text-wrap h1::before {
+  content: attr(data-watermark);
+  position: absolute;
+  left: 0;
+  top: -8px;
+  transform: none;
+  display: block;
+  width: calc(100% - 40px);
+  font-size: 5rem;
+  line-height: 0.95;
+  color: rgba(0,0,0,0.04);
+  z-index: 0;
+  pointer-events: none;
+  font-weight: 900;
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: clip;
+  opacity: 1;
+}
+html.theme-dark .hero-text-wrap h1::before {
+  color: rgba(255,255,255,0.03);
+}
+
+/* Watermark big headline behind the hero */
+.hero-text-wrap { position: relative; }
+.hero-text-wrap h1::before {
+  content: attr(data-watermark);
+  position: absolute;
+  left: 0;
+  top: -48px;
+  font-size: 4.2rem;
+  color: rgba(0,0,0,0.04);
+  z-index: 0;
+  pointer-events: none;
+  font-weight: 800;
+  white-space: pre-line;
+}
+html.theme-dark .hero-text-wrap h1::before {
+  color: rgba(255,255,255,0.03);
+}
+
+/* Ajustes CTA para modo oscuro */
+html.theme-dark .btn-inacap { background-color: #b41a33; }
+html.theme-dark .btn-inacap-secondary { background-color: transparent; color: #f5f5f5; border-color: rgba(255,255,255,0.06); }
+html.theme-dark .hero-kpis { color: var(--inacap-text-primary); }
 .more-chip { background: rgba(0,0,0,0.3); border-color: rgba(0,0,0,0.2); }
 
 /* Variantes de color para chips según área */
@@ -673,3 +787,24 @@
 .promo-card:hover .promo-card-inner { position:relative; }
 .promo-card:focus-within::after,
 .promo-card:hover::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; box-shadow:0 0 0 1px rgba(196,30,58,.35), 0 4px 12px -2px rgba(0,0,0,.3); }
+
+/* Ajustes para modo oscuro */
+html.theme-dark .home-root {
+  background: var(--inacap-background) !important;
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .project-card {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-xl) !important;
+}
+
+html.theme-dark .project-card h3,
+html.theme-dark .project-card p {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .project-banner {
+  background: linear-gradient(135deg, #1e1e1e, #2a2a2a) !important;
+}

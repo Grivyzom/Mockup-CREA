@@ -56,6 +56,161 @@ html.theme-dark {
   --inacap-error: #ef4444;
 }
 
+/* Forzar color de texto claro en modo oscuro (aplica de forma global para evitar fugas de color oscuro) */
+html.theme-dark,
+html.theme-dark body {
+  color: var(--inacap-text-primary) !important;
+  background-color: var(--inacap-background) !important;
+}
+
+/* Asegurar que los elementos de texto comunes usen el token de texto primario */
+html.theme-dark h1,
+html.theme-dark h2,
+html.theme-dark h3,
+html.theme-dark h4,
+html.theme-dark h5,
+html.theme-dark h6,
+html.theme-dark p,
+html.theme-dark a,
+html.theme-dark span,
+html.theme-dark label,
+html.theme-dark li,
+html.theme-dark small,
+html.theme-dark button,
+html.theme-dark input,
+html.theme-dark textarea {
+  color: var(--inacap-text-primary) !important;
+}
+
+/* Forzar que SVGs y iconos tomen el color de texto para que se vean claros */
+html.theme-dark svg,
+html.theme-dark svg * {
+  color: var(--inacap-text-primary) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Más reglas específicas para iconos comunes en la UI */
+html.theme-dark svg.kpi-icon,
+html.theme-dark svg.kpi-icon *,
+html.theme-dark svg.section-icon,
+html.theme-dark svg.section-icon *,
+html.theme-dark svg.status-icon,
+html.theme-dark svg.status-icon *,
+html.theme-dark svg.info-icon,
+html.theme-dark svg.info-icon *,
+html.theme-dark svg.ver-mas-icon,
+html.theme-dark svg.ver-mas-icon * {
+  color: var(--inacap-text-primary) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Neutralizar utilidades Tailwind que aplican text-white/text-<color> sobre SVGs */
+html.theme-dark svg[class*="text-"] {
+  /* Force icon color to theme text */
+  color: var(--inacap-text-primary) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Partner logos: asegurar que el <text> dentro de SVG use currentColor */
+html.theme-dark .partner-card,
+html.theme-dark .partner-card .partner-logo {
+  color: var(--inacap-text-primary) !important;
+}
+html.theme-dark .partner-card .partner-logo text {
+  fill: currentColor !important;
+}
+
+/* Asegurar que los iconos dentro de botones con fondo semitransparente se muestren correctamente */
+html.theme-dark button svg,
+html.theme-dark .btn-inacap svg,
+html.theme-dark .btn-inacap-secondary svg {
+  color: var(--inacap-text-primary) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* Tiny fix: if an SVG explicitly sets fill="none" but paths rely on stroke, ensure stroke remains visible */
+html.theme-dark svg [stroke] {
+  stroke: currentColor !important;
+}
+
+
+/* Componentes que usan colores hardcoded: asegurar override en modo oscuro */
+html.theme-dark .partner-card,
+html.theme-dark .hero-banner-title,
+html.theme-dark .hero-banner-desc,
+html.theme-dark .promo-title,
+html.theme-dark .promo-desc,
+html.theme-dark .promo-badge,
+html.theme-dark .area-badge,
+html.theme-dark .area-chip {
+  color: var(--inacap-text-primary) !important;
+}
+
+/* Global overrides to ensure home page uses dark surfaces when theme-dark is active */
+html.theme-dark .home-root,
+html.theme-dark .home-root .home-hero,
+html.theme-dark .home-root section,
+html.theme-dark .home-root .max-w-7xl,
+html.theme-dark .home-root .greeting-card,
+html.theme-dark #panel-proyectos,
+html.theme-dark .promo-callouts--wide {
+  background: var(--inacap-background) !important;
+  color: var(--inacap-text-primary) !important;
+}
+
+/* Replace white card backgrounds in home with elevated surface tokens in dark */
+html.theme-dark .home-root .bg-white,
+html.theme-dark .home-root [class*="bg-white"],
+html.theme-dark .home-root .rounded-2xl,
+html.theme-dark .home-root .promo-card,
+html.theme-dark .home-root .greeting-card,
+html.theme-dark .home-root .hero-panel {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-xl) !important;
+}
+
+/* Prevent light gradients from leaking through in dark mode */
+html.theme-dark .home-root [class*="from-"] ,
+html.theme-dark .home-root [class*="to-white"] {
+  background-image: none !important;
+}
+
+/* Aggressive neutralization for common Tailwind color utilities inside critical roots
+   This is a fast mitigation to avoid manual replacement across hundreds of templates.
+   Later we should replace usages with design tokens and remove the !important rules. */
+html.theme-dark .home-root [class*="text-gray-"] {
+  color: var(--inacap-text-primary) !important;
+}
+html.theme-dark .sidebar [class*="text-gray-"] {
+  color: var(--inacap-text-primary) !important;
+}
+html.theme-dark .home-root [class*="text-gray"] {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .home-root [class*="bg-white"] ,
+html.theme-dark .home-root [class*="bg-gray-"] ,
+html.theme-dark .sidebar [class*="bg-white"],
+html.theme-dark .sidebar [class*="bg-gray-"] {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-xl) !important;
+}
+
+/* Neutralize common gradient utilities that reference light stops */
+html.theme-dark .home-root [class*="from-gray-"] ,
+html.theme-dark .home-root [class*="to-white"] ,
+html.theme-dark .home-root [class*="via-white"] {
+  background-image: none !important;
+}
+
+
+
 /* Alto contraste: reforzar colores de foreground/background y bordes */
 html.contrast-high {
   --inacap-text-primary: #000000;
@@ -373,6 +528,15 @@ textarea.scrollbar-form::-webkit-scrollbar-thumb:hover,
   ::-webkit-scrollbar-thumb:active {
     background: var(--inacap-red);
   }
+}
+
+/* Reglas globales para SVGs en modo oscuro */
+html.theme-dark svg {
+  filter: none !important; /* Elimina cualquier filtro aplicado */
+  box-shadow: none !important; /* Elimina sombras */
+  text-shadow: none !important; /* Elimina sombras de texto */
+  fill: currentColor !important; /* Asegura que el color de relleno sea el actual */
+  stroke: currentColor !important; /* Asegura que el color del trazo sea el actual */
 }
 
 /* You can add global styles to this file, and also import other style files */

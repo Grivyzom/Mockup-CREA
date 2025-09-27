@@ -188,3 +188,19 @@
     transform: translateY(20px) scale(0.95);
   }
 }
+
+/* Ajustes para modo oscuro */
+html.theme-dark .modal-container {
+  background: var(--inacap-surface-elevated) !important;
+  color: var(--inacap-text-primary) !important;
+  box-shadow: var(--inacap-shadow-xl) !important;
+}
+
+html.theme-dark .modal-body {
+  background: var(--inacap-background) !important;
+}
+
+html.theme-dark .modal-footer {
+  background: var(--inacap-surface) !important;
+  border-top: 1px solid var(--inacap-border-secondary) !important;
+}

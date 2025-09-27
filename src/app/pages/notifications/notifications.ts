@@ -27,7 +27,6 @@ export interface NotificationItem {
 })
 export class NotificationsPage {
   // Estado reactivo principal ahora proviene del servicio compartido
-  constructor(private notificationService: NotificationService){ }
   private allNotifications = computed(() => this.notificationService.items());
   @ViewChild('searchInput') searchInput?: ElementRef<HTMLInputElement>;
   search = signal('');
@@ -232,6 +231,15 @@ export class NotificationsPage {
 
   // Persistencia de preferencias en localStorage
   private readonly LS_KEY = 'notifications_prefs';
+
+  constructor(private notificationService: NotificationService){
+    // Efecto para guardar cambios: debe registrarse durante la construcción
+    effect(() => {
+      const snapshot = { compact: this.compactMode(), sortBy: this.sortBy() };
+      try { localStorage.setItem(this.LS_KEY, JSON.stringify(snapshot)); } catch {}
+    });
+  }
+
   ngOnInit(){
     try {
       const raw = localStorage.getItem(this.LS_KEY);
@@ -241,11 +249,6 @@ export class NotificationsPage {
         if (typeof pref?.sortBy === 'string') this.sortBy.set(pref.sortBy);
       }
     } catch {}
-    // Efecto para guardar cambios
-    effect(() => {
-      const snapshot = { compact: this.compactMode(), sortBy: this.sortBy() };
-      try { localStorage.setItem(this.LS_KEY, JSON.stringify(snapshot)); } catch {}
-    });
   }
 
   setSortBy(v: 'reciente' | 'antiguo' | 'titulo-az' | 'titulo-za'){ this.sortBy.set(v); }

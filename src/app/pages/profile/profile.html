@@ -82,18 +82,24 @@
 
 
         <!-- Preferencia de tono de piel (emoji) -->
-        <div class="grid-1">
+        <div class="grid-1" style="margin-top: 2rem;">
           <div class="field">
             <label>Preferencia de tono de piel (emoji)</label>
-            <div class="skin-tone-row">
+            <div class="skin-tone-row" role="radiogroup" aria-label="Seleccionar tono de piel para emojis">
               @for (t of skinTones; track t.value) {
-                <label class="skin-opt">
-                  <input type="radio" name="skinTone" [value]="t.value" [checked]="skinTone===t.value" (change)="skinTone=t.value" [disabled]="!isEditingProfile"/>
-                  <span [title]="t.label" style="font-size:1.4rem;line-height:1;">{{ t.emoji }}</span>
+                <label class="skin-opt" [attr.aria-label]="'Tono de piel: ' + t.label">
+                  <input type="radio" 
+                         name="skinTone" 
+                         [value]="t.value" 
+                         [checked]="skinTone===t.value" 
+                         (change)="skinTone=t.value" 
+                         [disabled]="!isEditingProfile"
+                         [attr.aria-describedby]="'skin-hint'"/>
+                  <span [title]="t.label" class="emoji-display" style="font-size:1.6rem;line-height:1;">{{ t.emoji }}</span>
                 </label>
               }
             </div>
-            <small class="hint">Se usará en emojis compatibles.</small>
+            <small class="hint" id="skin-hint">Se usará en emojis compatibles. Esto es opcional y solo afecta la apariencia visual de ciertos emojis.</small>
           </div>
         </div>
 
@@ -162,7 +168,7 @@
               <button type="button" class="icon-btn" (click)="showCurrent=!showCurrent" [attr.aria-pressed]="showCurrent" [attr.aria-label]="showCurrent ? 'Ocultar contraseña' : 'Mostrar contraseña'">
                 @if (!showCurrent) {
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 0 1 6 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                   </svg>
                 }
@@ -183,7 +189,7 @@
               <button type="button" class="icon-btn" (click)="showNew=!showNew" [attr.aria-pressed]="showNew" [attr.aria-label]="showNew ? 'Ocultar contraseña' : 'Mostrar contraseña'">
                 @if (!showNew) {
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 0 1 6 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                   </svg>
                 }
@@ -210,7 +216,7 @@
               <button type="button" class="icon-btn" (click)="showConfirm=!showConfirm" [attr.aria-pressed]="showConfirm" [attr.aria-label]="showConfirm ? 'Ocultar contraseña' : 'Mostrar contraseña'">
                 @if (!showConfirm) {
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 0 1 6 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                   </svg>
                 }
@@ -416,7 +422,7 @@
     </div>
 
     <!-- Eliminar cuenta -->
-    <div class="card danger dark">
+  <div class="card danger dark">
       <h2 class="section-title">
         <svg class="section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/>
@@ -424,7 +430,7 @@
         Eliminar cuenta
       </h2>
       <p class="section-desc">¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción es irreversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.</p>
-      <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()" novalidate>
+  <form [formGroup]="deleteForm" (ngSubmit)="showDeleteModal=true" novalidate>
         <div class="grid-1">
           <div class="field">
             <label for="confirmDel">Escribe ELIMINAR para confirmar</label>
@@ -439,5 +445,27 @@
         </div>
       </form>
     </div>
+
+    <!-- Modal de confirmación de eliminación (diseño tipo tarjeta) -->
+    @if (showDeleteModal) {
+      <div class="confirm-modal-overlay">
+        <div class="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirmModalTitle">
+          <button class="confirm-modal__close" aria-label="Cerrar" type="button" (click)="showDeleteModal=false">×</button>
+          <header class="confirm-modal__header">
+            <h2 id="confirmModalTitle">¿Eliminar cuenta?</h2>
+          </header>
+          <div class="confirm-modal__body">
+            <p class="muted">Esta acción es <strong>irreversible</strong>. Si confirmas, tu cuenta y todos los datos asociados se eliminarán permanentemente.</p>
+            @if (deleteError) {<div class="status-error mt-3">{{ deleteError }}</div>}
+          </div>
+          <footer class="confirm-modal__footer">
+            <button class="btn-inacap-secondary" type="button" (click)="showDeleteModal=false">Cancelar</button>
+            <button class="btn-danger-inacap ml-3" type="button" (click)="confirmDeleteAccount()" [disabled]="deleteLoading">
+              @if (!deleteLoading) {<span>Eliminar cuenta</span>} @else {<span class="btn-loading" aria-label="Eliminando"></span>}
+            </button>
+          </footer>
+        </div>
+      </div>
+    }
   </div>
 </section>

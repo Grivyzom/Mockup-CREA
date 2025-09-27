@@ -1,6 +1,59 @@
 <div class="settings-page">
   <h1 class="page-title">Configuración</h1>
 
+  <!-- Banner: selección de temática visual (mockup) -->
+  <section class="card banner-themes">
+    <div class="card-body banner-inner">
+      <div class="theme-card" [class.active]="theme()==='light'" (click)="setTheme('light')">
+        <div class="theme-card-header">
+          <span class="theme-icon">☀️</span>
+          <h3>Tema claro</h3>
+          <span class="badge" *ngIf="theme()==='light'">Activo</span>
+        </div>
+        <p class="sub muted">Este tema se activará cuando tu sistema esté en modo "claro"</p>
+        <div class="theme-preview">
+          <div class="preview-window">
+            <div class="preview-line"></div>
+            <div class="preview-shelf"></div>
+          </div>
+        </div>
+        <div class="theme-caption">Light default</div>
+        <div class="swatches">
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+        </div>
+      </div>
+
+      <div class="theme-card" [class.active]="theme()==='dark'" (click)="setTheme('dark')">
+        <div class="theme-card-header">
+          <span class="theme-icon">🌙</span>
+          <h3>Tema oscuro</h3>
+          <span class="badge" *ngIf="theme()==='dark'">Activo</span>
+        </div>
+        <p class="sub muted">Este tema se activará cuando tu sistema esté en modo "oscuro"</p>
+        <div class="theme-preview">
+          <div class="preview-window preview-dark">
+            <div class="preview-line"></div>
+            <div class="preview-shelf"></div>
+          </div>
+        </div>
+        <div class="theme-caption">Light default</div>
+        <div class="swatches">
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+          <button class="swatch"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Sección: Historial de actividad / inicios de sesión -->
   <section class="card">
     <header class="card-header">

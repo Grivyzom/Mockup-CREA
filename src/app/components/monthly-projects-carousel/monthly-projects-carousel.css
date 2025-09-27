@@ -937,3 +937,24 @@
   color: #6b7280;
   border: 2px solid #fff;
 }
+
+/* Ajustes para modo oscuro */
+html.theme-dark .deck-wrapper {
+  background: var(--inacap-background) !important;
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .card {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-xl) !important;
+}
+
+html.theme-dark .card .title,
+html.theme-dark .card .description-text {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .banner {
+  background: linear-gradient(135deg, #1e1e1e, #2a2a2a) !important;
+}

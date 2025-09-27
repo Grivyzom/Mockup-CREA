@@ -1,4 +1,4 @@
-<section class="profile-wrap">
+<section class="profile-wrap select-none">
   <div class="container">
     <!-- Información personal -->
     <div class="card dark">
@@ -52,6 +52,7 @@
           </div>
         </div>
 
+
         <div class="grid-1">
           <div class="field">
             <label for="timezone">Zona horaria</label>
@@ -63,6 +64,32 @@
               <option value="America/Bogota">Bogotá</option>
               <option value="UTC">UTC</option>
             </select>
+          </div>
+        </div>
+
+        <!-- Género -->
+        <div class="grid-1">
+          <div class="field">
+            <label for="gender">Género</label>
+            <div class="gender-row">
+              <label *ngFor="let g of genders" class="gender-opt">
+                <input type="radio" name="gender" [value]="g.value" [(ngModel)]="gender" />
+                <span>
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <ng-container [ngSwitch]="g.value">
+                      <path *ngSwitchCase="'prefer-not'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5l14 14M19 5L5 19" />
+                      <path *ngSwitchCase="'woman'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5h2v2h-2zM12 7v10M9 12h6M10 17h4" />
+                      <path *ngSwitchCase="'man'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5h2v3h3v2h-3v7h-2v-7H9V8h3V5z" />
+                      <path *ngSwitchCase="'nonbinary'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4l4 4-4 4-4-4 4-4M8 16h8" />
+                      <path *ngSwitchCase="'trans'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 2h2v3h3v2h-3v3h-2v-3H8V5h3V2z" />
+                      <path *ngSwitchCase="'agender'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v20M2 12h20" />
+                      <path *ngSwitchCase="'other'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4l3 6h6l-5 4 2 6-6-4-6 4 2-6-5-4h6z" />
+                    </ng-container>
+                  </svg>
+                  {{ g.label }}
+                </span>
+              </label>
+            </div>
           </div>
         </div>
 
@@ -94,7 +121,7 @@
               <button type="button" class="icon-btn" (click)="toggleCurrentPassword()" [attr.aria-pressed]="showCurrent" [attr.aria-label]="showCurrent ? 'Ocultar contraseña actual' : 'Mostrar contraseña actual'" title="{{showCurrent ? 'Ocultar contraseña' : 'Mostrar contraseña'}}">
                 @if (!showCurrent) {
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 0 1 6 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                   </svg>
                 } @else {
@@ -114,7 +141,7 @@
               <button type="button" class="icon-btn" (click)="toggleNewPassword()" [attr.aria-pressed]="showNew" [attr.aria-label]="showNew ? 'Ocultar nueva contraseña' : 'Mostrar nueva contraseña'" title="{{showNew ? 'Ocultar contraseña' : 'Mostrar contraseña'}}">
                 @if (!showNew) {
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 0 1 6 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                   </svg>
                 } @else {
@@ -140,7 +167,7 @@
               <button type="button" class="icon-btn" (click)="toggleConfirmPassword()" [attr.aria-pressed]="showConfirm" [attr.aria-label]="showConfirm ? 'Ocultar confirmación de contraseña' : 'Mostrar confirmación de contraseña'" title="{{showConfirm ? 'Ocultar contraseña' : 'Mostrar contraseña'}}">
                 @if (!showConfirm) {
                   <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 616 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 0 1 6 0z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                   </svg>
                 } @else {
@@ -194,7 +221,7 @@
         Eliminar cuenta
       </h2>
       <p class="section-desc">¿Ya no quieres usar nuestro servicio? Puedes eliminar tu cuenta aquí. Esta acción es irreversible. Toda la información relacionada con esta cuenta se eliminará permanentemente.</p>
-      <form [formGroup]="deleteForm" (ngSubmit)="deleteAccount()" novalidate>
+      <form [formGroup]="deleteForm" (ngSubmit)="showDeleteModal=true" novalidate>
         <div class="grid-1">
           <div class="field">
             <label for="confirmDel">Escribe ELIMINAR para confirmar</label>
@@ -209,5 +236,22 @@
         </div>
       </form>
     </div>
+
+    <!-- Modal de confirmación de eliminación -->
+    @if (showDeleteModal) {
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-lg w-full mx-4">
+          <h3 class="text-lg font-bold text-red-600 mb-2">Confirmar eliminación</h3>
+          <p class="text-sm text-gray-700 dark:text-gray-200 mb-4">Esta acción es irreversible. Si confirmas, tu cuenta será eliminada permanentemente. ¿Deseas continuar?</p>
+          @if (deleteError) {<div class="status-error mb-3">{{ deleteError }}</div>}
+          <div class="flex justify-end gap-3">
+            <button class="btn-inacap-secondary" type="button" (click)="showDeleteModal=false">Cancelar</button>
+            <button class="btn-danger-inacap" type="button" (click)="confirmDeleteAccount()" [disabled]="deleteLoading">
+              @if (!deleteLoading) {<span>Eliminar cuenta</span>} @else {<span class="btn-loading" aria-label="Eliminando"></span>}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
   </div>
 </section>

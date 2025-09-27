@@ -112,6 +112,8 @@ export class Profile implements OnInit {
   deleteForm = this.fb.group({ confirm: ['', Validators.required] });
   deleteError: string | null = null;
   deleteLoading = false;
+  // Modal de confirmación
+  showDeleteModal = false;
 
   // Avatar
   avatarLoading = false;
@@ -225,12 +227,39 @@ export class Profile implements OnInit {
       this.deleteForm.markAllAsTouched();
       return;
     }
+    // Legacy path: if code still calls deleteAccount directly, show browser confirm as fallback
     if (!window.confirm('Esta acción es irreversible. ¿Deseas eliminar tu cuenta?')) return;
     this.deleteLoading = true;
     try {
       this.profileService.deleteAccount();
       alert('Cuenta eliminada. Se cerrará la sesión.');
       // En un flujo real, aquí rediriges /logout o /login
+    } finally {
+      this.deleteLoading = false;
+    }
+  }
+
+  async confirmDeleteAccount() {
+    // Confirmación desde modal
+    this.deleteError = null;
+    const confirmVal = (this.deleteForm.value.confirm ?? '').toString().trim().toUpperCase();
+    if (confirmVal !== 'ELIMINAR') {
+      this.deleteError = 'Escribe ELIMINAR para confirmar.';
+      this.deleteForm.markAllAsTouched();
+      return;
+    }
+    this.deleteLoading = true;
+    try {
+      await Promise.resolve(this.profileService.deleteAccount());
+      this.showDeleteModal = false;
+      // give user feedback
+      this.toast.show({ message: 'Cuenta eliminada. Se cerrará la sesión.', type: 'success', duration: 4000 });
+      // Vaciar el campo de confirmación y limpiar el formulario
+      try { this.deleteForm.reset(); } catch {}
+      // En un flujo real: redirigir o cerrar sesión
+    } catch (e: any) {
+      this.deleteError = e?.message ?? 'No se pudo eliminar la cuenta';
+  this.toast.show({ message: this.deleteError ?? '', type: 'error', duration: 4000 });
     } finally {
       this.deleteLoading = false;
     }

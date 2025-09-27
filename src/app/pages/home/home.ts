@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ProjectModal, ProjectData, ProjectMember } from '../../components/project-modal/project-modal';
 import { MonthlyProjectsCarousel } from '../../components/monthly-projects-carousel/monthly-projects-carousel';
@@ -7,7 +7,7 @@ import { MonthlyProjectsCarousel } from '../../components/monthly-projects-carou
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterLink, ProjectModal, MonthlyProjectsCarousel],
+  imports: [CommonModule, NgIf, RouterLink, ProjectModal, MonthlyProjectsCarousel],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })
@@ -296,7 +296,8 @@ export class Home implements AfterViewInit, OnDestroy {
       }
 
       // Calcular estadísticas del usuario (mock desde monthlyProjects)
-      this.computeStats();
+      // Se difiere con setTimeout(0) para evitar ExpressionChangedAfterItHasBeenCheckedError
+      setTimeout(() => this.computeStats(), 0);
     }
   }
 

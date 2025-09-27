@@ -1,4 +1,5 @@
 import { Component, signal } from '@angular/core';
+import { AccessibilityService } from './core/services/accessibility.service';
 import { RouterOutlet } from '@angular/router';
 import { Sidebar } from './components/sidebar/sidebar';
 import { Footer } from './components/footer/footer';
@@ -16,4 +17,6 @@ import { ModalContainer } from './components/ui/modal/modal-container';
 })
 export class App {
   protected readonly title = signal('mockup-crea');
+  // Inyectar AccessibilityService para que sus efectos se ejecuten en bootstrap
+  constructor(private accessibility: AccessibilityService) {}
 }

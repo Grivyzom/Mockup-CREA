@@ -997,3 +997,76 @@
   position: relative;
   min-height: 100vh;
 }
+
+/* Dark mode: make sidebar use theme background tokens so it blends with home background */
+html.theme-dark .sidebar {
+  background-color: var(--inacap-background) !important;
+  color: var(--inacap-text-primary) !important;
+  box-shadow: none;
+  border-right: 1px solid var(--inacap-border);
+}
+
+/* Dark-mode detailed overrides to replace hard-coded light backgrounds/colors */
+html.theme-dark .search-input {
+  background: var(--inacap-surface-elevated) !important;
+  color: var(--inacap-text-primary) !important;
+  border: 1px solid var(--inacap-border-secondary) !important;
+}
+html.theme-dark .search-input::placeholder { color: var(--inacap-text-secondary) !important; }
+html.theme-dark .search-clear {
+  background: rgba(255,255,255,0.03) !important;
+  color: var(--inacap-text-primary) !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+
+html.theme-dark .iniciar-proyecto-link {
+  background: var(--inacap-surface-elevated) !important;
+  border: 1px dashed rgba(255,255,255,0.04) !important;
+}
+html.theme-dark .iniciar-proyecto-link:hover {
+  background: rgba(255,255,255,0.02) !important;
+}
+
+/* Stats and header adjustments */
+html.theme-dark .stats-container {
+  background: var(--inacap-surface-elevated) !important;
+  border: 1px solid var(--inacap-border) !important;
+}
+html.theme-dark .stat-number { color: var(--inacap-text-primary) !important; }
+html.theme-dark .stat-label { color: var(--inacap-text-secondary) !important; }
+html.theme-dark .welcome-title { color: var(--inacap-text-primary) !important; }
+html.theme-dark .welcome-subtitle { color: var(--inacap-text-secondary) !important; }
+
+/* Dropdowns and profile menu */
+html.theme-dark .dropdown-menu,
+html.theme-dark .dropdown-header,
+html.theme-dark .dropdown-footer {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  color: var(--inacap-text-primary) !important;
+}
+html.theme-dark .dropdown-header h3 { color: var(--inacap-text-primary) !important; }
+html.theme-dark .dropdown-item { color: var(--inacap-text-primary) !important; }
+html.theme-dark .dropdown-item:hover { background-color: rgba(196,30,58,0.06) !important; color: var(--inacap-text-primary) !important; }
+html.theme-dark .dropdown-item.logout:hover { background-color: rgba(220,38,38,0.06) !important; }
+
+/* Profile stats inside dropdown */
+html.theme-dark .profile-stat-item {
+  background: var(--inacap-surface) !important;
+  border: 1px solid var(--inacap-border) !important;
+  color: var(--inacap-text-primary) !important;
+}
+html.theme-dark .profile-stat-number { color: var(--inacap-text-primary) !important; }
+html.theme-dark .profile-stat-label { color: var(--inacap-text-secondary) !important; }
+
+/* User avatar / name */
+html.theme-dark .user-name, html.theme-dark .user-dropdown-icon { color: var(--inacap-text-primary) !important; }
+html.theme-dark .user-avatar img { border-color: var(--inacap-border) !important; }
+
+/* Ensure notification button/icon uses light color */
+html.theme-dark .notification-btn { color: var(--inacap-text-primary) !important; }
+html.theme-dark .notification-btn:hover { color: var(--inacap-primary) !important; }
+
+/* Small helpers: make partner card and promo text readable */
+html.theme-dark .partner-card { background: var(--inacap-surface) !important; color: var(--inacap-text-primary) !important; }
+html.theme-dark .promo-title, html.theme-dark .promo-desc { color: var(--inacap-text-primary) !important; }

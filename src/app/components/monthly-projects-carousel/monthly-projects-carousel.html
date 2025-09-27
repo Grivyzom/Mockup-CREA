@@ -70,8 +70,9 @@
 							 (mouseleave)="closeAreasDropdown(p.id)">
 						<button class="info-icon-btn" type="button" aria-label="Ver áreas involucradas"
 									(click)="toggleAreasDropdown(p.id); $event.stopPropagation()">
+							<!-- Replaced malformed path with a validated 'information' icon path (Heroicons - solid) -->
 							<svg class="info-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-								<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+								<path fill-rule="evenodd" d="M18 10c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8zm-9-1a1 1 0 112 0v5a1 1 0 11-2 0V9zm1-4a1.25 1.25 0 100 2.5A1.25 1.25 0 0010 5z" clip-rule="evenodd"/>
 							</svg>
 						</button>
 						<span class="chip area-chip" [ngClass]="'chip-' + p.area">

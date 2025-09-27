@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService, type StudentProfile } from '../../../services/profile.service';
 import { ModalService } from '../../../components/ui/modal/modal.service';
+import { AccessibilityService } from '../../../core/services/accessibility.service';
 
 @Component({
   selector: 'app-settings-public-profile',
@@ -15,8 +16,35 @@ import { ModalService } from '../../../components/ui/modal/modal.service';
       <p class="sub">Preferencias de representación e identidad.</p>
     </header>
     <div class="card-body form-cols">
-      <!-- Campos de nombre público, bio y tono de piel se movieron a Perfil -->
+      <!-- Sección: Temática (claro/oscuro/sistema) -->
+      <div class="form-field">
+        <label>Temática</label>
+        <div class="theme-choices" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start;">
+          <div class="theme-card" [class.active]="a11y.theme()==='light'">
+            <div class="theme-card__header">Light theme</div>
+            <div class="theme-card__preview" aria-hidden="true"> <!-- simple preview box -->
+              <div class="preview-light"></div>
+            </div>
+            <div style="margin-top:.5rem;display:flex;gap:.5rem;align-items:center;justify-content:center;">
+              <button class="btn" (click)="a11y.setTheme('light')" [class.active]="a11y.theme()==='light'">Seleccionar</button>
+            </div>
+          </div>
+          <div class="theme-card" [class.active]="a11y.theme()==='dark'">
+            <div class="theme-card__header">Dark theme</div>
+            <div class="theme-card__preview" aria-hidden="true">
+              <div class="preview-dark"></div>
+            </div>
+            <div style="margin-top:.5rem;display:flex;gap:.5rem;align-items:center;justify-content:center;">
+              <button class="btn" (click)="a11y.setTheme('dark')" [class.active]="a11y.theme()==='dark'">Seleccionar</button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem;margin-left:6px;">
+            <button class="btn" (click)="a11y.setTheme('system')" [class.active]="a11y.theme()==='system'">Sincronizar con sistema</button>
+          </div>
+        </div>
+      </div>
 
+      <!-- Campos de nombre público, bio y tono de piel se movieron a Perfil -->
 
       <!-- Género movido a Perfil -->
 
@@ -35,6 +63,7 @@ import { ModalService } from '../../../components/ui/modal/modal.service';
 export class SettingsPublicProfile {
   private profileSrv = inject(ProfileService);
   private modal = inject(ModalService);
+  a11y = inject(AccessibilityService);
   profile = signal<StudentProfile>(this.profileSrv.getProfile());
   gender = signal<string>('prefer-not');
   genders = [
