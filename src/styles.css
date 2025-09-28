@@ -50,7 +50,7 @@ html {
   --inacap-hover-overlay: rgba(0, 0, 0, 0.04);
   --inacap-active-overlay: rgba(0, 0, 0, 0.08);
   
-  /* Colores semÃ¡nticos */
+  /* Colores semÃƒÂ¡nticos */
   --inacap-success: #059669;
   --inacap-warning: #d97706;
   --inacap-error: #dc2626;
@@ -95,7 +95,7 @@ html.theme-dark {
   /* Rojo adaptado para mejor contraste en oscuro */
   --inacap-red-light: rgba(204, 0, 0, 0.15);
   
-  /* Colores semÃ¡nticos adaptados */
+  /* Colores semÃƒÂ¡nticos adaptados */
   --inacap-success: #10b981;
   --inacap-warning: #f59e0b;
   --inacap-error: #ef4444;
@@ -118,7 +118,7 @@ html.theme-dark body {
 }
 
 /* ========================================
-   TIPOGRAFÃA CONSISTENTE
+   TIPOGRAFÃƒA CONSISTENTE
    ======================================== */
 
 html.theme-dark h1,
@@ -152,7 +152,7 @@ html.theme-dark [class*="text-gray-4"] {
    SUPERFICIES Y CARDS (SIN AFECTAR SIDEBAR)
    ======================================== */
 
-/* Home page especÃ­fico */
+/* Home page especÃƒÂ­fico */
 html.theme-dark .home-root .bg-white,
 html.theme-dark .home-root [class*="bg-white"],
 html.theme-dark .home-root .rounded-2xl,
@@ -246,7 +246,7 @@ html.theme-dark svg:not(.sidebar svg) {
   stroke: currentColor;
 }
 
-/* Iconos especÃ­ficos que necesitan color primario */
+/* Iconos especÃƒÂ­ficos que necesitan color primario */
 html.theme-dark .home-root .kpi-icon,
 html.theme-dark .home-root .notification-icon,
 html.theme-dark .home-root .info-icon,
@@ -255,7 +255,102 @@ html.theme-dark .project-card .ver-mas-icon {
 }
 
 /* ========================================
-   HOME PAGE ESPECÃFICO
+   CORRECCIÓN PARA ÍCONOS SVG EN DROPDOWNS
+   ======================================== */
+
+/* Base: Todos los íconos SVG en dropdowns deben heredar el color del texto */
+.dropdown-item svg,
+.profile-dropdown svg,
+.notification-dropdown svg,
+.dropdown-menu svg {
+  width: 1.25rem !important; /* 20px - igual que .nav-icon */
+  height: 1.25rem !important; /* 20px */
+  display: block !important;
+  flex-shrink: 0 !important;
+  stroke-width: 2 !important;
+  color: inherit !important; /* Heredar del elemento padre */
+  fill: none !important; /* No fill por defecto */
+  stroke: currentColor !important; /* Usar el color actual del texto */
+  overflow: visible !important;
+  background: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+  opacity: 1 !important;
+}
+
+/* MODO CLARO: Usar un color más claro y consistente con el texto */
+html:not(.theme-dark) .dropdown-item {
+  color: var(--inacap-text-secondary, #525252) !important; /* Usar token de texto secundario */
+}
+
+html:not(.theme-dark) .dropdown-item:hover {
+  color: var(--inacap-text-primary, #1a1a1a) !important; /* Texto más oscuro en hover */
+}
+
+html:not(.theme-dark) .dropdown-item svg {
+  color: inherit !important; /* Heredar del .dropdown-item */
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+/* MODO OSCURO: Mantener el comportamiento actual que funciona bien */
+html.theme-dark .dropdown-item {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .dropdown-item svg {
+  color: inherit !important;
+  fill: none !important;
+  stroke: currentColor !important;
+}
+
+/* Asegurar que los paths dentro de los SVG no tengan fill forzado */
+.dropdown-item svg path,
+.profile-dropdown svg path,
+.notification-dropdown svg path,
+.dropdown-menu svg path {
+  fill: none !important;
+  stroke: inherit !important;
+  stroke-width: inherit !important;
+}
+
+/* Íconos especiales (como logout) que necesitan color específico */
+.dropdown-item.logout svg {
+  color: var(--inacap-error, #dc2626) !important;
+  stroke: var(--inacap-error, #dc2626) !important;
+}
+
+/* Íconos de estadísticas en el dropdown de perfil */
+.profile-stat-item .stat-icon,
+.profile-stat-item svg {
+  color: var(--inacap-red) !important;
+  stroke: var(--inacap-red) !important;
+}
+
+/* Asegurar que hover funcione correctamente en ambos modos */
+.dropdown-item:hover svg {
+  color: inherit !important;
+}
+
+/* Si hay íconos que usan fill en lugar de stroke */
+.dropdown-item svg[data-fill="true"],
+.dropdown-item svg.filled-icon {
+  fill: currentColor !important;
+  stroke: none !important;
+}
+
+/* Para íconos de notificaciones que pueden tener colores específicos */
+.notification-icon svg {
+  color: white !important;
+  fill: currentColor !important;
+  stroke: none !important;
+}
+
+/* ========================================
+   HOME PAGE ESPECÃƒFICO
    ======================================== */
 
 html.theme-dark .home-root,
@@ -324,21 +419,8 @@ html.theme-dark .notification-item:hover {
 }
 
 /* ========================================
-   ARREGLOS ESPECÍFICOS PARA DROPDOWN PERFIL EN MODO OSCURO
+   ARREGLOS ESPECÃFICOS PARA DROPDOWN PERFIL EN MODO OSCURO
    ======================================== */
-
-/* Arreglar iconos SVG cortados en dropdown de perfil */
-html.theme-dark .profile-dropdown svg,
-html.theme-dark .dropdown svg {
-  width: 1rem !important;
-  height: 1rem !important;
-  flex-shrink: 0 !important;
-  fill: currentColor !important;
-  stroke: currentColor !important;
-  color: var(--inacap-text-primary) !important;
-  display: block !important;
-  overflow: visible !important;
-}
 
 /* Asegurar que los items del dropdown tengan suficiente espacio */
 html.theme-dark .profile-dropdown .dropdown-item,
@@ -385,7 +467,7 @@ html.theme-dark .profile-dropdown .profile-email {
   font-size: 0.75rem !important;
 }
 
-/* Arreglar las estadísticas en el dropdown */
+/* Arreglar las estadÃ­sticas en el dropdown */
 html.theme-dark .dropdown-stats {
   background: var(--inacap-surface) !important;
   border-top: 1px solid var(--inacap-border) !important;
@@ -458,7 +540,7 @@ html.theme-dark .dropdown .dropdown-footer {
   padding: 0.5rem !important;
 }
 
-/* Arreglar el botón de logout */
+/* Arreglar el botÃ³n de logout */
 html.theme-dark .dropdown-item.logout {
   color: var(--inacap-error) !important;
   font-weight: 600 !important;
@@ -471,8 +553,7 @@ html.theme-dark .dropdown-item.logout:hover {
 
 html.theme-dark .dropdown-item.logout svg {
   color: var(--inacap-error) !important;
-  width: 1rem !important;
-  height: 1rem !important;
+  stroke: var(--inacap-error) !important;
 }
 
 /* Asegurar que la flecha del dropdown se vea bien */
@@ -511,7 +592,7 @@ html.theme-dark .dropdown-content::-webkit-scrollbar-thumb:hover {
    Dark-mode: profile & notification dropdown fixes
    ========================== */
 
-/* Perfil: menÃº desplegable */
+/* Perfil: menÃƒÂº desplegable */
 html.theme-dark .profile-dropdown,
 html.theme-dark .user-menu-dropdown,
 html.theme-dark .menu-dropdown,
@@ -528,7 +609,7 @@ html.theme-dark .dropdown.user {
   backdrop-filter: blur(8px) !important;
 }
 
-/* Asegurar que los items del menÃº sean legibles */
+/* Asegurar que los items del menÃƒÂº sean legibles */
 html.theme-dark .profile-dropdown .menu-item,
 html.theme-dark .user-menu-dropdown .menu-item,
 html.theme-dark .dropdown .menu-item,
@@ -540,7 +621,7 @@ html.theme-dark .menu-dropdown .menu-item {
   gap: 0.65rem !important;
 }
 
-/* Meta / subtÃ­tulos dentro del dropdown */
+/* Meta / subtÃƒÂ­tulos dentro del dropdown */
 html.theme-dark .profile-dropdown .meta,
 html.theme-dark .dropdown .meta,
 html.theme-dark .menu-item .meta,
@@ -573,7 +654,7 @@ html.theme-dark .notifications-panel {
   min-width: 260px !important;
 }
 
-/* Cada item de notificaciÃ³n */
+/* Cada item de notificaciÃƒÂ³n */
 html.theme-dark .notifications-list .notification-item,
 html.theme-dark .notification-item,
 html.theme-dark .notifications-dropdown .notification-item {
@@ -584,7 +665,7 @@ html.theme-dark .notifications-dropdown .notification-item {
 html.theme-dark .notifications-list .notification-item:last-child,
 html.theme-dark .notification-item:last-child { border-bottom: none !important; }
 
-/* Texto y metadatos dentro de cada notificaciÃ³n */
+/* Texto y metadatos dentro de cada notificaciÃƒÂ³n */
 html.theme-dark .notifications-list .notification-item .title,
 html.theme-dark .notifications-list .notification-item p,
 html.theme-dark .notification-item .text,
@@ -602,20 +683,11 @@ html.theme-dark .notification-dot {
   box-shadow: 0 0 0 3px rgba(0,0,0,0.35) inset, 0 2px 8px rgba(0,0,0,0.45);
 }
 
-/* Forzar que iconos SVG dentro de los dropdowns mantengan currentColor */
-html.theme-dark .profile-dropdown svg,
-html.theme-dark .notifications-dropdown svg,
-html.theme-dark .dropdown svg {
-  fill: currentColor !important;
-  stroke: currentColor !important;
-  color: var(--inacap-text-primary) !important;
-}
-
-/* PequeÃ±o ajuste: asegurar separaciÃ³n entre grupos en el menÃº */
+/* PequeÃƒÂ±o ajuste: asegurar separaciÃƒÂ³n entre grupos en el menÃƒÂº */
 html.theme-dark .profile-dropdown .menu-group,
 html.theme-dark .dropdown .menu-group { margin: 0.35rem 0 !important; padding: 0.25rem 0 !important; }
 
-/* Si hay botones de acciÃ³n (Cerrar sesiÃ³n), darle peso visual */
+/* Si hay botones de acciÃƒÂ³n (Cerrar sesiÃƒÂ³n), darle peso visual */
 html.theme-dark .profile-dropdown .danger,
 html.theme-dark .dropdown .danger {
   color: var(--inacap-error) !important;
@@ -642,12 +714,6 @@ html.theme-dark .notification-list {
 html.theme-dark .notification-title,
 html.theme-dark .notification-item .notification-title {
   color: var(--inacap-text-primary) !important;
-}
-
-/* Fix the profile dropdown arrow color in dark mode */
-html.theme-dark .profile-dropdown::before {
-  border-bottom-color: var(--inacap-surface-elevated) !important;
-  filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.6)) !important;
 }
 
 /* Cover alternative naming in header user menu */

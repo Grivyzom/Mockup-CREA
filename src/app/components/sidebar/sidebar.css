@@ -1112,3 +1112,56 @@ html.theme-dark .notification-btn:hover { color: var(--inacap-primary) !importan
 /* Small helpers: make partner card and promo text readable */
 html.theme-dark .partner-card { background: var(--inacap-surface) !important; color: var(--inacap-text-primary) !important; }
 html.theme-dark .promo-title, html.theme-dark .promo-desc { color: var(--inacap-text-primary) !important; }
+
+/* --------------------------------------------------------------------------
+   Make dropdown icons visually match the sidebar nav icons
+   - Same size as .nav-icon svg (approx 20px)
+   - Use currentColor so color follows the text color
+   - Ensure stroke-width matches (2)
+   - Use !important to override global dark-mode helpers if present
+   -------------------------------------------------------------------------- */
+.dropdown-item svg,
+.profile-dropdown svg,
+.notification-dropdown svg,
+.dropdown-menu svg {
+  width: 1.25rem !important; /* 20px */
+  height: 1.25rem !important; /* 20px */
+  display: block !important;
+  flex-shrink: 0 !important;
+  stroke-width: 2 !important;
+  color: inherit !important; /* inherit from parent (.dropdown-item) */
+  fill: currentColor !important;
+  overflow: visible !important;
+}
+
+/* Ensure the nav-like icons in dropdowns have the same spacing as sidebar icons */
+.dropdown-item { align-items: center; gap: 0.75rem; }
+
+/* Light mode: ensure dropdown icons use the same muted dark tone as sidebar nav icons */
+html:not(.theme-dark) .dropdown-item svg,
+html:not(.theme-dark) .profile-dropdown svg,
+html:not(.theme-dark) .notification-dropdown svg,
+html:not(.theme-dark) .dropdown-menu svg {
+  /* Use the same token as .nav-icon to ensure identical tone */
+  color: var(--inacap-gray-300, #D1D5DB) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  opacity: 0.95 !important;
+}
+
+/* Extra robust overrides: if an SVG contains hard-coded fills/strokes on paths/circles,
+   force them to the same token so icons don't appear black in light mode. */
+html:not(.theme-dark) .header-right .dropdown-menu svg,
+html:not(.theme-dark) .header-right .dropdown-item svg,
+html:not(.theme-dark) .dropdown-menu svg,
+html:not(.theme-dark) .dropdown-item svg {
+  color: var(--inacap-gray-300, #D1D5DB) !important;
+  fill: var(--inacap-gray-300, #D1D5DB) !important;
+  stroke: var(--inacap-gray-300, #D1D5DB) !important;
+}
+
+html:not(.theme-dark) .dropdown-menu svg *,
+html:not(.theme-dark) .dropdown-item svg * {
+  fill: var(--inacap-gray-300, #D1D5DB) !important;
+  stroke: var(--inacap-gray-300, #D1D5DB) !important;
+}
