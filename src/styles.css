@@ -12,145 +12,252 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Tokens de color INACAP */
+/* ========================================
+   TOKENS DE COLOR INACAP MEJORADOS
+   ======================================== */
+
 :root {
-  --inacap-red: #cc0000; /* TODO: Reemplazar con HEX oficial cuando lo entreguen */
+  /* Colores base INACAP */
+  --inacap-red: #cc0000;
+  --inacap-red-hover: #b30000;
+  --inacap-red-light: #f5e6e8;
   --inacap-black: #1e1e1e;
   --inacap-gray-700: #444;
   --inacap-gray-300: #d9d9d9;
   --inacap-white: #fffffd;
   
-  /* Colores semánticos basados en la paleta INACAP */
-  --inacap-red-hover: rgb(144, 20, 37);
-  --inacap-red-light: #f5e6e8;
-  --inacap-border: #eaeaea;
-  --inacap-text-primary: var(--inacap-black);
-  --inacap-text-secondary: var(--inacap-gray-700);
-  --inacap-background: var(--inacap-white);
-  /* Superficies/elevación */
-  --surface-1: #ffffff; /* tarjetas, paneles */
-  --text-muted: var(--inacap-text-secondary);
-  /* Tokens adicionales usados por componentes (modales, etc.) */
-  --inacap-surface-elevated: #ffffff;
-  --inacap-border-secondary: #ececec;
-  --inacap-shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.18);
+  /* Modo claro (valores mejorados) */
+  --inacap-primary: var(--inacap-red);
+  --inacap-background: #ffffff;
   --inacap-surface: #fafafa;
-  --inacap-primary: var(--inacap-red);
+  --inacap-surface-elevated: #ffffff;
+  --inacap-surface-overlay: rgba(255, 255, 255, 0.95);
+  
+  --inacap-text-primary: #1a1a1a;
+  --inacap-text-secondary: #525252;
+  --inacap-text-tertiary: #737373;
+  
+  --inacap-border: #e5e5e5;
+  --inacap-border-secondary: #d4d4d4;
+  --inacap-border-focus: var(--inacap-red);
+  
+  --inacap-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --inacap-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --inacap-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --inacap-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  
+  /* Estados interactivos */
+  --inacap-hover-overlay: rgba(0, 0, 0, 0.04);
+  --inacap-active-overlay: rgba(0, 0, 0, 0.08);
+  
+  /* Colores semÃ¡nticos */
+  --inacap-success: #059669;
+  --inacap-warning: #d97706;
   --inacap-error: #dc2626;
+  --inacap-info: #0284c7;
+  
+  /* Legacy tokens (mantenidos para compatibilidad) */
+  --surface-1: var(--inacap-surface-elevated);
+  --text-muted: var(--inacap-text-secondary);
 }
 
-/* Modo oscuro: override tokens al aplicar .theme-dark en <html> */
+/* ========================================
+   MODO OSCURO MEJORADO
+   ======================================== */
+
 html.theme-dark {
+  /* Backgrounds oscuros con contraste adecuado */
+  --inacap-background: #0a0a0a;
+  --inacap-surface: #111111;
+  --inacap-surface-elevated: #1a1a1a;
+  --inacap-surface-overlay: rgba(26, 26, 26, 0.95);
+  
+  /* Textos con contraste WCAG AA+ */
   --inacap-text-primary: #f5f5f5;
-  --inacap-text-secondary: #d1d5db;
-  --inacap-background: #0f1115;
-  --inacap-border: #2a2e35;
-  --surface-1: #161a20;
-  --text-muted: #a3aab5;
-  /* Elevación y bordes para dark */
-  --inacap-surface-elevated: #1c2027;
-  --inacap-border-secondary: #353a42;
-  --inacap-shadow-xl: 0 28px 80px rgba(0, 0, 0, 0.55);
-  --inacap-surface: #141820;
-  --inacap-primary: var(--inacap-red);
+  --inacap-text-secondary: #a3a3a3;
+  --inacap-text-tertiary: #737373;
+  
+  /* Bordes sutiles que no interfieren */
+  --inacap-border: #262626;
+  --inacap-border-secondary: #404040;
+  --inacap-border-focus: var(--inacap-red);
+  
+  /* Sombras adaptadas para modo oscuro */
+  --inacap-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --inacap-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+  --inacap-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+  --inacap-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+  
+  /* Estados interactivos para modo oscuro */
+  --inacap-hover-overlay: rgba(255, 255, 255, 0.08);
+  --inacap-active-overlay: rgba(255, 255, 255, 0.12);
+  
+  /* Rojo adaptado para mejor contraste en oscuro */
+  --inacap-red-light: rgba(204, 0, 0, 0.15);
+  
+  /* Colores semÃ¡nticos adaptados */
+  --inacap-success: #10b981;
+  --inacap-warning: #f59e0b;
   --inacap-error: #ef4444;
+  --inacap-info: #3b82f6;
+  
+  /* Legacy tokens actualizados */
+  --surface-1: var(--inacap-surface-elevated);
+  --text-muted: var(--inacap-text-secondary);
 }
 
-/* Forzar color de texto claro en modo oscuro (aplica de forma global para evitar fugas de color oscuro) */
+/* ========================================
+   BASE STYLES MEJORADOS
+   ======================================== */
+
 html.theme-dark,
 html.theme-dark body {
-  color: var(--inacap-text-primary) !important;
-  background-color: var(--inacap-background) !important;
+  background-color: var(--inacap-background);
+  color: var(--inacap-text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Asegurar que los elementos de texto comunes usen el token de texto primario */
+/* ========================================
+   TIPOGRAFÃA CONSISTENTE
+   ======================================== */
+
 html.theme-dark h1,
 html.theme-dark h2,
 html.theme-dark h3,
 html.theme-dark h4,
 html.theme-dark h5,
-html.theme-dark h6,
+html.theme-dark h6 {
+  color: var(--inacap-text-primary);
+}
+
 html.theme-dark p,
-html.theme-dark a,
 html.theme-dark span,
-html.theme-dark label,
-html.theme-dark li,
-html.theme-dark small,
-html.theme-dark button,
-html.theme-dark input,
-html.theme-dark textarea {
-  color: var(--inacap-text-primary) !important;
+html.theme-dark div,
+html.theme-dark label {
+  color: var(--inacap-text-primary);
 }
 
-/* Forzar que SVGs y iconos tomen el color de texto para que se vean claros */
-html.theme-dark svg,
-html.theme-dark svg * {
-  color: var(--inacap-text-primary) !important;
-  fill: currentColor !important;
-  stroke: currentColor !important;
+html.theme-dark .text-secondary,
+html.theme-dark [class*="text-gray-5"],
+html.theme-dark [class*="text-gray-6"] {
+  color: var(--inacap-text-secondary) !important;
 }
 
-/* Más reglas específicas para iconos comunes en la UI */
-html.theme-dark svg.kpi-icon,
-html.theme-dark svg.kpi-icon *,
-html.theme-dark svg.section-icon,
-html.theme-dark svg.section-icon *,
-html.theme-dark svg.status-icon,
-html.theme-dark svg.status-icon *,
-html.theme-dark svg.info-icon,
-html.theme-dark svg.info-icon *,
-html.theme-dark svg.ver-mas-icon,
-html.theme-dark svg.ver-mas-icon * {
-  color: var(--inacap-text-primary) !important;
-  fill: currentColor !important;
-  stroke: currentColor !important;
+html.theme-dark .text-tertiary,
+html.theme-dark [class*="text-gray-4"] {
+  color: var(--inacap-text-tertiary) !important;
 }
 
-/* Neutralizar utilidades Tailwind que aplican text-white/text-<color> sobre SVGs */
-html.theme-dark svg[class*="text-"] {
-  /* Force icon color to theme text */
-  color: var(--inacap-text-primary) !important;
-  fill: currentColor !important;
-  stroke: currentColor !important;
+/* ========================================
+   SUPERFICIES Y CARDS (SIN AFECTAR SIDEBAR)
+   ======================================== */
+
+/* Home page especÃ­fico */
+html.theme-dark .home-root .bg-white,
+html.theme-dark .home-root [class*="bg-white"],
+html.theme-dark .home-root .rounded-2xl,
+html.theme-dark .home-root .promo-card,
+html.theme-dark .home-root .greeting-card,
+html.theme-dark .home-root .hero-panel,
+html.theme-dark .home-root .project-card {
+  background-color: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-lg) !important;
 }
 
-/* Partner logos: asegurar que el <text> dentro de SVG use currentColor */
-html.theme-dark .partner-card,
-html.theme-dark .partner-card .partner-logo {
-  color: var(--inacap-text-primary) !important;
-}
-html.theme-dark .partner-card .partner-logo text {
-  fill: currentColor !important;
-}
-
-/* Asegurar que los iconos dentro de botones con fondo semitransparente se muestren correctamente */
-html.theme-dark button svg,
-html.theme-dark .btn-inacap svg,
-html.theme-dark .btn-inacap-secondary svg {
-  color: var(--inacap-text-primary) !important;
-  fill: currentColor !important;
-  stroke: currentColor !important;
+/* Cards generales (excepto sidebar) */
+html.theme-dark .card:not(.sidebar *),
+html.theme-dark .card-inacap:not(.sidebar *),
+html.theme-dark .partner-card {
+  background-color: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-lg) !important;
 }
 
-/* Tiny fix: if an SVG explicitly sets fill="none" but paths rely on stroke, ensure stroke remains visible */
-html.theme-dark svg [stroke] {
-  stroke: currentColor !important;
+/* Modales y dropdowns */
+html.theme-dark .modal-container,
+html.theme-dark .modal-content,
+html.theme-dark .dropdown-menu {
+  background-color: var(--inacap-surface-elevated);
+  border-color: var(--inacap-border);
+  box-shadow: var(--inacap-shadow-xl);
 }
 
+/* ========================================
+   BOTONES MEJORADOS
+   ======================================== */
 
-/* Componentes que usan colores hardcoded: asegurar override en modo oscuro */
-html.theme-dark .partner-card,
-html.theme-dark .hero-banner-title,
-html.theme-dark .hero-banner-desc,
-html.theme-dark .promo-title,
-html.theme-dark .promo-desc,
-html.theme-dark .promo-badge,
-html.theme-dark .area-badge,
-html.theme-dark .area-chip {
-  color: var(--inacap-text-primary) !important;
+html.theme-dark .btn-inacap,
+html.theme-dark .btn-inacap-primary {
+  background-color: var(--inacap-red);
+  color: white;
+  border-color: var(--inacap-red);
 }
 
-/* Global overrides to ensure home page uses dark surfaces when theme-dark is active */
+html.theme-dark .btn-inacap:hover,
+html.theme-dark .btn-inacap-primary:hover {
+  background-color: var(--inacap-red-hover);
+  border-color: var(--inacap-red-hover);
+}
+
+html.theme-dark .btn-inacap-secondary {
+  background-color: transparent;
+  color: var(--inacap-text-primary);
+  border-color: var(--inacap-border-secondary);
+}
+
+html.theme-dark .btn-inacap-secondary:hover {
+  background-color: var(--inacap-hover-overlay);
+  border-color: var(--inacap-red);
+  color: var(--inacap-red);
+}
+
+/* ========================================
+   FORMULARIOS
+   ======================================== */
+
+html.theme-dark input:not(.sidebar input),
+html.theme-dark textarea:not(.sidebar textarea),
+html.theme-dark select:not(.sidebar select) {
+  background-color: var(--inacap-surface-elevated);
+  border-color: var(--inacap-border);
+  color: var(--inacap-text-primary);
+}
+
+html.theme-dark input:focus:not(.sidebar input),
+html.theme-dark textarea:focus:not(.sidebar textarea),
+html.theme-dark select:focus:not(.sidebar select) {
+  border-color: var(--inacap-border-focus);
+  box-shadow: 0 0 0 3px rgba(204, 0, 0, 0.1);
+}
+
+html.theme-dark input::placeholder:not(.sidebar input::placeholder),
+html.theme-dark textarea::placeholder:not(.sidebar textarea::placeholder) {
+  color: var(--inacap-text-tertiary);
+}
+
+/* ========================================
+   ICONOS Y SVG MEJORADOS (SIN AFECTAR SIDEBAR)
+   ======================================== */
+
+html.theme-dark svg:not(.sidebar svg) {
+  color: currentColor;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* Iconos especÃ­ficos que necesitan color primario */
+html.theme-dark .home-root .kpi-icon,
+html.theme-dark .home-root .notification-icon,
+html.theme-dark .home-root .info-icon,
+html.theme-dark .project-card .ver-mas-icon {
+  color: var(--inacap-text-secondary);
+}
+
+/* ========================================
+   HOME PAGE ESPECÃFICO
+   ======================================== */
+
 html.theme-dark .home-root,
 html.theme-dark .home-root .home-hero,
 html.theme-dark .home-root section,
@@ -162,381 +269,455 @@ html.theme-dark .promo-callouts--wide {
   color: var(--inacap-text-primary) !important;
 }
 
-/* Replace white card backgrounds in home with elevated surface tokens in dark */
-html.theme-dark .home-root .bg-white,
-html.theme-dark .home-root [class*="bg-white"],
-html.theme-dark .home-root .rounded-2xl,
-html.theme-dark .home-root .promo-card,
-html.theme-dark .home-root .greeting-card,
-html.theme-dark .home-root .hero-panel {
-  background: var(--inacap-surface-elevated) !important;
-  border-color: var(--inacap-border) !important;
-  box-shadow: var(--inacap-shadow-xl) !important;
+html.theme-dark .home-root {
+  background: linear-gradient(180deg, var(--inacap-background) 0%, var(--inacap-surface) 100%) !important;
+}
+
+html.theme-dark .hero-banner-inner {
+  background: linear-gradient(135deg, var(--inacap-surface-elevated), var(--inacap-surface));
+  border-color: var(--inacap-border);
 }
 
 /* Prevent light gradients from leaking through in dark mode */
-html.theme-dark .home-root [class*="from-"] ,
+html.theme-dark .home-root [class*="from-"],
 html.theme-dark .home-root [class*="to-white"] {
   background-image: none !important;
 }
 
-/* Aggressive neutralization for common Tailwind color utilities inside critical roots
-   This is a fast mitigation to avoid manual replacement across hundreds of templates.
-   Later we should replace usages with design tokens and remove the !important rules. */
-html.theme-dark .home-root [class*="text-gray-"] {
-  color: var(--inacap-text-primary) !important;
-}
-html.theme-dark .sidebar [class*="text-gray-"] {
-  color: var(--inacap-text-primary) !important;
-}
-html.theme-dark .home-root [class*="text-gray"] {
-  color: var(--inacap-text-primary) !important;
+/* ========================================
+   PROYECTO CARDS
+   ======================================== */
+
+html.theme-dark .project-card {
+  background-color: var(--inacap-surface-elevated);
+  border-color: var(--inacap-border);
+  box-shadow: var(--inacap-shadow-lg);
 }
 
-html.theme-dark .home-root [class*="bg-white"] ,
-html.theme-dark .home-root [class*="bg-gray-"] ,
-html.theme-dark .sidebar [class*="bg-white"],
-html.theme-dark .sidebar [class*="bg-gray-"] {
-  background: var(--inacap-surface-elevated) !important;
-  border-color: var(--inacap-border) !important;
-  box-shadow: var(--inacap-shadow-xl) !important;
+html.theme-dark .project-card:hover {
+  box-shadow: var(--inacap-shadow-xl);
+  transform: translateY(-2px);
 }
 
-/* Neutralize common gradient utilities that reference light stops */
-html.theme-dark .home-root [class*="from-gray-"] ,
-html.theme-dark .home-root [class*="to-white"] ,
-html.theme-dark .home-root [class*="via-white"] {
-  background-image: none !important;
+html.theme-dark .project-banner {
+  position: relative;
 }
 
-
-
-/* Alto contraste: reforzar colores de foreground/background y bordes */
-html.contrast-high {
-  --inacap-text-primary: #000000;
-  --inacap-text-secondary: #000000;
-  --inacap-background: #ffffff;
-  --inacap-border: #000000;
-}
-
-/* Escala de fuente accesible (aplicada al html) */
-html.font-md { font-size: 100%; }
-html.font-lg { font-size: 112.5%; }  /* ~18px si base 16 */
-html.font-xl { font-size: 125%; }    /* ~20px si base 16 */
-
-/* Clases utilitarias INACAP */
-@layer utilities {
-  .bg-inacap-red {
-    background-color: var(--inacap-red);
-  }
-  
-  .text-inacap-red {
-    color: var(--inacap-red);
-  }
-  
-  .border-inacap-red {
-    border-color: var(--inacap-red);
-  }
-  
-  .hover\:bg-inacap-red-hover:hover {
-    background-color: var(--inacap-red-hover);
-  }
-  
-  .bg-inacap-black {
-    background-color: var(--inacap-black);
-  }
-  
-  .text-inacap-black {
-    color: var(--inacap-black);
-  }
-  
-  .bg-inacap-gray-700 {
-    background-color: var(--inacap-gray-700);
-  }
-  
-  .text-inacap-gray-700 {
-    color: var(--inacap-gray-700);
-  }
-
-  /* Utilidades adicionales para variables definidas */
-  .bg-inacap-red-light { background-color: var(--inacap-red-light); }
-  .bg-inacap-white { background-color: var(--inacap-white); }
-  .text-inacap-white { color: var(--inacap-white); }
-  .border-inacap { border-color: var(--inacap-border); }
-}
-
-/* Tipografía INACAP (provisional) */
-
-@layer base {
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: var(--inacap-text-primary);
-    background-color: var(--inacap-background);
-  }
-  html { scroll-behavior: smooth; }
-  
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Montserrat', 'Inter', sans-serif;
-    font-weight: 600;
-    color: var(--inacap-text-primary);
-  }
-  
-  /* Asegurar contraste WCAG AA */
-  .contrast-check {
-    color: var(--inacap-text-primary);
-    background-color: var(--inacap-background);
-  }
-  /* Utilidad de focus visible accesible */
-  .focus-visible:focus-visible,
-  [data-focus-visible-added] {
-    outline: 2px solid var(--inacap-red);
-    outline-offset: 2px;
-  }
-}
-
-/* Componentes base INACAP */
-.btn-inacap-primary {
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-  color: white;
-  border-radius: 0.5rem;
-  transition: all 0.2s;
-  outline: none;
-  background-color: var(--inacap-red);
-  border: 1px solid var(--inacap-red);
-}
-
-.btn-inacap-primary:hover {
-  background-color: var(--inacap-red-hover);
-  border-color: var(--inacap-red-hover);
-}
-
-.btn-inacap-primary:focus {
-  box-shadow: 0 0 0 2px var(--inacap-red);
-}
-  
-/* Botón secundario INACAP */
-.btn-inacap-secondary {
-  padding: 0.75rem 1.5rem;
-  font-weight: 500;
-  border-radius: 0.5rem;
-  transition: all 0.2s;
-  outline: none;
-  color: var(--inacap-red);
-  border: 2px solid var(--inacap-red);
-  background-color: transparent;
-}
-  
-  .btn-inacap-secondary:hover {
-    background-color: var(--inacap-red-light);
-  }
-  
-/* Cards INACAP */
-.card-inacap {
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--inacap-border);
-}
-
-/* Headers INACAP */
-.header-inacap {
-  background-color: var(--inacap-red);
-  color: var(--inacap-white);
+html.theme-dark .project-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
 }
 
 /* ========================================
-   WEBKIT SCROLLBAR INACAP COMPLEMENT
+   DROPDOWNS Y INTERACCIONES
    ======================================== */
 
-/* Scrollbar principal (global) */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+html.theme-dark .dropdown-item:hover {
+  background-color: var(--inacap-hover-overlay);
 }
 
-::-webkit-scrollbar-track {
-  background: var(--inacap-background);
-  border-radius: 4px;
+html.theme-dark .notification-item:hover {
+  background-color: var(--inacap-hover-overlay);
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--inacap-gray-300);
-  border-radius: 4px;
-  border: 1px solid var(--inacap-border);
-  transition: background-color 0.2s ease;
+/* ========================================
+   ARREGLOS ESPECÍFICOS PARA DROPDOWN PERFIL EN MODO OSCURO
+   ======================================== */
+
+/* Arreglar iconos SVG cortados en dropdown de perfil */
+html.theme-dark .profile-dropdown svg,
+html.theme-dark .dropdown svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  color: var(--inacap-text-primary) !important;
+  display: block !important;
+  overflow: visible !important;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--inacap-gray-700);
+/* Asegurar que los items del dropdown tengan suficiente espacio */
+html.theme-dark .profile-dropdown .dropdown-item,
+html.theme-dark .dropdown .dropdown-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  padding: 0.875rem 1rem !important;
+  min-height: 2.5rem !important;
+  color: var(--inacap-text-primary) !important;
+  transition: all 0.2s ease !important;
 }
 
-::-webkit-scrollbar-thumb:active {
-  background: var(--inacap-red);
+/* Mejorar el hover de los items */
+html.theme-dark .profile-dropdown .dropdown-item:hover,
+html.theme-dark .dropdown .dropdown-item:hover {
+  background-color: rgba(196, 30, 58, 0.08) !important;
+  color: var(--inacap-text-primary) !important;
 }
 
-::-webkit-scrollbar-corner {
-  background: var(--inacap-background);
+/* Arreglar el header del dropdown */
+html.theme-dark .profile-dropdown .dropdown-header,
+html.theme-dark .dropdown .dropdown-header {
+  background: var(--inacap-surface-elevated) !important;
+  border-bottom: 1px solid var(--inacap-border) !important;
+  padding: 1rem !important;
 }
 
-/* Scrollbar para elementos específicos con clase .scrollbar-inacap */
-.scrollbar-inacap::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* Arreglar la info del perfil en el header */
+html.theme-dark .profile-dropdown .profile-info {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
 }
 
-.scrollbar-inacap::-webkit-scrollbar-track {
-  background: var(--inacap-red-light);
-  border-radius: 6px;
-  margin: 2px;
+html.theme-dark .profile-dropdown .profile-name,
+html.theme-dark .profile-dropdown .profile-email {
+  color: var(--inacap-text-primary) !important;
+  margin: 0 !important;
 }
 
-.scrollbar-inacap::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--inacap-red) 0%, var(--inacap-red-hover) 100%);
-  border-radius: 6px;
-  border: 2px solid var(--inacap-red-light);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+html.theme-dark .profile-dropdown .profile-email {
+  color: var(--inacap-text-secondary) !important;
+  font-size: 0.75rem !important;
 }
 
-.scrollbar-inacap::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--inacap-red-hover) 0%, var(--inacap-red) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(196, 30, 58, 0.2);
+/* Arreglar las estadísticas en el dropdown */
+html.theme-dark .dropdown-stats {
+  background: var(--inacap-surface) !important;
+  border-top: 1px solid var(--inacap-border) !important;
+  border-bottom: 1px solid var(--inacap-border) !important;
+  margin: 0 !important;
+  padding: 0.75rem 0 !important;
 }
 
-.scrollbar-inacap::-webkit-scrollbar-thumb:active {
-  background: var(--inacap-red-hover);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+html.theme-dark .dropdown-stats h4 {
+  color: var(--inacap-text-secondary) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.025em !important;
+  margin: 0 0 0.5rem 0 !important;
+  padding: 0 1rem !important;
 }
 
-/* Scrollbar delgado para elementos compactos */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+html.theme-dark .profile-stats-container {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 0 1rem !important;
+  gap: 1rem !important;
 }
 
-.scrollbar-thin::-webkit-scrollbar-track {
+html.theme-dark .profile-stat-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  flex: 1 !important;
+  padding: 0.5rem !important;
+  background: var(--inacap-surface-elevated) !important;
+  border: 1px solid var(--inacap-border) !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.2s ease !important;
+}
+
+html.theme-dark .profile-stat-item:hover {
+  background: var(--inacap-surface) !important;
+  border-color: rgba(196, 30, 58, 0.2) !important;
+}
+
+html.theme-dark .profile-stat-item .stat-icon {
+  color: var(--inacap-red) !important;
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+}
+
+html.theme-dark .profile-stat-number {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: var(--inacap-text-primary) !important;
+  line-height: 1 !important;
+}
+
+html.theme-dark .profile-stat-label {
+  font-size: 0.625rem !important;
+  color: var(--inacap-text-secondary) !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.025em !important;
+}
+
+/* Arreglar el footer del dropdown */
+html.theme-dark .profile-dropdown .dropdown-footer,
+html.theme-dark .dropdown .dropdown-footer {
+  background: var(--inacap-surface-elevated) !important;
+  border-top: 1px solid var(--inacap-border) !important;
+  padding: 0.5rem !important;
+}
+
+/* Arreglar el botón de logout */
+html.theme-dark .dropdown-item.logout {
+  color: var(--inacap-error) !important;
+  font-weight: 600 !important;
+}
+
+html.theme-dark .dropdown-item.logout:hover {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+  color: var(--inacap-error) !important;
+}
+
+html.theme-dark .dropdown-item.logout svg {
+  color: var(--inacap-error) !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+/* Asegurar que la flecha del dropdown se vea bien */
+html.theme-dark .profile-dropdown::before {
+  border-bottom-color: var(--inacap-surface-elevated) !important;
+  filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.6)) !important;
+}
+
+/* Arreglar el contenido del dropdown */
+html.theme-dark .profile-dropdown .dropdown-content,
+html.theme-dark .dropdown .dropdown-content {
+  background: var(--inacap-surface-elevated) !important;
+  max-height: 20rem !important;
+  overflow-y: auto !important;
+}
+
+/* Scrollbar personalizado para el dropdown */
+html.theme-dark .dropdown-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+html.theme-dark .dropdown-content::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: var(--inacap-gray-300);
-  border-radius: 3px;
-  opacity: 0.6;
-  transition: opacity 0.2s ease;
+html.theme-dark .dropdown-content::-webkit-scrollbar-thumb {
+  background-color: var(--inacap-border-secondary);
+  border-radius: 9999px;
 }
 
-.scrollbar-thin:hover::-webkit-scrollbar-thumb {
-  opacity: 1;
-  background: var(--inacap-red);
+html.theme-dark .dropdown-content::-webkit-scrollbar-thumb:hover {
+  background-color: var(--inacap-red);
 }
 
-/* Scrollbar invisible (overlay) */
-.scrollbar-invisible::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
-  background: transparent;
+/* ==========================
+   Dark-mode: profile & notification dropdown fixes
+   ========================== */
+
+/* Perfil: menÃº desplegable */
+html.theme-dark .profile-dropdown,
+html.theme-dark .user-menu-dropdown,
+html.theme-dark .menu-dropdown,
+html.theme-dark .dropdown.profile,
+html.theme-dark .dropdown.user {
+  background: linear-gradient(180deg, rgba(18,18,18,0.98), rgba(12,12,12,0.96)) !important;
+  color: var(--inacap-text-primary) !important;
+  border: 1px solid var(--inacap-border-secondary) !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.65) !important;
+  border-radius: 10px !important;
+  padding: 0.4rem !important;
+  min-width: 220px !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  backdrop-filter: blur(8px) !important;
 }
 
-.scrollbar-invisible {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+/* Asegurar que los items del menÃº sean legibles */
+html.theme-dark .profile-dropdown .menu-item,
+html.theme-dark .user-menu-dropdown .menu-item,
+html.theme-dark .dropdown .menu-item,
+html.theme-dark .menu-dropdown .menu-item {
+  color: var(--inacap-text-primary) !important;
+  padding: 0.625rem 0.9rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
 }
 
-/* Scrollbar para áreas de texto y formularios */
-textarea.scrollbar-form::-webkit-scrollbar,
-.form-scrollable::-webkit-scrollbar {
-  width: 8px;
+/* Meta / subtÃ­tulos dentro del dropdown */
+html.theme-dark .profile-dropdown .meta,
+html.theme-dark .dropdown .meta,
+html.theme-dark .menu-item .meta,
+html.theme-dark .menu-item .muted {
+  color: var(--inacap-text-secondary) !important;
+  font-size: .9rem !important;
 }
 
-textarea.scrollbar-form::-webkit-scrollbar-track,
-.form-scrollable::-webkit-scrollbar-track {
-  background: var(--inacap-border);
-  border-radius: 4px;
-  margin: 4px 0;
+/* Botones/links dentro del dropdown */
+html.theme-dark .profile-dropdown a,
+html.theme-dark .profile-dropdown button,
+html.theme-dark .dropdown a,
+html.theme-dark .dropdown button {
+  color: var(--inacap-text-primary) !important;
 }
 
-textarea.scrollbar-form::-webkit-scrollbar-thumb,
-.form-scrollable::-webkit-scrollbar-thumb {
-  background: var(--inacap-gray-700);
-  border-radius: 4px;
-  border: 1px solid var(--inacap-border);
+/* Notificaciones: fondo y texto blanco para los items */
+html.theme-dark .notifications-dropdown,
+html.theme-dark .notifications-popover,
+html.theme-dark .push-notification-container,
+html.theme-dark .notifications-list,
+html.theme-dark .notification-popover,
+html.theme-dark .notifications-panel {
+  background: linear-gradient(180deg, rgba(14,14,14,0.96), rgba(18,18,18,0.96)) !important;
+  color: var(--inacap-text-primary) !important;
+  border: 1px solid var(--inacap-border-secondary) !important;
+  box-shadow: 0 14px 40px rgba(0,0,0,0.72) !important;
+  border-radius: 10px !important;
+  padding: 0.35rem !important;
+  min-width: 260px !important;
 }
 
-textarea.scrollbar-form::-webkit-scrollbar-thumb:hover,
-.form-scrollable::-webkit-scrollbar-thumb:hover {
-  background: var(--inacap-red);
+/* Cada item de notificaciÃ³n */
+html.theme-dark .notifications-list .notification-item,
+html.theme-dark .notification-item,
+html.theme-dark .notifications-dropdown .notification-item {
+  color: var(--inacap-text-primary) !important;
+  padding: 0.75rem 0.9rem !important;
+  border-bottom: 1px solid rgba(255,255,255,0.03) !important;
+}
+html.theme-dark .notifications-list .notification-item:last-child,
+html.theme-dark .notification-item:last-child { border-bottom: none !important; }
+
+/* Texto y metadatos dentro de cada notificaciÃ³n */
+html.theme-dark .notifications-list .notification-item .title,
+html.theme-dark .notifications-list .notification-item p,
+html.theme-dark .notification-item .text,
+html.theme-dark .notification-item .meta {
+  color: var(--inacap-text-primary) !important;
+}
+html.theme-dark .notifications-list .notification-item .meta {
+  color: var(--inacap-text-secondary) !important;
+  font-size: .9rem !important;
 }
 
-/* Scrollbar para modales y overlays */
-.modal-content::-webkit-scrollbar,
-.overlay-content::-webkit-scrollbar {
-  width: 12px;
+/* Mantener los indicadores circulares (colores) visibles y con buen contraste */
+html.theme-dark .notifications-list .dot,
+html.theme-dark .notification-dot {
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.35) inset, 0 2px 8px rgba(0,0,0,0.45);
 }
 
-.modal-content::-webkit-scrollbar-track,
-.overlay-content::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+/* Forzar que iconos SVG dentro de los dropdowns mantengan currentColor */
+html.theme-dark .profile-dropdown svg,
+html.theme-dark .notifications-dropdown svg,
+html.theme-dark .dropdown svg {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+  color: var(--inacap-text-primary) !important;
 }
 
-.modal-content::-webkit-scrollbar-thumb,
-.overlay-content::-webkit-scrollbar-thumb {
-  background: rgba(196, 30, 58, 0.8);
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+/* PequeÃ±o ajuste: asegurar separaciÃ³n entre grupos en el menÃº */
+html.theme-dark .profile-dropdown .menu-group,
+html.theme-dark .dropdown .menu-group { margin: 0.35rem 0 !important; padding: 0.25rem 0 !important; }
+
+/* Si hay botones de acciÃ³n (Cerrar sesiÃ³n), darle peso visual */
+html.theme-dark .profile-dropdown .danger,
+html.theme-dark .dropdown .danger {
+  color: var(--inacap-error) !important;
+  font-weight: 700 !important;
 }
 
-.modal-content::-webkit-scrollbar-thumb:hover,
-.overlay-content::-webkit-scrollbar-thumb:hover {
-  background: var(--inacap-red);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+/* Accessibility: focus visible dentro de los dropdowns */
+html.theme-dark .profile-dropdown .menu-item:focus-visible,
+html.theme-dark .notifications-dropdown .notification-item:focus-visible {
+  outline: 2px solid rgba(196,30,58,0.9) !important;
+  outline-offset: 2px !important;
 }
 
-/* Responsive: scrollbars más gruesos en móvil para mejor usabilidad */
-@media (max-width: 768px) {
-  ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-  }
-  
-  .scrollbar-inacap::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
+/* Extra tweaks: cover singular class names and profile arrow color in dark */
+html.theme-dark .notification-dropdown,
+html.theme-dark .notification-popover,
+html.theme-dark .notification-panel,
+html.theme-dark .notification-list {
+  background: linear-gradient(180deg, rgba(14,14,14,0.96), rgba(18,18,18,0.96)) !important;
+  color: var(--inacap-text-primary) !important;
 }
 
-/* Dark mode support (si se implementa en el futuro) */
-@media (prefers-color-scheme: dark) {
-  ::-webkit-scrollbar-track {
-    background: #2a2a2a;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: #555;
-    border-color: #444;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: #777;
-  }
-  
-  ::-webkit-scrollbar-thumb:active {
-    background: var(--inacap-red);
-  }
+/* Ensure specific title class used in sidebar is overridden */
+html.theme-dark .notification-title,
+html.theme-dark .notification-item .notification-title {
+  color: var(--inacap-text-primary) !important;
 }
 
-/* Reglas globales para SVGs en modo oscuro */
-html.theme-dark svg {
-  filter: none !important; /* Elimina cualquier filtro aplicado */
-  box-shadow: none !important; /* Elimina sombras */
-  text-shadow: none !important; /* Elimina sombras de texto */
-  fill: currentColor !important; /* Asegura que el color de relleno sea el actual */
-  stroke: currentColor !important; /* Asegura que el color del trazo sea el actual */
+/* Fix the profile dropdown arrow color in dark mode */
+html.theme-dark .profile-dropdown::before {
+  border-bottom-color: var(--inacap-surface-elevated) !important;
+  filter: drop-shadow(0 -2px 4px rgba(0,0,0,0.6)) !important;
 }
 
-/* You can add global styles to this file, and also import other style files */
+/* Cover alternative naming in header user menu */
+html.theme-dark .user-menu,
+html.theme-dark .header-user-dropdown,
+html.theme-dark .account-dropdown {
+  background: linear-gradient(180deg, rgba(18,18,18,0.98), rgba(12,12,12,0.96)) !important;
+  color: var(--inacap-text-primary) !important;
+  border: 1px solid var(--inacap-border-secondary) !important;
+}
+
+/* Strong override: ensure all text inside notification dropdowns is bright in dark mode */
+html.theme-dark .notifications-dropdown,
+html.theme-dark .notifications-popover,
+html.theme-dark .notifications-panel,
+html.theme-dark .notification-popover,
+html.theme-dark .notifications-list,
+html.theme-dark .notification-list,
+html.theme-dark .notification-dropdown {
+  color: var(--inacap-text-primary) !important;
+}
+
+/* Target common descendants to remove dimming/opacity and force color */
+html.theme-dark .notifications-dropdown *,
+html.theme-dark .notifications-popover *,
+html.theme-dark .notifications-panel *,
+html.theme-dark .notification-popover *,
+html.theme-dark .notifications-list *,
+html.theme-dark .notification-list * {
+  color: var(--inacap-text-primary) !important;
+  opacity: 1 !important;
+  mix-blend-mode: normal !important;
+}
+
+/* Explicit for text elements inside notifications */
+html.theme-dark .notifications-dropdown h1,
+html.theme-dark .notifications-dropdown h2,
+html.theme-dark .notifications-dropdown h3,
+html.theme-dark .notifications-dropdown h4,
+html.theme-dark .notifications-dropdown h5,
+html.theme-dark .notifications-dropdown h6,
+html.theme-dark .notifications-dropdown p,
+html.theme-dark .notifications-dropdown span,
+html.theme-dark .notifications-dropdown a,
+html.theme-dark .notifications-dropdown button,
+html.theme-dark .notifications-dropdown .notification-title,
+html.theme-dark .notifications-dropdown .notification-time,
+html.theme-dark .notifications-dropdown .notification-content,
+html.theme-dark .notifications-dropdown .meta {
+  color: var(--inacap-text-primary) !important;
+}
+
+/* Keep meta/time slightly muted but readable */
+html.theme-dark .notifications-dropdown .notification-time,
+html.theme-dark .notifications-dropdown .meta {
+  color: var(--inacap-text-secondary) !important;
+  opacity: 0.95 !important;
+}
+
+/* Ensure bottom link (ver todas) remains visible but uses brand accent if desired */
+html.theme-dark .notifications-dropdown .see-all,
+html.theme-dark .notifications-dropdown .view-all-notifications,
+html.theme-dark .notifications-dropdown .footer-link {
+  color: var(--inacap-primary) !important;
+  font-weight: 700 !important;
+}
+
+/* If the dropdown items had reduced pointer-events or filters, remove them */
+html.theme-dark .notifications-dropdown .notification-item,
+html.theme-dark .notifications-dropdown .notification-item * {
+  filter: none !important;
+  -webkit-filter: none !important;
+}

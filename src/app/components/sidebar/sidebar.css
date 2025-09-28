@@ -492,9 +492,10 @@
 }
 
 .user-dropdown-icon {
-  color: var(--inacap-gray-400);
-  margin-left: 0.25rem;
-  transition: transform 0.2s;
+  width: 1rem !important;
+  height: 1rem !important;
+  flex-shrink: 0 !important;
+  stroke-width: 2 !important;
 }
 
 .user-dropdown-icon.rotate {
@@ -583,8 +584,10 @@
 }
 
 .dropdown-item svg {
+  width: 1rem;
+  height: 1rem;
   flex-shrink: 0;
-  color: var(--inacap-gray-400);
+  stroke-width: 2;
 }
 
 .dropdown-item:hover svg {
@@ -708,6 +711,8 @@
   height: 2.5rem;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--inacap-border);
+  flex-shrink: 0;
 }
 
 .profile-name {
@@ -779,9 +784,12 @@
   border-color: rgba(196, 30, 58, 0.2);
 }
 
-.profile-stat-item .stat-icon {
-  color: var(--inacap-red);
+.profile-stat-item .stat-icon,
+.stat-icon {
+  width: 1rem;
+  height: 1rem;
   flex-shrink: 0;
+  stroke-width: 2;
 }
 
 .profile-stat-info {
@@ -829,21 +837,55 @@
   /* Ocultar la acción del header en móvil */
   .welcome-action { display: none; }
   .notification-dropdown {
-    width: 20rem;
-    right: -8rem;
+    /* En móvil, las dimensiones se controlan abajo (position:fixed) */
+    width: auto;
   }
   
   .profile-dropdown {
-    width: 16rem;
-    right: -6rem;
+    width: auto;
   }
   
+  /* Forzar dropdowns fuera del flujo para evitar que se corten por contenedores
+     (sidebar, header o overlays). Posición fija debajo del header, con margen
+     lateral y un max-width para que no se salga de la pantalla. Usamos la
+     variable --header-height para controlar la altura del encabezado. */
+  .notification-dropdown,
+  .profile-dropdown,
   .dropdown-menu {
-    max-height: 70vh;
+    position: fixed;
+    top: var(--header-height, 70px); /* altura del header en móvil (por defecto 70px) */
+    right: 1rem;
+    left: auto;
+    z-index: 1300; /* por encima del sidebar (1100) y overlay (1050) */
+    min-width: 12rem;
+    max-width: calc(100% - 2rem);
+    width: auto;
+    transform: none; /* evitar desplazamientos que causen clipping */
+    box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+    border-radius: 0.75rem;
+    pointer-events: auto;
   }
-  
-  .dropdown-content {
-    max-height: 15rem;
+
+  /* Limitar alturas en móvil pero permitiendo scroll interno */
+  .dropdown-menu { max-height: 70vh; overflow: visible; }
+  .dropdown-content { max-height: 40vh; }
+
+  /* Mostrar flecha (pointer) y posicionarla con una variable calculada en JS
+     --dropdown-arrow-left (distancia desde el borde izquierdo del dropdown). */
+  .notification-dropdown::before,
+  .profile-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    left: var(--dropdown-arrow-left, 2rem);
+    right: auto;
+    width: 0;
+    height: 0;
+    border-left: 0.5rem solid transparent;
+    border-right: 0.5rem solid transparent;
+    border-bottom: 0.5rem solid var(--surface-1, #fff);
+    filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.12));
+    display: block;
   }
 }
 

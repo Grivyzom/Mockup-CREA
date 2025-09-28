@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, effect, inject, runInInjectionContext } from '@angular/core';
+import { Component, OnInit, HostListener, effect, inject, runInInjectionContext, AfterViewInit, OnDestroy, ElementRef, Renderer2 } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -41,6 +41,12 @@ export class Sidebar implements OnInit {
 
   private clickTimeout: any = null; // para distinguir simple vs doble click
   private dblClickDelay = 240; // ms
+  // Portal related
+  private profileDropdownEl: HTMLElement | null = null;
+  private notificationDropdownEl: HTMLElement | null = null;
+  private portalHost = document.body;
+  private resizeHandler = () => this.repositionOpenDropdowns();
+  private scrollHandler = () => this.repositionOpenDropdowns();
 
   constructor(private router: Router, private notificationService: NotificationService, private profileService: ProfileService) {
     // Mover effect al constructor para asegurar el contexto de inyección
@@ -62,6 +68,10 @@ export class Sidebar implements OnInit {
     
     // Establecer título inicial
     this.updatePageTitle(this.router.url);
+    // Añadir listeners globales para reposicionar dropdowns cuando cambie el viewport
+    window.addEventListener('resize', this.resizeHandler);
+    window.addEventListener('orientationchange', this.resizeHandler);
+    window.addEventListener('scroll', this.scrollHandler, true);
   }
 
   toggleMobileMenu() {
@@ -78,14 +88,22 @@ export class Sidebar implements OnInit {
     if (!this.isProfileDropdownPinned) {
       this.isNotificationDropdownOpen = true;
       this.isProfileDropdownOpen = false;
+      // Portal: move to body and position
+      setTimeout(()=> this.attachAndPosition('notification'), 0);
     }
   }
 
-  closeNotificationDropdown() {
-    // Solo cerrar si no está fijado por click
-    if (!this.isNotificationDropdownPinned) {
-      this.isNotificationDropdownOpen = false;
+  closeNotificationDropdown(ev?: MouseEvent) {
+    // Si el dropdown está fijado por click, no lo cerramos
+    if (this.isNotificationDropdownPinned) return;
+    // Si viene un event, comprobar relatedTarget para evitar cerrar cuando el cursor
+    // se mueve del botón al propio dropdown
+    if (ev && ev.relatedTarget) {
+      const related = ev.relatedTarget as Node;
+      const dropdown = document.querySelector('.notification-dropdown');
+      if (dropdown && dropdown.contains(related)) return;
     }
+    this.isNotificationDropdownOpen = false;
   }
 
   openProfileDropdown() {
@@ -93,14 +111,20 @@ export class Sidebar implements OnInit {
     if (!this.isNotificationDropdownPinned) {
       this.isProfileDropdownOpen = true;
       this.isNotificationDropdownOpen = false;
+      // Portal: move to body and position
+      setTimeout(()=> this.attachAndPosition('profile'), 0);
     }
   }
 
-  closeProfileDropdown() {
-    // Solo cerrar si no está fijado por click
-    if (!this.isProfileDropdownPinned) {
-      this.isProfileDropdownOpen = false;
+  closeProfileDropdown(ev?: MouseEvent) {
+    // Si el dropdown está fijado por click, no lo cerramos
+    if (this.isProfileDropdownPinned) return;
+    if (ev && ev.relatedTarget) {
+      const related = ev.relatedTarget as Node;
+      const dropdown = document.querySelector('.profile-dropdown');
+      if (dropdown && dropdown.contains(related)) return;
     }
+    this.isProfileDropdownOpen = false;
   }
 
   // Métodos para manejar clicks (fijar/desfijar dropdowns)
@@ -115,6 +139,7 @@ export class Sidebar implements OnInit {
       this.isProfileDropdownPinned = false;
       this.isNotificationDropdownOpen = true;
       this.isProfileDropdownOpen = false;
+      setTimeout(()=> this.attachAndPosition('notification'), 0);
     }
   }
 
@@ -129,6 +154,7 @@ export class Sidebar implements OnInit {
       this.isNotificationDropdownPinned = false;
       this.isProfileDropdownOpen = true;
       this.isNotificationDropdownOpen = false;
+      setTimeout(()=> this.attachAndPosition('profile'), 0);
     }
   }
 
@@ -138,6 +164,97 @@ export class Sidebar implements OnInit {
     this.isProfileDropdownOpen = false;
     this.isNotificationDropdownPinned = false;
     this.isProfileDropdownPinned = false;
+    // detach portal elements if needed
+    this.detachFromPortal('notification');
+    this.detachFromPortal('profile');
+  }
+
+  // PORTAL HELPERS
+  private attachAndPosition(kind: 'profile' | 'notification'){
+    try{
+      if(kind === 'profile'){
+        if(!this.profileDropdownEl) this.profileDropdownEl = document.querySelector('.profile-dropdown') as HTMLElement;
+        this.moveToBodyAndPosition(this.profileDropdownEl, '.user-avatar');
+      } else {
+        if(!this.notificationDropdownEl) this.notificationDropdownEl = document.querySelector('.notification-dropdown') as HTMLElement;
+        this.moveToBodyAndPosition(this.notificationDropdownEl, '.notification-btn');
+      }
+    }catch(e){
+      // si falla, no romper la UI
+      console.warn('Portal attach error', e);
+    }
+  }
+
+  private detachFromPortal(kind: 'profile' | 'notification'){
+    try{
+      const el = kind === 'profile' ? this.profileDropdownEl : this.notificationDropdownEl;
+      if(!el) return;
+      // intentamos regresar el elemento a su contenedor original en el header/sidebar
+      const container = document.querySelector('.header-right');
+      if(container) container.appendChild(el);
+      // limpiar estilos inline
+      el.style.position = '';
+      el.style.top = '';
+      el.style.left = '';
+      el.style.right = '';
+      el.style.width = '';
+      el.style.maxWidth = '';
+      el.style.setProperty('--dropdown-arrow-left', '');
+    }catch(e){ console.warn('Portal detach error', e); }
+  }
+
+  private moveToBodyAndPosition(el: HTMLElement | null, anchorSelector: string){
+    if(!el) return;
+    const anchor = document.querySelector(anchorSelector) as HTMLElement | null;
+    if(!anchor) return;
+    // move to body if not already
+    if(el.parentElement !== this.portalHost) this.portalHost.appendChild(el);
+    // compute rects
+    const aRect = anchor.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const headerHeight = getComputedStyle(document.documentElement).getPropertyValue('--header-height') || '';
+    const headerPx = headerHeight ? parseInt(headerHeight) : 70;
+    // default right margin
+    const rightMargin = 16; // 1rem
+
+    // Prefer placing the dropdown using left (distance from viewport left).
+    // Attempt to align the dropdown near the anchor.left but keep it inside the viewport.
+    const viewportW = window.innerWidth;
+    const margin = 12; // px margin to viewport edges
+    el.style.position = 'fixed';
+    el.style.top = (aRect.bottom + 8) + 'px'; // small gap under anchor
+    // allow natural sizing first
+    el.style.left = '0px';
+    el.style.right = 'auto';
+    el.style.maxWidth = 'calc(100% - 2rem)';
+    // measure width
+    const measured = el.getBoundingClientRect();
+    const elWidth = measured.width || elRect.width || 240;
+    // desired left attempts to align with anchor.left
+    let leftVal = Math.round(aRect.left);
+    // ensure dropdown doesn't overflow right edge
+    if (leftVal + elWidth + margin > viewportW) {
+      leftVal = Math.max(margin, viewportW - elWidth - margin);
+    }
+    // ensure dropdown doesn't overflow left edge
+    if (leftVal < margin) leftVal = margin;
+    el.style.left = leftVal + 'px';
+    // compute arrow position relative to dropdown left edge
+    const newRect = el.getBoundingClientRect();
+    const anchorCenter = aRect.left + aRect.width / 2;
+    const arrowLeft = Math.round(Math.max(12, Math.min(newRect.width - 12, anchorCenter - newRect.left)));
+    el.style.setProperty('--dropdown-arrow-left', arrowLeft + 'px');
+  }
+
+  private repositionOpenDropdowns(){
+    if(this.isProfileDropdownOpen) this.moveToBodyAndPosition(this.profileDropdownEl || document.querySelector('.profile-dropdown') as HTMLElement, '.user-avatar');
+    if(this.isNotificationDropdownOpen) this.moveToBodyAndPosition(this.notificationDropdownEl || document.querySelector('.notification-dropdown') as HTMLElement, '.notification-btn');
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeHandler);
+    window.removeEventListener('orientationchange', this.resizeHandler);
+    window.removeEventListener('scroll', this.scrollHandler, true);
   }
 
   // Interacción de ítems de notificación en dropdown

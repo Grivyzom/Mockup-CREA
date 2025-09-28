@@ -16,6 +16,7 @@ export class MonthlyProjectsCarousel implements OnInit, OnDestroy {
   @Input() autoplay = true; // Reproducción automática
   @Input() autoplayInterval = 5000; // ms
   @Input() pauseOnHover = true; // Pausar al pasar el mouse o enfocar
+  @Input() isDarkMode: boolean = false; // Recibido desde Home para adaptar renderizado en modo oscuro
   @Output() viewMore = new EventEmitter<ProjectData>();
 
   currentIndex = 0;

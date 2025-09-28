@@ -1,133 +1,234 @@
-<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white home-root">
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-white home-root" [class.theme-dark]="isDarkMode">
   <!-- Hero Section -->
-  <!-- <section class="py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-        Bienvenido a <span class="text-blue-600">MiWeb</span>
-      </h1>
-      <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-        Una experiencia digital moderna creada con Angular y Tailwind CSS. 
-        Descubre todas nuestras funcionalidades y servicios.
-      </p>
-      <div class="space-x-4">
-        <button class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
-          Comenzar
-        </button>
-        <button class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-50 transition-colors">
-          Aprender Más
-        </button>
-      </div>
-    </div>
-  </section> -->
-
-  <!-- Header / Hero INACAP (fondo blanco) -->
   <section class="relative overflow-hidden bg-white text-gray-900 home-hero">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
-  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 items-start">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 items-start">
+        
         <!-- Columna izquierda: texto y CTA -->
-  <div class="no-select hero-text-wrap">
-          <h1 data-watermark="Explora proyectos reales y únete a construir el futuro" class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
+        <div class="no-select hero-text-wrap">
+          <h1 data-watermark="Explora proyectos reales y únete a construir el futuro" 
+              class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight"
+              [class]="isDarkMode ? 'text-gray-50' : 'text-gray-900'">
             Explora proyectos reales
             y únete a construir el futuro
           </h1>
-          <p class="mt-6 text-lg md:text-xl text-gray-600 max-w-2xl">
+          
+          <p class="mt-6 text-lg md:text-xl max-w-2xl"
+             [class]="isDarkMode ? 'text-gray-300' : 'text-gray-600'">
             Descubre iniciativas de estudiantes y docentes de INACAP. Inspírate, participa y aporta en proyectos con impacto real.
           </p>
+          
           <div class="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a routerLink="/about" class="btn-inacap px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2 inline-flex items-center justify-center" aria-label="Ir a la página Acerca de / Proyectos">
+            <a routerLink="/about" 
+               class="btn-inacap px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2 inline-flex items-center justify-center" 
+               aria-label="Ir a la página Acerca de / Proyectos">
               Explorar proyectos
             </a>
-            <button type="button" class="btn-inacap-secondary px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2" (click)="startNewProject()">
+            
+            <button type="button" 
+                    class="btn-inacap-secondary px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2" 
+                    (click)="startNewProject()">
               Iniciar proyecto
             </button>
-            <a #metricsRef href="#panel-proyectos" class="hero-kpis group block rounded-xl border border-inacap-red px-5 py-4 transition-colors hover:bg-inacap-red-light focus:outline-none focus:ring-2 focus:ring-[var(--inacap-red)] cursor-pointer" aria-label="Ver proyectos y participar" aria-live="polite">
+            
+            <!-- Métricas KPI mejoradas para modo oscuro -->
+            <a #metricsRef 
+               href="#panel-proyectos" 
+               class="hero-kpis group block rounded-xl border px-5 py-4 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--inacap-red)] cursor-pointer"
+               [class]="isDarkMode ? 'border-gray-600 hover:bg-gray-800' : 'border-inacap-red hover:bg-inacap-red-light'"
+               aria-label="Ver proyectos y participar" 
+               aria-live="polite">
+              
               <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
+                <!-- Proyectos Activos -->
                 <div class="flex items-center gap-2">
-                  <!-- Icono: Activos (play en círculo) -->
-                  <svg class="kpi-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <svg class="kpi-icon w-4 h-4 flex-shrink-0" 
+                       [class]="isDarkMode ? 'text-red-400' : 'text-red-600'"
+                       viewBox="0 0 24 24" 
+                       aria-hidden="true" 
+                       focusable="false">
                     <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
                     <path d="M10 8l6 4-6 4z" fill="currentColor"/>
                   </svg>
-                  <button type="button" class="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] rounded px-1 -mx-1" title="{{ activeProjectsTooltip }}" (click)="filterBy('active')">
-                    <span class="text-sm font-semibold text-gray-900">Proyectos Activos</span>
-                    <span class="text-sm font-bold text-gray-900/90"> · {{ activeProjectsDisplay }}</span>
+                  
+                  <button type="button" 
+                          class="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] rounded px-1 -mx-1" 
+                          [title]="activeProjectsTooltip" 
+                          (click)="filterBy('active')">
+                    <span class="text-sm font-semibold"
+                          [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                      Proyectos Activos
+                    </span>
+                    <span class="text-sm font-bold"
+                          [class]="isDarkMode ? 'text-gray-50' : 'text-gray-900'">
+                      · {{ activeProjectsDisplay }}
+                    </span>
                   </button>
                 </div>
-                <span class="hidden sm:block h-4 w-px bg-[color:rgba(196,30,58,0.3)]"></span>
+
+                <!-- Separador -->
+                <span class="hidden sm:block h-4 w-px"
+                      [class]="isDarkMode ? 'bg-gray-600' : 'bg-red-300'"></span>
+
+                <!-- Estudiantes Participando -->
                 <div class="flex items-center gap-2">
-                  <!-- Icono: Estudiantes (usuarios) -->
-                  <svg class="kpi-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <svg class="kpi-icon w-4 h-4 flex-shrink-0" 
+                       [class]="isDarkMode ? 'text-red-400' : 'text-red-600'"
+                       viewBox="0 0 24 24" 
+                       aria-hidden="true" 
+                       focusable="false">
                     <circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"/>
                     <circle cx="16" cy="9" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/>
                     <path d="M4 18c0-2.2 2.8-4 6-4s6 1.8 6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
-                  <button type="button" class="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] rounded px-1 -mx-1" title="{{ participatingStudentsTooltip }}" (click)="filterBy('students')">
-                    <span class="text-sm font-semibold text-gray-900">Estudiantes participando</span>
-                    <span class="text-sm font-bold text-gray-900/90"> · {{ participatingStudentsDisplay }}</span>
+                  
+                  <button type="button" 
+                          class="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] rounded px-1 -mx-1" 
+                          [title]="participatingStudentsTooltip" 
+                          (click)="filterBy('students')">
+                    <span class="text-sm font-semibold"
+                          [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                      Estudiantes participando
+                    </span>
+                    <span class="text-sm font-bold"
+                          [class]="isDarkMode ? 'text-gray-50' : 'text-gray-900'">
+                      · {{ participatingStudentsDisplay }}
+                    </span>
                   </button>
                 </div>
-                <span class="hidden sm:block h-4 w-px bg-[color:rgba(196,30,58,0.3)]"></span>
+
+                <!-- Separador -->
+                <span class="hidden sm:block h-4 w-px"
+                      [class]="isDarkMode ? 'bg-gray-600' : 'bg-red-300'"></span>
+
+                <!-- Proyectos Concluidos -->
                 <div class="flex items-center gap-2">
-                  <!-- Icono: Concluidos (check en círculo) -->
-                  <svg class="kpi-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <svg class="kpi-icon w-4 h-4 flex-shrink-0" 
+                       [class]="isDarkMode ? 'text-red-400' : 'text-red-600'"
+                       viewBox="0 0 24 24" 
+                       aria-hidden="true" 
+                       focusable="false">
                     <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
                     <path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
-                  <button type="button" class="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] rounded px-1 -mx-1" title="{{ completedProjectsTooltip }}" (click)="filterBy('completed')">
-                    <span class="text-sm font-semibold text-gray-900">Proyectos Concluidos</span>
-                    <span class="text-sm font-bold text-gray-900/90"> · {{ completedProjectsDisplay }}</span>
+                  
+                  <button type="button" 
+                          class="text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] rounded px-1 -mx-1" 
+                          [title]="completedProjectsTooltip" 
+                          (click)="filterBy('completed')">
+                    <span class="text-sm font-semibold"
+                          [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                      Proyectos Concluidos
+                    </span>
+                    <span class="text-sm font-bold"
+                          [class]="isDarkMode ? 'text-gray-50' : 'text-gray-900'">
+                      · {{ completedProjectsDisplay }}
+                    </span>
                   </button>
                 </div>
-                <span class="ml-auto text-inacap-red opacity-80 transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span>
+
+                <!-- Flecha indicadora -->
+                <span class="ml-auto opacity-80 transition-transform group-hover:translate-x-0.5" 
+                      [class]="isDarkMode ? 'text-red-400' : 'text-red-600'"
+                      aria-hidden="true">→</span>
               </div>
             </a>
           </div>
-
-          <!-- Métricas -->
-          
-          <!-- Promo Cards removidas de aquí para ampliar a ancho completo -->
         </div>
 
-
         <!-- Columna derecha: panel usuario logueado -->
-  <div class="no-select lg:justify-self-end w-full greeting-card-wrap">
-    <div class="bg-white border border-gray-200 rounded-2xl p-6 md:p-8 shadow-xl w-full greeting-card">
+        <div class="no-select lg:justify-self-end w-full greeting-card-wrap">
+          <div class="border rounded-2xl p-6 md:p-8 shadow-xl w-full greeting-card"
+               [class]="isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'">
+            
             <div class="flex items-start justify-between gap-4">
               <div>
-                <h2 class="text-xl md:text-2xl font-bold">¡Hola, Juan! 👋</h2>
-                <p class="text-gray-500 text-sm mt-1">Semestre 2025-2 · INACAP</p>
+                <h2 class="text-xl md:text-2xl font-bold"
+                    [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                  ¡Hola, Juan! 👋
+                </h2>
+                <p class="text-sm mt-1"
+                   [class]="isDarkMode ? 'text-gray-400' : 'text-gray-500'">
+                  Semestre 2025-2 · INACAP
+                </p>
               </div>
-              <!-- CTA eliminado por solicitud: el botón Iniciar Proyecto no se muestra aquí -->
             </div>
 
+            <!-- Grid de estadísticas -->
             <div class="grid grid-cols-3 gap-3 mt-6">
-              <button type="button" class="rounded-lg border border-gray-200 p-3 text-left hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)]" (click)="filterBy('active')" title="Filtrar por proyectos en progreso">
-                <div class="text-xs text-gray-500 mb-1">En progreso</div>
-                <div class="text-lg font-extrabold">{{ stats.inProgress }}</div>
+              <button type="button" 
+                      class="rounded-lg border p-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)]"
+                      [class]="isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'"
+                      (click)="filterBy('active')" 
+                      title="Filtrar por proyectos en progreso">
+                <div class="text-xs mb-1"
+                     [class]="isDarkMode ? 'text-gray-400' : 'text-gray-500'">
+                  En progreso
+                </div>
+                <div class="text-lg font-extrabold"
+                     [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                  {{ stats.inProgress }}
+                </div>
               </button>
-              <button type="button" class="rounded-lg border border-gray-200 p-3 text-left hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)]" (click)="filterBy('completed')" title="Filtrar por proyectos completados">
-                <div class="text-xs text-gray-500 mb-1">Completados</div>
-                <div class="text-lg font-extrabold">{{ stats.completed }}</div>
+
+              <button type="button" 
+                      class="rounded-lg border p-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)]"
+                      [class]="isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'"
+                      (click)="filterBy('completed')" 
+                      title="Filtrar por proyectos completados">
+                <div class="text-xs mb-1"
+                     [class]="isDarkMode ? 'text-gray-400' : 'text-gray-500'">
+                  Completados
+                </div>
+                <div class="text-lg font-extrabold"
+                     [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                  {{ stats.completed }}
+                </div>
               </button>
-              <button type="button" class="rounded-lg border border-gray-200 p-3 text-left hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)]" (click)="filterBy('all')" title="Ver todos los proyectos">
-                <div class="text-xs text-gray-500 mb-1">En pausa</div>
-                <div class="text-lg font-extrabold">{{ stats.paused }}</div>
+
+              <button type="button" 
+                      class="rounded-lg border p-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)]"
+                      [class]="isDarkMode ? 'border-gray-600 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'"
+                      (click)="filterBy('all')" 
+                      title="Ver todos los proyectos">
+                <div class="text-xs mb-1"
+                     [class]="isDarkMode ? 'text-gray-400' : 'text-gray-500'">
+                  En pausa
+                </div>
+                <div class="text-lg font-extrabold"
+                     [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                  {{ stats.paused }}
+                </div>
               </button>
             </div>
 
-            <div class="mt-6 p-4 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-200 hero-panel">
+            <!-- Panel "Continuar donde lo dejaste" -->
+            <div class="mt-6 p-4 rounded-xl border hero-panel"
+                 [class]="isDarkMode ? 'bg-gray-700 border-gray-600' : 'bg-gradient-to-r from-gray-50 to-white border-gray-200'">
               <div class="flex items-center justify-between gap-3">
                 <div class="min-w-0">
-                  <div class="text-sm text-gray-500">Continuar donde lo dejaste</div>
-                  <div class="font-semibold truncate">{{ lastInProgress?.title || 'Sin proyectos en progreso' }}</div>
+                  <div class="text-sm"
+                       [class]="isDarkMode ? 'text-gray-400' : 'text-gray-500'">
+                    Continuar donde lo dejaste
+                  </div>
+                  <div class="font-semibold truncate"
+                       [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                    {{ lastInProgress?.title || 'Sin proyectos en progreso' }}
+                  </div>
                 </div>
-                <button type="button" class="btn-inacap-secondary" (click)="continueLastProject()">Continuar</button>
+                <button type="button" 
+                        class="btn-inacap-secondary" 
+                        (click)="continueLastProject()">
+                  Continuar
+                </button>
               </div>
             </div>
 
-            <div class="mt-4 flex flex-col gap-1 text-xs text-gray-500">
+            <!-- Tips y última actividad -->
+            <div class="mt-4 flex flex-col gap-1 text-xs"
+                 [class]="isDarkMode ? 'text-gray-400' : 'text-gray-500'">
               <div class="flex items-center gap-2">
-                <span class="inline-block w-2 h-2 rounded-full bg-inacap-red"></span>
+                <span class="inline-block w-2 h-2 rounded-full bg-red-600"></span>
                 Tips: puedes cambiar la vista del carrusel (Amplia, Compacta, Vitrina).
               </div>
               <div>
@@ -135,34 +236,75 @@
               </div>
             </div>
           </div>
-          <!-- (Se eliminó el banner lateral; ahora las promos viven en la columna izquierda) -->
         </div>
         
-        <!-- Promo Cards (Convocatoria + Robótica) ancho completo debajo del saludo -->
+        <!-- Promo Cards - Ancho completo debajo del saludo -->
         <div class="promo-callouts promo-callouts--wide mt-8 col-span-1 lg:col-span-2">
-          <article class="promo-card promo-card--primary" role="complementary" aria-label="Convocatoria Proyectos 2025 (principal)">
+          <!-- Convocatoria Principal -->
+          <article class="promo-card promo-card--primary" 
+                   [class]="isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'"
+                   role="complementary" 
+                   aria-label="Convocatoria Proyectos 2025 (principal)">
             <div class="promo-card-inner">
               <header class="promo-card-header">
-                <span class="promo-badge">NOVEDAD</span>
+                <span class="promo-badge"
+                      [class]="isDarkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800'">
+                  NOVEDAD
+                </span>
               </header>
-              <h2 class="promo-title">Convocatoria Proyectos 2025</h2>
-              <p class="promo-desc">Postula ideas interdisciplinarias y recibe mentoría de docentes y expertos de la industria.</p>
+              <h2 class="promo-title"
+                  [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+                Convocatoria Proyectos 2025
+              </h2>
+              <p class="promo-desc"
+                 [class]="isDarkMode ? 'text-gray-300' : 'text-gray-600'">
+                Postula ideas interdisciplinarias y recibe mentoría de docentes y expertos de la industria.
+              </p>
               <div class="promo-actions">
-                <a routerLink="/ayuda" class="promo-link" aria-label="Ver bases de la convocatoria 2025">Ver bases</a>
-                <button type="button" class="promo-cta" (click)="startNewProject()" aria-label="Postular ahora a la convocatoria 2025">Postular ahora</button>
+                <a routerLink="/ayuda" 
+                   class="promo-link" 
+                   aria-label="Ver bases de la convocatoria 2025">
+                  Ver bases
+                </a>
+                <button type="button" 
+                        class="promo-cta" 
+                        (click)="startNewProject()" 
+                        aria-label="Postular ahora a la convocatoria 2025">
+                  Postular ahora
+                </button>
               </div>
             </div>
           </article>
-          <article class="promo-card promo-card--robotics" role="complementary" aria-label="Mes de la Robótica: proyectos de robótica priorizados">
+
+          <!-- Mes de la Robótica -->
+          <article class="promo-card promo-card--robotics" 
+                   role="complementary" 
+                   aria-label="Mes de la Robótica: proyectos de robótica priorizados">
             <div class="promo-card-inner">
               <header class="promo-card-header">
-                <span class="promo-badge" aria-label="Etiqueta: Mes de la Robótica">MES DE LA ROBÓTICA</span>
+                <span class="promo-badge bg-blue-900 text-blue-200" 
+                      aria-label="Etiqueta: Mes de la Robótica">
+                  MES DE LA ROBÓTICA
+                </span>
               </header>
-              <h2 class="promo-title">Impulsa tu Proyecto de Robótica</h2>
-              <p class="promo-desc">Durante este mes los proyectos de robótica reciben revisión acelerada y visibilidad destacada en la plataforma.</p>
+              <h2 class="promo-title text-blue-50">
+                Impulsa tu Proyecto de Robótica
+              </h2>
+              <p class="promo-desc text-blue-100">
+                Durante este mes los proyectos de robótica reciben revisión acelerada y visibilidad destacada en la plataforma.
+              </p>
               <div class="promo-actions">
-                <a routerLink="/ayuda" class="promo-link" aria-label="Ver criterios de prioridad para proyectos de robótica">Ver criterios</a>
-                <button type="button" class="promo-cta" (click)="startNewProject()" aria-label="Crear un nuevo proyecto de robótica">Crear proyecto</button>
+                <a routerLink="/ayuda" 
+                   class="promo-link bg-blue-800 text-blue-200 border-blue-600" 
+                   aria-label="Ver criterios de prioridad para proyectos de robótica">
+                  Ver criterios
+                </a>
+                <button type="button" 
+                        class="promo-cta bg-blue-500 text-blue-900" 
+                        (click)="startNewProject()" 
+                        aria-label="Crear un nuevo proyecto de robótica">
+                  Crear proyecto
+                </button>
               </div>
             </div>
           </article>
@@ -172,55 +314,69 @@
   </section>
 
   <!-- Panel de Proyectos Mensuales -->
-  <section id="panel-proyectos" class="py-16 bg-gradient-to-r from-gray-50 to-gray-100">
+  <section id="panel-proyectos" 
+           class="py-16"
+           [ngClass]="{ 'bg-gray-900': isDarkMode, 'bg-gradient-to-r from-gray-50 to-gray-100': !isDarkMode }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Carrusel a ancho completo -->
       <div>
-          <!-- Header del Panel -->
-          <!-- <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Proyectos Mensuales INACAP
-            </h2>
-            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
-              Descubre los proyectos destacados de este mes en todas nuestras áreas de especialización.
-              Desde tecnología hasta agricultura, nuestros estudiantes están creando soluciones innovadoras.
-            </p>
-            <div class="mt-6 flex justify-center">
-              <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800 month-indicator">
-                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.414L11 9.586V6z" clip-rule="evenodd"/>
-                </svg>
-                Septiembre 2025
-              </span>
-            </div>
-          </div> -->
-
-          <!-- Carrusel tipo cartas apiladas -->
-          <!-- Skeletons de carga -->
-          <div *ngIf="isLoading" aria-live="polite" class="space-y-4">
-            <div class="skeleton h-8 w-40"></div>
-            <div class="skeleton h-[520px] w-full rounded-2xl"></div>
-            <div class="skeleton h-6 w-32 mx-auto"></div>
-          </div>
-
-          <!-- Estado vacío -->
-          <div *ngIf="!isLoading && filteredProjects.length === 0" class="text-center bg-white border border-gray-200 rounded-2xl p-10">
-            <h3 class="text-xl font-bold text-gray-900">No hay proyectos aún</h3>
-            <p class="text-gray-600 mt-2">Sé el primero en crear uno y comienza a colaborar.</p>
-            <div class="mt-6 flex justify-center">
-              <button type="button" class="btn-inacap px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2" (click)="startNewProject()">
-                Crear el primer proyecto
-              </button>
-            </div>
-          </div>
-
-          <!-- Carrusel principal -->
-          <app-monthly-projects-carousel
-            *ngIf="!isLoading && filteredProjects.length > 0"
-            [projects]="filteredProjects"
-            (viewMore)="openProjectModal($event)">
-          </app-monthly-projects-carousel>
+        <!-- Skeletons de carga -->
+        <div *ngIf="isLoading" aria-live="polite" class="space-y-4">
+          <div class="skeleton h-8 w-40"
+               [class]="isDarkMode ? 'bg-gray-700' : 'bg-gray-200'"></div>
+          <div class="skeleton h-[520px] w-full rounded-2xl"
+               [class]="isDarkMode ? 'bg-gray-700' : 'bg-gray-200'"></div>
+          <div class="skeleton h-6 w-32 mx-auto"
+               [class]="isDarkMode ? 'bg-gray-700' : 'bg-gray-200'"></div>
         </div>
+
+        <!-- Estado vacío / preview de proyectos -->
+        <div *ngIf="!isLoading && filteredProjects.length === 0" 
+             class="text-center border rounded-2xl p-10 shadow-sm"
+             [class]="isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'">
+          <h3 class="text-xl font-bold"
+              [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+            No hay proyectos aún
+          </h3>
+          <p class="mt-2 text-base max-w-xl mx-auto"
+             [class]="isDarkMode ? 'text-gray-300' : 'text-gray-600'">
+            Sé el primero en crear uno y comienza a colaborar.
+          </p>
+          <div class="mt-6 flex justify-center">
+            <button type="button" 
+                    class="btn-inacap px-5 py-3 rounded-lg font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--inacap-red)] focus-visible:ring-offset-2" 
+                    (click)="startNewProject()">
+              Crear el primer proyecto
+            </button>
+          </div>
+        </div>
+
+        <!-- Si hay proyectos, mostrar un preview compacto (hasta 3) en modo claro como parte del perfil -->
+        <div *ngIf="!isLoading && filteredProjects.length > 0" class="mt-6">
+          <div class="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <ng-container *ngFor="let p of filteredProjects.slice(0,3)">
+              <article class="rounded-lg border p-4 text-left hover:shadow-md transition-shadow"
+                       [class]="isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-100' : 'bg-white border-gray-200 text-gray-900'"
+                       (click)="openProjectModal(p)">
+                <div class="flex items-center justify-between gap-3">
+                  <div>
+                    <h4 class="font-semibold truncate">{{ p.title }}</h4>
+                    <p class="text-sm mt-1 truncate" [class]="isDarkMode ? 'text-gray-300' : 'text-gray-500'">{{ p.description }}</p>
+                  </div>
+                  <div class="text-xs text-gray-400">{{ p.progress }}%</div>
+                </div>
+              </article>
+            </ng-container>
+          </div>
+        </div>
+
+        <!-- Carrusel principal -->
+        <app-monthly-projects-carousel
+          *ngIf="!isLoading && filteredProjects.length > 0"
+          [projects]="filteredProjects"
+          [isDarkMode]="isDarkMode"
+          (viewMore)="openProjectModal($event)">
+        </app-monthly-projects-carousel>
+      </div>
     </div>
   </section>
 
@@ -228,60 +384,99 @@
   <app-project-modal 
     [isOpen]="isModalOpen"
     [project]="selectedProject"
+    [isDarkMode]="isDarkMode"
     (closeModal)="closeProjectModal()">
   </app-project-modal>
 
   <!-- Sección: Colaboradores -->
-  <section id="colaboradores" class="py-16 bg-gradient-to-b from-white to-gray-50">
+  <section id="colaboradores" 
+           class="py-16"
+           [ngClass]="{ 'bg-gradient-to-b from-gray-900 to-gray-800': isDarkMode, 'bg-gradient-to-b from-white to-gray-50': !isDarkMode }">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-10">
-        <h2 class="text-2xl md:text-3xl font-extrabold text-gray-900">Colaboran con nosotros</h2>
-        <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Organizaciones que impulsan proyectos y oportunidades para nuestra comunidad.</p>
+        <h2 class="text-2xl md:text-3xl font-extrabold"
+            [class]="isDarkMode ? 'text-gray-100' : 'text-gray-900'">
+          Colaboran con nosotros
+        </h2>
+        <p class="mt-2 max-w-2xl mx-auto"
+           [class]="isDarkMode ? 'text-gray-300' : 'text-gray-600'">
+          Organizaciones que impulsan proyectos y oportunidades para nuestra comunidad.
+        </p>
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
-        <!-- Logo 1 -->
-        <a class="partner-card" aria-label="TechCorp: soluciones cloud para estudiantes INACAP" href="#partner-techcorp" title="TechCorp: ver beneficios" tabindex="0">
+        <!-- Logos de colaboradores con adaptación de tema -->
+        <a class="partner-card transition-all duration-200"
+           [class]="isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-red-400' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-red-600'"
+           aria-label="TechCorp: soluciones cloud para estudiantes INACAP" 
+           href="#partner-techcorp" 
+           title="TechCorp: ver beneficios" 
+           tabindex="0">
           <svg class="partner-logo" viewBox="0 0 120 40" role="img" aria-label="Logo de TechCorp">
             <rect x="4" y="8" width="28" height="24" rx="6" fill="currentColor"/>
             <text x="42" y="26" font-size="16" font-family="Montserrat, Inter, sans-serif" fill="currentColor">TechCorp</text>
           </svg>
           <span class="sr-only">Ir al detalle de TechCorp</span>
         </a>
-        <!-- Logo 2 -->
-        <a class="partner-card" aria-label="EduLab: licencias educativas y cursos" href="#partner-edulab" title="EduLab: ver beneficios" tabindex="0">
+
+        <a class="partner-card transition-all duration-200"
+           [class]="isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-red-400' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-red-600'"
+           aria-label="EduLab: licencias educativas y cursos" 
+           href="#partner-edulab" 
+           title="EduLab: ver beneficios" 
+           tabindex="0">
           <svg class="partner-logo" viewBox="0 0 120 40" role="img" aria-label="Logo de EduLab">
             <circle cx="18" cy="20" r="12" fill="currentColor"/>
             <text x="42" y="26" font-size="16" font-family="Montserrat, Inter, sans-serif" fill="currentColor">EduLab</text>
           </svg>
           <span class="sr-only">Ir al detalle de EduLab</span>
         </a>
-        <!-- Logo 3 -->
-        <a class="partner-card" aria-label="AgriTech: innovación para agricultura" href="#partner-agritech" title="AgriTech: ver beneficios" tabindex="0">
+
+        <a class="partner-card transition-all duration-200"
+           [class]="isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-red-400' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-red-600'"
+           aria-label="AgriTech: innovación para agricultura" 
+           href="#partner-agritech" 
+           title="AgriTech: ver beneficios" 
+           tabindex="0">
           <svg class="partner-logo" viewBox="0 0 120 40" role="img" aria-label="Logo de AgriTech">
             <path d="M10 24c6-10 14-10 20 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
             <text x="42" y="26" font-size="16" font-family="Montserrat, Inter, sans-serif" fill="currentColor">AgriTech</text>
           </svg>
           <span class="sr-only">Ir al detalle de AgriTech</span>
         </a>
-        <!-- Logo 4 -->
-        <a class="partner-card" aria-label="MecánicaPro: equipamiento para talleres" href="#partner-mecanicapro" title="MecánicaPro: ver beneficios" tabindex="0">
+
+        <a class="partner-card transition-all duration-200"
+           [class]="isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-red-400' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-red-600'"
+           aria-label="MecánicaPro: equipamiento para talleres" 
+           href="#partner-mecanicapro" 
+           title="MecánicaPro: ver beneficios" 
+           tabindex="0">
           <svg class="partner-logo" viewBox="0 0 120 40" role="img" aria-label="Logo de MecánicaPro">
             <path d="M16 12l8 8-8 8-8-8 8-8z" fill="currentColor"/>
             <text x="42" y="26" font-size="16" font-family="Montserrat, Inter, sans-serif" fill="currentColor">MecánicaPro</text>
           </svg>
           <span class="sr-only">Ir al detalle de MecánicaPro</span>
         </a>
-        <!-- Logo 5 -->
-        <a class="partner-card" aria-label="ElectroPlus: sensores y componentes" href="#partner-electroplus" title="ElectroPlus: ver beneficios" tabindex="0">
+
+        <a class="partner-card transition-all duration-200"
+           [class]="isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-red-400' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-red-600'"
+           aria-label="ElectroPlus: sensores y componentes" 
+           href="#partner-electroplus" 
+           title="ElectroPlus: ver beneficios" 
+           tabindex="0">
           <svg class="partner-logo" viewBox="0 0 120 40" role="img" aria-label="Logo de ElectroPlus">
             <path d="M12 26l8-12h-6l6-8" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
             <text x="42" y="26" font-size="16" font-family="Montserrat, Inter, sans-serif" fill="currentColor">ElectroPlus</text>
           </svg>
           <span class="sr-only">Ir al detalle de ElectroPlus</span>
         </a>
-        <!-- Logo 6 -->
-        <a class="partner-card" aria-label="SaludNet: redes clínicas y prácticas" href="#partner-saludnet" title="SaludNet: ver beneficios" tabindex="0">
+
+        <a class="partner-card transition-all duration-200"
+           [class]="isDarkMode ? 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-red-400' : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-red-600'"
+           aria-label="SaludNet: redes clínicas y prácticas" 
+           href="#partner-saludnet" 
+           title="SaludNet: ver beneficios" 
+           tabindex="0">
           <svg class="partner-logo" viewBox="0 0 120 40" role="img" aria-label="Logo de SaludNet">
             <path d="M8 22h10l2-6 4 12 2-6h10" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
             <text x="42" y="26" font-size="16" font-family="Montserrat, Inter, sans-serif" fill="currentColor">SaludNet</text>
@@ -289,9 +484,6 @@
           <span class="sr-only">Ir al detalle de SaludNet</span>
         </a>
       </div>
-
-      <!-- Nota: Puedes reemplazar estos SVG por logos reales (PNG/SVG) colocando archivos en public/ y cambiando <svg> por <img> -->
     </div>
   </section>
-
 </div>

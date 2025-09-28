@@ -202,10 +202,10 @@
     <!-- Área del usuario (derecha) -->
     <div class="header-right select-none">
       <!-- Notificaciones -->
-      <div class="dropdown-container select-none" 
-           [class.notification-pinned]="isNotificationDropdownPinned"
-           (mouseenter)="openNotificationDropdown()" 
-           (mouseleave)="closeNotificationDropdown()">
+   <div class="dropdown-container select-none" 
+     [class.notification-pinned]="isNotificationDropdownPinned"
+     (mouseenter)="openNotificationDropdown()" 
+     (mouseleave)="closeNotificationDropdown($event)">
         <button class="notification-btn select-none" 
                 (click)="toggleNotificationDropdown()"
                 aria-label="Notificaciones ({{ unreadTotal }} sin leer)">
@@ -216,8 +216,10 @@
         </button>
         
         <!-- Dropdown de notificaciones -->
-        <div class="dropdown-menu notification-dropdown select-none" 
-             [class.show]="isNotificationDropdownOpen">
+     <div class="dropdown-menu notification-dropdown select-none" 
+       [class.show]="isNotificationDropdownOpen"
+       (mouseenter)="openNotificationDropdown()"
+       (mouseleave)="closeNotificationDropdown($event)">
           <div class="dropdown-header select-none">
             <h3 class="select-none">Notificaciones</h3>
             <span class="notification-count select-none" *ngIf="unreadTotal > 0">{{ unreadTotal }} nuevas</span>
@@ -260,10 +262,10 @@
       </div>
 
       <!-- Avatar del usuario -->
-      <div class="dropdown-container select-none" 
-           [class.profile-pinned]="isProfileDropdownPinned"
-           (mouseenter)="openProfileDropdown()" 
-           (mouseleave)="closeProfileDropdown()">
+   <div class="dropdown-container select-none" 
+     [class.profile-pinned]="isProfileDropdownPinned"
+     (mouseenter)="openProfileDropdown()" 
+     (mouseleave)="closeProfileDropdown($event)">
         <div class="user-avatar select-none" 
              (click)="toggleProfileDropdown()">
           <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
@@ -279,8 +281,10 @@
         </div>
         
         <!-- Dropdown de perfil -->
-        <div class="dropdown-menu profile-dropdown select-none" 
-             [class.show]="isProfileDropdownOpen">
+     <div class="dropdown-menu profile-dropdown select-none" 
+       [class.show]="isProfileDropdownOpen"
+       (mouseenter)="openProfileDropdown()"
+       (mouseleave)="closeProfileDropdown($event)">
           <div class="dropdown-header select-none">
             <div class="profile-info select-none">
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 

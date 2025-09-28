@@ -404,17 +404,52 @@
 html.theme-dark .home-root { background: linear-gradient(180deg,#0b0d10,#0f1115) !important; }
 /* override Tailwind bg-white on the hero section */
 /* Use the theme variable so hero follows dark tokens */
-html.theme-dark .home-hero { background: var(--inacap-background) !important; color: var(--inacap-text-primary); }
+html.theme-dark .home-hero {
+  background: var(--inacap-background) !important;
+  color: var(--inacap-text-primary) !important;
+}
 html.theme-dark .home-hero, html.theme-dark .home-hero .max-w-7xl { background: var(--inacap-background) !important; }
-html.theme-dark .home-hero h1 { color: var(--inacap-text-primary); opacity: 0.98; }
-html.theme-dark .home-hero p { color: var(--inacap-text-secondary); }
-html.theme-dark .greeting-card { background: var(--inacap-surface-elevated); border-color: var(--inacap-border); box-shadow: var(--inacap-shadow-xl); }
-html.theme-dark .greeting-card .text-gray-500 { color: var(--text-muted); }
-html.theme-dark .hero-panel { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)) !important; border-color: var(--inacap-border); }
+html.theme-dark .home-hero h1 {
+  color: var(--inacap-text-primary) !important;
+}
+html.theme-dark .home-hero p {
+  color: var(--inacap-text-secondary) !important;
+}
+html.theme-dark .greeting-card {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-xl) !important;
+}
+
+html.theme-dark .greeting-card h2 {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .greeting-card .text-gray-500 {
+  color: var(--inacap-text-secondary) !important;
+}
+html.theme-dark .hero-panel {
+  background: linear-gradient(135deg, var(--inacap-surface-elevated), var(--inacap-surface)) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-lg) !important;
+}
 html.theme-dark .hero-kpis .text-gray-900, html.theme-dark .hero-kpis .text-gray-900\/90 { color: var(--inacap-text-primary); }
 html.theme-dark .hero-kpis .kpi-icon { color: var(--inacap-text-secondary); }
 html.theme-dark .promo-callouts--wide { background: transparent; }
-html.theme-dark .promo-card { background: #17181b; border-color: #232428; }
+html.theme-dark .promo-card {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-lg) !important;
+}
+html.theme-dark .promo-card .promo-desc {
+  color: var(--inacap-text-secondary) !important;
+}
+
+html.theme-dark .promo-badge {
+  background: rgba(204, 0, 0, 0.15) !important;
+  color: #ff9fb0 !important;
+}
+
 
 /* Strong overrides to neutralize any bg-white inside the home area */
 html.theme-dark .home-root section.bg-white,
@@ -488,7 +523,7 @@ html.theme-dark .home-root [class*="to-white"] {
   opacity: 1;
 }
 html.theme-dark .hero-text-wrap h1::before {
-  color: rgba(255,255,255,0.03);
+  color: rgba(255, 255, 255, 0.02) !important; 
 }
 
 /* Watermark big headline behind the hero */
@@ -528,11 +563,13 @@ html.theme-dark .hero-kpis { color: var(--inacap-text-primary); }
   top: 2.5rem;
   right: 0;
   min-width: 220px;
-  background: #fff;
-  color: #111827;
+  /* Usar variables de tema; fallbacks garantizan apariencia por defecto */
+  background: var(--inacap-surface, #fff);
+  color: var(--inacap-text-primary, #111827);
   border-radius: 0.5rem;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-  border: 1px solid rgba(0,0,0,0.06);
+  /* Sombra y borde también pueden cambiar por tema mediante variables */
+  box-shadow: var(--inacap-shadow, 0 10px 25px rgba(0,0,0,0.15));
+  border: 1px solid var(--inacap-border-light, rgba(0,0,0,0.06));
   opacity: 0;
   transform: translateY(-4px);
   pointer-events: none;
@@ -542,17 +579,36 @@ html.theme-dark .hero-kpis { color: var(--inacap-text-primary); }
 .dropdown-menu.areas-dropdown.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 .dropdown-menu.areas-dropdown .dropdown-header {
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid #f3f4f6;
+  border-bottom: 1px solid var(--inacap-border-light, #f3f4f6);
 }
 .dropdown-menu.areas-dropdown .dropdown-header h3 {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #374151;
+  color: var(--inacap-text-primary, #374151);
 }
-.dropdown-menu.areas-dropdown .dropdown-content { padding: 0.5rem; max-height: 240px; overflow: auto; }
+.dropdown-menu.areas-dropdown .dropdown-content { padding: 0.5rem; max-height: min(60vh, 320px); overflow: auto; }
+
+/* Mobile: evitar que el dropdown se recorte dentro de contenedores con overflow:hidden
+   - en pantallas pequeñas mostramos el dropdown como una capa fija para que no quede
+     dentro del contenedor .banner/.card que suele tener overflow:hidden */
+@media (max-width: 768px) {
+  .dropdown-menu.areas-dropdown {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 1200 !important;
+    box-shadow: var(--inacap-shadow-xl, 0 20px 40px rgba(0,0,0,0.35)) !important;
+  }
+  .dropdown-menu.areas-dropdown .dropdown-content { max-height: 50vh; }
+}
 .dropdown-menu.areas-dropdown .dropdown-chips { display: flex; flex-wrap: wrap; gap: 0.375rem; }
 .dropdown-menu.areas-dropdown .dropdown-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.5rem; border-radius: 0.375rem; }
-.dropdown-menu.areas-dropdown .dropdown-item:hover { background: #f9fafb; }
+.dropdown-menu.areas-dropdown .dropdown-item:hover { background: var(--inacap-hover-overlay, #f9fafb); }
 .area-dot { width: 10px; height: 10px; border-radius: 9999px; display: inline-block; }
 /* Colores para las áreas */
 .area-informatica { background: #2563eb; }
@@ -797,14 +853,255 @@ html.theme-dark .home-root {
 html.theme-dark .project-card {
   background: var(--inacap-surface-elevated) !important;
   border-color: var(--inacap-border) !important;
-  box-shadow: var(--inacap-shadow-xl) !important;
+  box-shadow: var(--inacap-shadow-lg) !important;
 }
 
 html.theme-dark .project-card h3,
-html.theme-dark .project-card p {
+html.theme-dark .project-card p,
+html.theme-dark .project-card .font-semibold {
   color: var(--inacap-text-primary) !important;
 }
 
+html.theme-dark .project-card .text-sm {
+  color: var(--inacap-text-secondary) !important;
+}
+
+html.theme-dark .project-banner::before {
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)) !important;
+}
+
+
 html.theme-dark .project-banner {
-  background: linear-gradient(135deg, #1e1e1e, #2a2a2a) !important;
+  background: linear-gradient(135deg, var(--inacap-surface), var(--inacap-surface-elevated)) !important;
+}
+
+html.theme-dark .area-chip {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+html.theme-dark .areas-button {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+
+
+html.theme-dark .areas-button:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+html.theme-dark .dropdown-menu.areas-dropdown {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  box-shadow: var(--inacap-shadow-xl) !important;
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .dropdown-menu.areas-dropdown .dropdown-header h3 {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .dropdown-menu.areas-dropdown .dropdown-item:hover {
+  background: var(--inacap-hover-overlay) !important;
+}
+
+
+/* 10. COLABORADORES - Partner cards */
+html.theme-dark .partner-card {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+  color: var(--inacap-text-secondary) !important;
+}
+
+html.theme-dark .partner-card:hover {
+  background: var(--inacap-hover-overlay) !important;
+  color: var(--inacap-red) !important;
+  box-shadow: var(--inacap-shadow-md) !important;
+}
+
+/* 11. HERO KPIs - Mejor contraste e iconografía */
+html.theme-dark .hero-kpis {
+  border-color: var(--inacap-border) !important;
+  background: var(--inacap-surface-elevated) !important;
+}
+
+html.theme-dark .hero-kpis:hover {
+  background: var(--inacap-hover-overlay) !important;
+}
+
+html.theme-dark .hero-kpis .text-gray-900,
+html.theme-dark .hero-kpis .font-semibold,
+html.theme-dark .hero-kpis .font-bold {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .hero-kpis .kpi-icon {
+  color: var(--inacap-red) !important;
+}
+
+/* 12. SEPARADORES - Adaptación visual */
+html.theme-dark .hero-kpis .bg-\[color\:rgba\(196\,30\,58\,0\.3\)\] {
+  background: rgba(204, 0, 0, 0.4) !important;
+}
+
+/* 13. GRADIENTS Y BACKGROUNDS - Neutralización */
+html.theme-dark .home-root [class*="bg-gradient-to"],
+html.theme-dark .home-root [class*="from-gray-"],
+html.theme-dark .home-root [class*="to-white"],
+html.theme-dark .home-root [class*="to-gray-"] {
+  background-image: none !important;
+  background-color: var(--inacap-background) !important;
+}
+
+/* 14. SECCIÓN DE PROYECTOS - Panel principal */
+html.theme-dark #panel-proyectos {
+  background: var(--inacap-background) !important;
+}
+
+/* 15. RESERVED SPACE - Gutters laterales */
+html.theme-dark .reserved-space {
+  background: var(--inacap-background) !important;
+}
+
+/* 16. ESTADO VACÍO - Mejor presentación */
+html.theme-dark .text-center.bg-white {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+}
+
+html.theme-dark .text-center.bg-white h3 {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .text-center.bg-white p {
+  color: var(--inacap-text-secondary) !important;
+}
+
+/* 17. SKELETON LOADING - Adaptación de placeholders */
+html.theme-dark .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--inacap-surface) 25%,
+    var(--inacap-surface-elevated) 50%,
+    var(--inacap-surface) 75%
+  ) !important;
+  background-size: 200% 100%;
+  animation: loading-dark 1.5s infinite;
+}
+
+@keyframes loading-dark {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* 18. BOTONES CTA - Asegurar contraste */
+html.theme-dark .btn-inacap {
+  background-color: var(--inacap-red) !important;
+  color: white !important;
+  border-color: var(--inacap-red) !important;
+}
+
+html.theme-dark .btn-inacap:hover {
+  background-color: var(--inacap-red-hover) !important;
+  border-color: var(--inacap-red-hover) !important;
+}
+
+html.theme-dark .btn-inacap-secondary {
+  background-color: transparent !important;
+  color: var(--inacap-text-primary) !important;
+  border-color: var(--inacap-border-secondary) !important;
+}
+
+html.theme-dark .btn-inacap-secondary:hover {
+  background-color: var(--inacap-hover-overlay) !important;
+  border-color: var(--inacap-red) !important;
+  color: var(--inacap-red) !important;
+}
+
+/* 19. FOCUS STATES - Accesibilidad mejorada */
+html.theme-dark .btn-inacap:focus-visible,
+html.theme-dark .btn-inacap-secondary:focus-visible,
+html.theme-dark .hero-kpis:focus-visible,
+html.theme-dark .hero-kpis button:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px var(--inacap-background), 0 0 0 4px var(--inacap-red) !important;
+}
+
+/* 20. TEXTO ESPECÍFICO - Forzar colores correctos */
+html.theme-dark .home-root .text-gray-900,
+html.theme-dark .home-root .text-gray-800,
+html.theme-dark .home-root .text-gray-700 {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .home-root .text-gray-600,
+html.theme-dark .home-root .text-gray-500 {
+  color: var(--inacap-text-secondary) !important;
+}
+
+html.theme-dark .home-root .text-gray-400 {
+  color: var(--inacap-text-tertiary) !important;
+}
+
+/* 21. HERO BANNER - Si usas el componente hero-banner */
+html.theme-dark .hero-banner-inner {
+  background: linear-gradient(135deg, var(--inacap-surface-elevated), var(--inacap-surface)) !important;
+  border-color: var(--inacap-border) !important;
+}
+
+html.theme-dark .hero-banner-title {
+  color: var(--inacap-text-primary) !important;
+}
+
+html.theme-dark .hero-banner-desc {
+  color: var(--inacap-text-secondary) !important;
+}
+
+html.theme-dark .hero-banner-eyebrow {
+  background: rgba(204, 0, 0, 0.15) !important;
+  color: #ff9fb0 !important;
+}
+
+/* 22. TRANSICIONES SUAVES - Solo para elementos home */
+html.theme-dark .home-root * {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+/* 23. VARIANTES DE PROMO CARDS - Mantenimiento de jerarquía visual */
+html.theme-dark .promo-card--primary {
+  background: linear-gradient(135deg, var(--inacap-surface-elevated), var(--inacap-surface)) !important;
+  border-color: var(--inacap-border) !important;
+}
+
+html.theme-dark .promo-card--alt {
+  background: var(--inacap-surface-elevated) !important;
+  border-color: var(--inacap-border) !important;
+}
+
+html.theme-dark .promo-card--robotics {
+  background: linear-gradient(140deg, #0d1b2a, #122b3c 45%, #163d52) !important;
+  border-color: #1e4c62 !important;
+}
+
+/* 24. RESPONSIVE - Mantener adaptación en todos los tamaños */
+@media (max-width: 768px) {
+  html.theme-dark .home-root {
+    background: var(--inacap-background) !important;
+  }
+  
+  html.theme-dark .project-card .p-5 {
+    background: var(--inacap-surface-elevated) !important;
+  }
+}
+
+/* 25. OVERRIDE FINAL - Asegurar que nada de Tailwind interfiera */
+html.theme-dark .home-root [class*="bg-white"],
+html.theme-dark .home-root [class*="text-white"] {
+  background-color: var(--inacap-surface-elevated) !important;
+  color: var(--inacap-text-primary) !important;
 }

@@ -94,10 +94,27 @@
 .info-icon { width:16px; height:16px; color:#fff; opacity:.95; }
 
 /* Dropdown de áreas */
-.areas-dropdown { position:absolute; top:40px; right:0; min-width: 220px; background:#fff; border-radius:12px; border:1px solid #e5e7eb; box-shadow:0 16px 35px rgba(0,0,0,.18); opacity:0; transform: translateY(-6px); pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 20; }
+.areas-dropdown { position:absolute; top:40px; right:0; min-width: 220px; /* usar tokens para tema */ background: var(--inacap-surface, #fff); border-radius:12px; border:1px solid var(--inacap-border, #e5e7eb); box-shadow: var(--inacap-shadow, 0 16px 35px rgba(0,0,0,.18)); opacity:0; transform: translateY(-6px); pointer-events: none; transition: opacity .18s ease, transform .18s ease; z-index: 20; }
 .areas-dropdown.show { opacity:1; transform: translateY(0); pointer-events: auto; }
 .areas-dropdown-inner { padding:12px; }
-.areas-title { font-size:.8rem; font-weight:800; color:#374151; margin-bottom:8px; }
+.areas-dropdown .areas-chips { max-height: min(60vh, 320px); overflow: auto; }
+
+@media (max-width: 768px) {
+  .areas-dropdown {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: 12px !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    z-index: 1200 !important;
+    box-shadow: var(--inacap-shadow-xl, 0 20px 40px rgba(0,0,0,0.35)) !important;
+  }
+  .areas-dropdown .areas-chips { max-height: 50vh; }
+}
+.areas-title { font-size:.8rem; font-weight:800; color: var(--inacap-text-primary, #374151); margin-bottom:8px; }
 .areas-chips { display:flex; flex-wrap:wrap; gap:6px; }
 
 /* Chips por área (colores) */

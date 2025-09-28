@@ -38,6 +38,7 @@ export interface ProjectData {
 export class ProjectModal {
   @Input() isOpen = false;
   @Input() project: ProjectData | null = null;
+  @Input() isDarkMode: boolean = false;
   @Output() closeModal = new EventEmitter<void>();
 
   constructor(private router: Router) {}
